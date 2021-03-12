@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.westcatr.emergency.business.mapper.SecurityIncidentsInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.westcatr.emergency.business.entity.SecurityIncidentsInfo">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="event_id" property="eventId" />
+        <result column="enterprise_name" property="enterpriseName" />
+        <result column="event_level" property="eventLevel" />
+        <result column="event_description" property="eventDescription" />
+        <result column="event_incident" property="eventIncident" />
+        <result column="countermeasures" property="countermeasures" />
+        <result column="occurren_company" property="occurrenCompany" />
+        <result column="occurren_time" property="occurrenTime" />
+        <result column="source_attack" property="sourceAttack" />
+        <result column="preliminary_impact" property="preliminaryImpact" />
+        <result column="scope_influen" property="scopeInfluen" />
+    </resultMap>
+
+</mapper>
