@@ -38,13 +38,13 @@ public class MybatisPlusGenerator {
         // 数据库用户名
         String username = "root";
         // 数据库密码
-        String password = "Ls13548274447";
+        String password = "root";
         // 数据库名
         String dataBase = "emergency_db";
         // 逻辑删除字段，不要为null或者空
         String logicDeleteFieldName = "deleted";
         // 需要生成的表，正则表达式匹配前缀
-        String tableName = "";
+        String tableName = "bus_monitor_info";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
         // 需要生成的表的前缀，生成后将不含前缀
@@ -107,7 +107,7 @@ public class MybatisPlusGenerator {
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername(username);
         dsc.setPassword(password);
-        dsc.setUrl("jdbc:mysql://localhost:3306/" + dataBase);
+        dsc.setUrl("jdbc:mysql://localhost:3306/" + dataBase+"?useSSL=false");
         /*
          * if (isView) { dsc.setDbQuery(new PostgreSqlQuery() {
          * 

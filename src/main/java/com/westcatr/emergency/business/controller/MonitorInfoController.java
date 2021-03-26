@@ -1,35 +1,36 @@
 package com.westcatr.emergency.business.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.westcatr.emergency.business.service.MonitorInfoService;
 import com.westcatr.emergency.business.entity.MonitorInfo;
+import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
+import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
+import com.westcatr.emergency.business.service.MonitorInfoService;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
+import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
+import com.westcatr.rd.base.acommon.annotation.Update;
+import com.westcatr.rd.base.acommon.vo.IResult;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
+import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
-import io.swagger.annotations.ApiOperation;
-import com.westcatr.rd.base.acommon.vo.IResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
 /**
  *  MonitorInfo 控制器
  *   @author ls
- *  @since 2021-03-10
+ *  @since 2021-03-26
  */
 @Validated
 @Api(tags="监测信息表接口", description = "monitorInfo")
@@ -44,7 +45,7 @@ public class MonitorInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="监测信息表分页数据接口", module="监测信息表管理")
     @IPermissions(value="monitorInfo:page")
@@ -58,7 +59,7 @@ public class MonitorInfoController {
     /**
      * 通过id获取监测信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="获取监测信息表数据接口", module="监测信息表管理")
     @IPermissions(value="monitorInfo:get")
@@ -72,7 +73,7 @@ public class MonitorInfoController {
     /**
      * 新增监测信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="新增监测信息表数据接口", level = 2, module="监测信息表管理")
     @IPermissions(value="monitorInfo:add")
@@ -86,7 +87,7 @@ public class MonitorInfoController {
     /**
      * 更新监测信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="更新监测信息表数据接口", level = 2, module="监测信息表管理")
     @IPermissions(value="monitorInfo:update")
@@ -100,7 +101,7 @@ public class MonitorInfoController {
     /**
      * 通过id删除监测信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="删除监测信息表数据接口", level = 3, module="监测信息表管理")
     @IPermissions(value="monitorInfo:del")
@@ -117,7 +118,7 @@ public class MonitorInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="监测信息表VO分页数据接口", module="监测信息表管理")
     @IPermissions(value="monitorInfo:page:vo")
@@ -132,7 +133,7 @@ public class MonitorInfoController {
     /**
      * 通过id获取监测信息表VO
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="获取监测信息表VO数据接口", module="监测信息表管理")
     @IPermissions(value="monitorInfo:get:vo")
@@ -142,6 +143,24 @@ public class MonitorInfoController {
     public IResult<MonitorInfoVO> getMonitorInfoVoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         AssociationQuery<MonitorInfoVO> associationQuery = new AssociationQuery<>(MonitorInfoVO.class);
         return IResult.ok(associationQuery.getVo(id, new MonitorInfoQuery()));
+    }
+
+
+
+    /**
+     * 分类管理界面
+     * @author : ls
+     * @since : Create in 2021-03-26
+     */
+    @SaveLog(value="分类管理界面", module="监测信息表管理")
+    @IPermissions(value="monitorInfo:TypeManagement")
+    @ApiOperationSupport(order=8)
+    @ApiOperation(value="分类管理界面", notes="monitorInfo:TypeManagement")
+    @GetMapping("/TypeManagement")
+    public IResult<Page<MonitorInfo>> getTypeManagementVoPage(PageDTO pageDTO) {
+        QueryWrapper<MonitorInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("judge_info_id").eq("is_handle","1");
+        return IResult.ok(monitorInfoService.page(pageDTO.page(), queryWrapper));
     }
 
 }

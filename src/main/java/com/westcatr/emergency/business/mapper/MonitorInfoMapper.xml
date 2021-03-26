@@ -17,6 +17,10 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="event_id" property="eventId" />
+        <result column="is_handle" property="isHandle" />
+        <result column="industrial_id" property="industrialId" />
+        <result column="is_duplicated" property="isDuplicated" />
+        <result column="judge_info_id" property="judgeInfoId" />
     </resultMap>
 
 </mapper>

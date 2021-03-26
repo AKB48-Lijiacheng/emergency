@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -68,11 +68,11 @@ public class MonitorInfo extends Model<MonitorInfo> {
 
     @ApiModelProperty(value = "是否重大活动")
     @TableField("tf_major_events")
-    private String tfMajorEvents;
+    private Integer tfMajorEvents;
 
     @ApiModelProperty(value = "是否上级指示")
     @TableField("tf_superior_instructions")
-    private String tfSuperiorInstructions;
+    private Integer tfSuperiorInstructions;
 
     @TableField("create_time")
     private Date createTime;
@@ -83,6 +83,22 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @ApiModelProperty(value = "事件唯一id")
     @TableField("event_id")
     private Long eventId;
+
+    @ApiModelProperty(value = "该事件是否通过审核")
+    @TableField("is_handle")
+    private Integer isHandle;
+
+    @ApiModelProperty(value = "产业分类表唯一id")
+    @TableField("industrial_id")
+    private Integer industrialId;
+
+    @ApiModelProperty(value = "该监测信息是否重复")
+    @TableField("is_duplicated")
+    private Integer isDuplicated;
+
+    @ApiModelProperty(value = "研判信息表唯一id")
+    @TableField("judge_info_id")
+    private Integer judgeInfoId;
 
 
     @Override

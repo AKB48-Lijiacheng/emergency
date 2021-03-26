@@ -15,11 +15,17 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <easyexcel.version>2.2.8</easyexcel.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.westcatr.rd.base</groupId>
             <artifactId>a-mapping-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+           <version>${easyexcel.version}</version>
         </dependency>
         <dependency>
             <groupId>com.westcatr.rd.base</groupId>
@@ -47,6 +53,15 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.11</version>
         </dependency>
+    <!--达梦数据库驱动-->
+    <dependency>
+        <groupId>com.dm</groupId>
+        <artifactId>DmJdbcDriver18</artifactId>
+        <version>1.8</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
+    </dependency>
+
     </dependencies>
 
     <!-- 设置私服仓库开始 -->
@@ -84,5 +99,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+
 
 </project>

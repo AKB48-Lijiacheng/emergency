@@ -1,22 +1,18 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -54,10 +50,10 @@ public class ProjectManagementInfo extends Model<ProjectManagementInfo> {
     @TableField("start_info_time")
     private Date startInfoTime;
 
+
     @ApiModelProperty(value = "结束时间")
     @TableField("end_info_time")
     private Date endInfoTime;
-
     @ApiModelProperty(value = "评级")
     @TableField("grade")
     private Double grade;

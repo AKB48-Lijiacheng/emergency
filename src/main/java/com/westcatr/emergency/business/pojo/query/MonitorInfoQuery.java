@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -64,11 +64,11 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
 
     @ApiModelProperty(value = "是否重大活动")
     @QueryCondition
-    private String tfMajorEvents;
+    private Integer tfMajorEvents;
 
     @ApiModelProperty(value = "是否上级指示")
     @QueryCondition
-    private String tfSuperiorInstructions;
+    private Integer tfSuperiorInstructions;
 
     @QueryCondition
     private Date createTime;
@@ -79,4 +79,20 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "事件唯一id")
     @QueryCondition
     private Long eventId;
+
+    @ApiModelProperty(value = "该事件是否通过审核")
+    @QueryCondition
+    private Integer isHandle;
+
+    @ApiModelProperty(value = "产业分类表唯一id")
+    @QueryCondition
+    private Integer industrialId;
+
+    @ApiModelProperty(value = "该监测信息是否重复")
+    @QueryCondition
+    private Integer isDuplicated;
+
+    @ApiModelProperty(value = "研判信息表唯一id")
+    @QueryCondition
+    private Integer judgeInfoId;
 }
