@@ -1,18 +1,15 @@
 package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,6 +45,9 @@ public class ExpertInfoVO implements Serializable {
 
     @ApiModelProperty(value = "职务")
     private String post;
+
+    @ApiModelProperty(value = "职称")
+    private String jobTitle;
 
     @ApiModelProperty(value = "联系电话")
     private String contactNumber;

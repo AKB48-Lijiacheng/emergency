@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-29
  */
 public interface SafeWarnInfoService extends IService<SafeWarnInfo> {
 

@@ -20,16 +20,13 @@ public class WebConfig {
         //设置日期格式
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setDateFormat(GlobalJsonDateConvert.instance);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         //设置长Id转换器
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        //设置中文编码格式
-//        List<MediaType> list = new ArrayList<MediaType>();
-//        list.add(MediaType.APPLICATION_JSON_UTF8);
-//        mappingJackson2HttpMessageConverter.setSupportedMediaTypes(list);
+
         return mappingJackson2HttpMessageConverter;
     }
 }

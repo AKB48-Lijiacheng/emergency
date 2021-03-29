@@ -1,22 +1,18 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -66,11 +62,11 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("disposal_measure")
     private String disposalMeasure;
 
-    @ApiModelProperty(value = "是否重大活动")
+    @ApiModelProperty(value = "是否重大活动，0不是，1是")
     @TableField("tf_major_events")
     private Integer tfMajorEvents;
 
-    @ApiModelProperty(value = "是否上级指示")
+    @ApiModelProperty(value = "是否上级指示，0不是，1是")
     @TableField("tf_superior_instructions")
     private Integer tfSuperiorInstructions;
 
@@ -84,7 +80,7 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("event_id")
     private Long eventId;
 
-    @ApiModelProperty(value = "该事件是否通过审核")
+    @ApiModelProperty(value = "该事件是否通过审核，0不通过，1通过")
     @TableField("is_handle")
     private Integer isHandle;
 
@@ -92,7 +88,7 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("industrial_id")
     private Integer industrialId;
 
-    @ApiModelProperty(value = "该监测信息是否重复")
+    @ApiModelProperty(value = "该监测信息是否重复,0不重复，1重复")
     @TableField("is_duplicated")
     private Integer isDuplicated;
 

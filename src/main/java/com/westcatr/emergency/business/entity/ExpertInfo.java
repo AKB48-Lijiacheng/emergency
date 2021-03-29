@@ -20,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -53,6 +53,10 @@ public class ExpertInfo extends Model<ExpertInfo> {
     @ApiModelProperty(value = "职务")
     @TableField("post")
     private String post;
+
+    @ApiModelProperty(value = "职称")
+    @TableField("job_title")
+    private String jobTitle;
 
     @ApiModelProperty(value = "联系电话")
     @TableField("contact_number")

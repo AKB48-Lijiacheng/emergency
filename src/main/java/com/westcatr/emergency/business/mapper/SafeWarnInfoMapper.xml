@@ -16,6 +16,7 @@
         <result column="alert_start_time" property="alertStartTime" />
         <result column="possible_scope_influence" property="possibleScopeInfluence" />
         <result column="development_tren" property="developmentTren" />
+        <result column="enterprise_name" property="enterpriseName" />
     </resultMap>
 
 </mapper>

@@ -1,9 +1,13 @@
 package com.westcatr.emergency.business.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
-import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.westcatr.emergency.business.entity.MonitorInfo;
+import com.westcatr.emergency.business.pojo.Dto.ParamDto.DocDto;
+import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
+
+import java.io.File;
+
 /**
  * <p>
  * 监测信息表 服务类
@@ -23,4 +27,7 @@ public interface MonitorInfoService extends IService<MonitorInfo> {
     MonitorInfo iGetById(Long id);
 
     boolean iRemove(Long id);
+
+
+    public File buildDoc(DocDto dto);
 }

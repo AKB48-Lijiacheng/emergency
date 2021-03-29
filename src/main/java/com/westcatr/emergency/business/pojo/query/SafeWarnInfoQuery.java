@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -75,4 +75,8 @@ public class SafeWarnInfoQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "发展趋势")
     @QueryCondition
     private String developmentTren;
+
+    @ApiModelProperty(value = "相关企业")
+    @QueryCondition
+    private String enterpriseName;
 }

@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -64,6 +64,9 @@ public class SafeWarnInfoVO implements Serializable {
 
     @ApiModelProperty(value = "发展趋势")
     private String developmentTren;
+
+    @ApiModelProperty(value = "相关企业")
+    private String enterpriseName;
 
 
 }

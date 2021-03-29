@@ -29,7 +29,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
 /**
  *  SafeWarnInfo 控制器
  *   @author ls
- *  @since 2021-03-10
+ *  @since 2021-03-29
  */
 @Validated
 @Api(tags="安全预警表接口", description = "safeWarnInfo")
@@ -44,7 +44,7 @@ public class SafeWarnInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="安全预警表分页数据接口", module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:page")
@@ -58,7 +58,7 @@ public class SafeWarnInfoController {
     /**
      * 通过id获取安全预警表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="获取安全预警表数据接口", module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:get")
@@ -72,7 +72,7 @@ public class SafeWarnInfoController {
     /**
      * 新增安全预警表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="新增安全预警表数据接口", level = 2, module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:add")
@@ -86,7 +86,7 @@ public class SafeWarnInfoController {
     /**
      * 更新安全预警表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="更新安全预警表数据接口", level = 2, module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:update")
@@ -100,7 +100,7 @@ public class SafeWarnInfoController {
     /**
      * 通过id删除安全预警表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="删除安全预警表数据接口", level = 3, module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:del")
@@ -117,7 +117,7 @@ public class SafeWarnInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="安全预警表VO分页数据接口", module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:page:vo")
@@ -132,7 +132,7 @@ public class SafeWarnInfoController {
     /**
      * 通过id获取安全预警表VO
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-29
      */
     @SaveLog(value="获取安全预警表VO数据接口", module="安全预警表管理")
     @IPermissions(value="safeWarnInfo:get:vo")

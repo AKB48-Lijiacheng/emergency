@@ -44,7 +44,7 @@ public class MybatisPlusGenerator {
         // 逻辑删除字段，不要为null或者空
         String logicDeleteFieldName = "deleted";
         // 需要生成的表，正则表达式匹配前缀
-        String tableName = "bus_monitor_info";
+        String tableName = "bus_safe_warn_info";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
         // 需要生成的表的前缀，生成后将不含前缀

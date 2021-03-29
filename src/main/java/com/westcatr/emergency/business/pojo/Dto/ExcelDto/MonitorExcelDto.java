@@ -1,13 +1,13 @@
-package com.westcatr.emergency.business.pojo.Dto;
+package com.westcatr.emergency.business.pojo.Dto.ExcelDto;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,18 +21,19 @@ import java.util.Date;
  * @since 2021-03-10
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 @TableName("bus_monitor_info")
+@ContentRowHeight(10)
+@ColumnWidth(15)
 public class MonitorExcelDto implements Serializable {
 
     @Select(exist = false)
     private static final long serialVersionUID=1L;
 
-    private Long id;
+     private String id;
     @ExcelProperty({"目标资产名称"})
     @ApiModelProperty(value = "目标资产名称")
     private String targetAssetName;
+
     @ExcelProperty({"问题名称"})
     @ApiModelProperty(value = "问题名称")
     private String problemName;
@@ -57,18 +58,18 @@ public class MonitorExcelDto implements Serializable {
     @ApiModelProperty(value = "处置措施")
 
     private String disposalMeasure;
-    @ExcelProperty({"是否上级指示"})
-    @ApiModelProperty(value = "是否上级指示")
-    private String tfMajorEvents;
+    @ExcelProperty({"是否重大活动"})
+    @ApiModelProperty(value = "是否重大活动")
+    private Integer tfMajorEvents;
 
     @ExcelProperty({"是否上级指示"})
     @ApiModelProperty(value = "是否上级指示")
-    private String tfSuperiorInstructions;
+    private Integer tfSuperiorInstructions;
 
-    @ExcelIgnore
+    @ExcelProperty({"创建时间"})
     private Date createTime;
 
-    @ExcelIgnore
+    @ExcelProperty({"更新时间"})
     private Date updateTime;
 
     @ExcelIgnore

@@ -1,19 +1,22 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+import com.westcatr.rd.base.acommon.annotation.Insert;
+import com.westcatr.rd.base.acommon.annotation.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -21,7 +24,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -71,12 +74,15 @@ public class SafeWarnInfo extends Model<SafeWarnInfo> {
 
     @ApiModelProperty(value = "可能影响范围")
     @TableField("possible_scope_influence")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private String possibleScopeInfluence;
 
     @ApiModelProperty(value = "发展趋势")
     @TableField("development_tren")
     private String developmentTren;
+
+    @ApiModelProperty(value = "相关企业")
+    @TableField("enterprise_name")
+    private String enterpriseName;
 
 
     @Override

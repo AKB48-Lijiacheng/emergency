@@ -10,6 +10,7 @@
         <result column="id_card" property="idCard" />
         <result column="work_company" property="workCompany" />
         <result column="post" property="post" />
+        <result column="job_title" property="jobTitle" />
         <result column="contact_number" property="contactNumber" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />

@@ -29,7 +29,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
 /**
  *  ExpertInfo 控制器
  *   @author ls
- *  @since 2021-03-10
+ *  @since 2021-03-26
  */
 @Validated
 @Api(tags="专家库信息表接口", description = "expertInfo")
@@ -44,7 +44,7 @@ public class ExpertInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="专家库信息表分页数据接口", module="专家库信息表管理")
     @IPermissions(value="expertInfo:page")
@@ -58,7 +58,7 @@ public class ExpertInfoController {
     /**
      * 通过id获取专家库信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="获取专家库信息表数据接口", module="专家库信息表管理")
     @IPermissions(value="expertInfo:get")
@@ -72,7 +72,7 @@ public class ExpertInfoController {
     /**
      * 新增专家库信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="新增专家库信息表数据接口", level = 2, module="专家库信息表管理")
     @IPermissions(value="expertInfo:add")
@@ -86,7 +86,7 @@ public class ExpertInfoController {
     /**
      * 更新专家库信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="更新专家库信息表数据接口", level = 2, module="专家库信息表管理")
     @IPermissions(value="expertInfo:update")
@@ -100,7 +100,7 @@ public class ExpertInfoController {
     /**
      * 通过id删除专家库信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="删除专家库信息表数据接口", level = 3, module="专家库信息表管理")
     @IPermissions(value="expertInfo:del")
@@ -117,7 +117,7 @@ public class ExpertInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="专家库信息表VO分页数据接口", module="专家库信息表管理")
     @IPermissions(value="expertInfo:page:vo")
@@ -132,7 +132,7 @@ public class ExpertInfoController {
     /**
      * 通过id获取专家库信息表VO
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-03-26
      */
     @SaveLog(value="获取专家库信息表VO数据接口", module="专家库信息表管理")
     @IPermissions(value="expertInfo:get:vo")

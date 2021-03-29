@@ -16,7 +16,7 @@ import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-03-29
  */
 @Service
 public class SafeWarnInfoServiceImpl extends ServiceImpl<SafeWarnInfoMapper, SafeWarnInfo> implements SafeWarnInfoService {
