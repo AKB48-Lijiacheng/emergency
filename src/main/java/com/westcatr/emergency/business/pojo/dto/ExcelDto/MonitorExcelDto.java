@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.pojo.Dto.ExcelDto;
+package com.westcatr.emergency.business.pojo.dto.ExcelDto;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;

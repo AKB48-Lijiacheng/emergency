@@ -1,19 +1,15 @@
 package com.westcatr.emergency.business.pojo.query;
 
-import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -35,19 +31,19 @@ public class FileInfoQuery extends TimeDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "文件名称")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String fileName;
 
     @ApiModelProperty(value = "文件地址")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String fileUrl;
 
     @ApiModelProperty(value = "文件存放地址")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String filePath;
 
     @ApiModelProperty(value = "文件编号")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String fileCode;
 
     @ApiModelProperty(value = "文件类型")

@@ -31,19 +31,19 @@ public class EntInfoQuery extends TimeDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "企业名称")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String entName;
 
     @ApiModelProperty(value = "企业类别")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String entCategory;
 
     @ApiModelProperty(value = "行业类别")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String entIndustryCategory;
 
     @ApiModelProperty(value = "企业地址")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String entAddress;
 
     @ApiModelProperty(value = "邮政编码")
@@ -51,27 +51,27 @@ public class EntInfoQuery extends TimeDTO implements Serializable {
     private String postCode;
 
     @ApiModelProperty(value = "法人")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String legalPerson;
 
     @ApiModelProperty(value = "注册城市")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String registerCity;
 
     @ApiModelProperty(value = "业务省份")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String businesProvince;
 
     @ApiModelProperty(value = "联系人姓名")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String contactName;
 
     @ApiModelProperty(value = "联系人电话")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String contactNumber;
 
     @ApiModelProperty(value = "联系人邮箱")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String contactEmail;
 
     @QueryCondition

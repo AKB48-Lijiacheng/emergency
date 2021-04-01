@@ -1,7 +1,7 @@
 package com.westcatr.emergency.business.component.schedule;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.westcatr.emergency.business.pojo.Dto.ElasticSearchDto.SecurityEventDto;
+import com.westcatr.emergency.business.pojo.dto.ElasticSearchDto.SecurityEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;

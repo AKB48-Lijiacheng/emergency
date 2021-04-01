@@ -1,28 +1,31 @@
 package com.westcatr.emergency.business.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.SecurityIncidentsInfoQuery;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
-
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.westcatr.emergency.business.service.SecurityIncidentsInfoService;
 import com.westcatr.emergency.business.entity.SecurityIncidentsInfo;
+import com.westcatr.emergency.business.pojo.query.SecurityIncidentsInfoQuery;
+import com.westcatr.emergency.business.pojo.vo.SecurityIncidentsInfoVO;
+import com.westcatr.emergency.business.service.SecurityIncidentsInfoService;
+import com.westcatr.emergency.business.util.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
+import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
+import com.westcatr.rd.base.acommon.annotation.Update;
+import com.westcatr.rd.base.acommon.vo.IResult;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import com.westcatr.emergency.business.pojo.vo.SecurityIncidentsInfoVO;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
-import io.swagger.annotations.ApiOperation;
-import com.westcatr.rd.base.acommon.vo.IResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.util.List;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
@@ -142,6 +145,20 @@ public class SecurityIncidentsInfoController {
     public IResult<SecurityIncidentsInfoVO> getSecurityIncidentsInfoVoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         AssociationQuery<SecurityIncidentsInfoVO> associationQuery = new AssociationQuery<>(SecurityIncidentsInfoVO.class);
         return IResult.ok(associationQuery.getVo(id, new SecurityIncidentsInfoQuery()));
+    }
+
+
+
+    @SaveLog(value = "导出文档表格", module = "监测信息表管理")
+    @ApiOperation(value = "导出文档表格", notes = "monitorInfo:export")
+    @ApiOperationSupport(order = 9)
+    @PostMapping("/export")
+    public void export(SecurityIncidentsInfoQuery query, @RequestParam("type") String type, HttpServletResponse response, HttpServletRequest request) {
+        AssociationQuery<SecurityIncidentsInfoVO> associationQuery = new AssociationQuery<>(SecurityIncidentsInfoVO.class);
+        query.setSize(9999);
+        List<SecurityIncidentsInfoVO> records = associationQuery.voPage(query).getRecords();
+        File file = securityIncidentsInfoService.buildDoc(type,records);
+        FileDownLoadUtil.downloadSingleFile(file, request, response);
     }
 
 }

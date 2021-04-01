@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.pojo.Dto.ElasticSearchDto;
+package com.westcatr.emergency.business.pojo.dto.ElasticSearchDto;
 
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;

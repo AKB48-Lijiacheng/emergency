@@ -1,26 +1,22 @@
 package com.westcatr.emergency.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.westcatr.emergency.business.Util.FileUtil;
 import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.mapper.MonitorInfoMapper;
-import com.westcatr.emergency.business.pojo.Dto.ExcelDto.MonitorExcelDto;
-import com.westcatr.emergency.business.pojo.Dto.ParamDto.DocDto;
+import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
+import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.service.MonitorInfoService;
+import com.westcatr.emergency.business.util.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, MonitorInfo> implements MonitorInfoService {
     @Value("${file.doc.path}")
-    String downLoadFilePath;
+    String  downLoadFilePath;
 
     @Override
     public IPage<MonitorInfo> iPage(MonitorInfoQuery query) {
@@ -70,35 +66,29 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
      * @return
      */
     @Override
-    public File buildDoc(DocDto dto) {
-        String type = dto.getType();
-        String name ="监测信息表";
+    public File buildDoc(String type, List<MonitorInfoVO> records) {
+        String name = "监测信息表";
         String fileSuffix = ".xlsx";
-        String time = DateUtil.format(new Date(), "yyyyMMdd");
+        long time = System.currentTimeMillis();
         String filePath = downLoadFilePath + time + name;
         File file = null;
         fileSuffix = FileUtil.getFileSuffix(type);
         try {
-            filePath += fileSuffix;
-            file = new File(filePath);
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }else if (!file.exists()){
-                file.createNewFile();
-            }
-            QueryWrapper<MonitorInfo> queryWrapper = new QueryWrapper<>();//条件构造
-            List<MonitorInfo> list  = this.list(queryWrapper);
-            List<MonitorExcelDto> monitorExcelLists = list.stream().map(m -> {
-                MonitorExcelDto monitorExcelDto = new MonitorExcelDto();
-                BeanUtil.copyProperties(m, monitorExcelDto);
-                return monitorExcelDto;
+            filePath += fileSuffix;//文件路径
+            cn.hutool.core.io.FileUtil.touch(filePath);//创建目录和文件
+            List<MonitorExcelDto> list = records.stream().map(m -> {
+                MonitorExcelDto dto = new MonitorExcelDto();
+                BeanUtil.copyProperties(m, dto);
+                return dto;
             }).collect(Collectors.toList());
-            EasyExcel.write(file, MonitorExcelDto.class).sheet("监测信息表").doWrite(monitorExcelLists);
-        } catch (IOException e) {
-           new RuntimeException("文件生成失败!");
+            EasyExcel.write(file, MonitorExcelDto.class).sheet(name).doWrite(list);
+        } catch (Exception e) {
+            new RuntimeException("文件生成失败!");
         }
         return file;
     }
+
+
 
 
 }

@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.westcatr.emergency.business.pojo.query.SafeWarnInfoQuery;
 import com.westcatr.emergency.business.entity.SafeWarnInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.westcatr.emergency.business.pojo.vo.SafeWarnInfoVO;
+
+import java.io.File;
+import java.util.List;
+
 /**
  * <p>
  * 安全预警表 服务类
@@ -23,4 +28,6 @@ public interface SafeWarnInfoService extends IService<SafeWarnInfo> {
     SafeWarnInfo iGetById(Long id);
 
     boolean iRemove(Long id);
+
+    File buildDoc(String type, List<SafeWarnInfoVO> records);
 }

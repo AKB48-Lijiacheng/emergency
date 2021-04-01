@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.westcatr.emergency.business.Util.FileDownLoadUtil;
 import com.westcatr.emergency.business.entity.MonitorInfo;
-import com.westcatr.emergency.business.pojo.Dto.ParamDto.DocDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.service.MonitorInfoService;
+import com.westcatr.emergency.business.util.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
@@ -31,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.util.List;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
@@ -172,10 +172,10 @@ public class MonitorInfoController {
      * @author : ls
      * @since : Create in 2021-03-26
      */
-    @SaveLog(value = "分类管理界面", module = "监测信息表管理")
+    @SaveLog(value = "分类管理查询接口", module = "监测信息表管理")
     @IPermissions(value = "monitorInfo:TypeManagement")
     @ApiOperationSupport(order = 8)
-    @ApiOperation(value = "分类管理界面", notes = "monitorInfo:TypeManagement")
+    @ApiOperation(value = "分类管理", notes = "monitorInfo:TypeManagement")
     @GetMapping("/TypeManagement")
     public IResult<Page<MonitorInfo>> getTypeManagementVoPage(PageDTO pageDTO) {
         QueryWrapper<MonitorInfo> queryWrapper = new QueryWrapper<>();
@@ -184,7 +184,7 @@ public class MonitorInfoController {
     }
 
 
-
+//todo
     /**
      * @author lijiacheng
      * @since 2021/3/29
@@ -192,9 +192,14 @@ public class MonitorInfoController {
     @SaveLog(value = "导出文档表格", module = "监测信息表管理")
     @ApiOperation(value = "导出文档表格", notes = "monitorInfo:export")
     @ApiOperationSupport(order = 9)
-    @PostMapping("/export")
-    public void export(DocDto dto, HttpServletResponse response, HttpServletRequest request) {
-        File file = monitorInfoService.buildDoc(dto);
+    @PostMapping ("/export")
+    public void export(MonitorInfoQuery query,@RequestParam("type") String type, HttpServletResponse response, HttpServletRequest request) {
+        AssociationQuery<MonitorInfoVO> associationQuery = new AssociationQuery<>(MonitorInfoVO.class);
+        query.setSize(9999);
+        List<MonitorInfoVO> records = associationQuery.voPage(query).getRecords();
+        File file = monitorInfoService.buildDoc(type,records);
         FileDownLoadUtil.downloadSingleFile(file, request, response);
     }
+
+
 }

@@ -6,8 +6,9 @@ import com.westcatr.rd.base.authority.annotation.EnableIAuthority;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
+@EnableCaching
 @EnableICacheKey
 @EnableIAuthority
 @EnableScheduling

@@ -75,7 +75,10 @@
         <scope>system</scope>
         <systemPath>${project.basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
     </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- 设置私服仓库开始 -->

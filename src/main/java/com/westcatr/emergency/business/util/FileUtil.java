@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.Util;
+package com.westcatr.emergency.business.util;
 
 /**
  * @author lijiacheng

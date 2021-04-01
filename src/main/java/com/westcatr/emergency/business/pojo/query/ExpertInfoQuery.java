@@ -31,7 +31,7 @@ public class ExpertInfoQuery extends TimeDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "姓名")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String name;
 
     @ApiModelProperty(value = "性别")
@@ -39,23 +39,23 @@ public class ExpertInfoQuery extends TimeDTO implements Serializable {
     private String sex;
 
     @ApiModelProperty(value = "身份证号")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String idCard;
 
     @ApiModelProperty(value = "就职单位")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String workCompany;
 
     @ApiModelProperty(value = "职务")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String post;
 
     @ApiModelProperty(value = "职称")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String jobTitle;
 
     @ApiModelProperty(value = "联系电话")
-    @QueryCondition
+    @QueryCondition(condition = QueryCondition.Condition.LIKE)
     private String contactNumber;
 
     @QueryCondition
