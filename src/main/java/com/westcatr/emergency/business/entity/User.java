@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +20,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -60,16 +59,56 @@ public class User extends Model<User> {
     private Integer enable;
 
     @ApiModelProperty(value = "注册时间")
-    @TableField("create_time") private Date createTime;
+    @TableField("create_time")
+    private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
-    @JsonFormat( pattern="yyyy-MM-dd HH:mm:ss")
     @TableField("update_time")
     private Date updateTime;
 
     @ApiModelProperty(value = "所属账户")
     @TableField("account_id")
     private Long accountId;
+
+    @ApiModelProperty(value = "所属区县id")
+    @TableField("city_id")
+    private Long cityId;
+
+    @ApiModelProperty(value = "所属市级id")
+    @TableField("country_id")
+    private Long countryId;
+
+    @ApiModelProperty(value = "所属企业id")
+    @TableField("ent_id")
+    private Long entId;
+
+    @ApiModelProperty(value = "大平台用户ID")
+    @TableField("sso_id")
+    private String ssoId;
+
+    @ApiModelProperty(value = "大平台头像")
+    @TableField("sso_user_icon")
+    private String ssoUserIcon;
+
+    @ApiModelProperty(value = "大平台邮箱")
+    @TableField("sso_email")
+    private String ssoEmail;
+
+    @ApiModelProperty(value = "大平台用户类型")
+    @TableField("sso_user_type")
+    private String ssoUserType;
+
+    @ApiModelProperty(value = "大平台姓名")
+    @TableField("sso_name")
+    private String ssoName;
+
+    @ApiModelProperty(value = "大平台账户")
+    @TableField("sso_account")
+    private String ssoAccount;
+
+    @ApiModelProperty(value = "大平台电话")
+    @TableField("sso_mobile")
+    private String ssoMobile;
 
 
     @Override

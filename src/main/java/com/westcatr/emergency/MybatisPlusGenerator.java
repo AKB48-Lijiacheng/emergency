@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.po.LikeTable;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -44,9 +43,10 @@ public class MybatisPlusGenerator {
         // 逻辑删除字段，不要为null或者空
         String logicDeleteFieldName = "deleted";
         // 需要生成的表，正则表达式匹配前缀
-        String tableName = "bus_safe_warn_info";
+        String tableName = "";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
+        String[] includeTable = new String[] {"sys_user"};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[] { "bus_", "sys_" };
 
@@ -107,7 +107,7 @@ public class MybatisPlusGenerator {
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername(username);
         dsc.setPassword(password);
-        dsc.setUrl("jdbc:mysql://localhost:3306/" + dataBase+"?useSSL=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/" + dataBase+"?useSSL=false&serverTimezone=Asia/Shanghai");
         /*
          * if (isView) { dsc.setDbQuery(new PostgreSqlQuery() {
          * 
@@ -123,7 +123,8 @@ public class MybatisPlusGenerator {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         // strategy.setCapitalMode(true);全局大写命名 ORACLE 注意
-        strategy.setLikeTable(new LikeTable(tableName));
+//        strategy.setLikeTable(new LikeTable(tableName));
+        strategy.setInclude(includeTable);
         // strategy.setInclude(tableNames.split(","));
         strategy.setTablePrefix(tableQ);
         if (logicDeleteFieldName != null && !logicDeleteFieldName.equals("")) {

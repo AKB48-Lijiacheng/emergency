@@ -20,11 +20,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableAsync//线程池
-public class ExecutorConfig {
+public class ThreadPool {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(ExecutorConfig.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(ThreadPool.class);
+     public  static Executor executorPool;
 
     @Bean("docExecutor")
     public Executor asyncServiceExecutor() {
@@ -44,6 +44,7 @@ public class ExecutorConfig {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 //执行初始化
         executor.initialize();
+        this.executorPool =executor;
         return executor;
     }
 }

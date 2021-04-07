@@ -1,18 +1,22 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+import com.westcatr.rd.base.acommon.annotation.Insert;
+import com.westcatr.rd.base.acommon.annotation.Update;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -20,7 +24,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-26
+ * @since 2021-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -62,11 +66,11 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("disposal_measure")
     private String disposalMeasure;
 
-    @ApiModelProperty(value = "是否重大活动，0不是，1是")
+    @ApiModelProperty(value = "是否重大活动")
     @TableField("tf_major_events")
     private Integer tfMajorEvents;
 
-    @ApiModelProperty(value = "是否上级指示，0不是，1是")
+    @ApiModelProperty(value = "是否上级指示")
     @TableField("tf_superior_instructions")
     private Integer tfSuperiorInstructions;
 
@@ -80,15 +84,15 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("event_id")
     private Long eventId;
 
-    @ApiModelProperty(value = "该事件是否通过审核，0不通过，1通过")
-    @TableField("is_handle")
-    private Integer isHandle;
+    @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
+    @TableField("status")
+    private Integer status;
 
     @ApiModelProperty(value = "产业分类表唯一id")
     @TableField("industrial_id")
     private Integer industrialId;
 
-    @ApiModelProperty(value = "该监测信息是否重复,0不重复，1重复")
+    @ApiModelProperty(value = "该监测信息是否重复")
     @TableField("is_duplicated")
     private Integer isDuplicated;
 

@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -60,6 +60,36 @@ public class UserVO implements Serializable {
 
     @ApiModelProperty(value = "所属账户")
     private Long accountId;
+
+    @ApiModelProperty(value = "所属区县id")
+    private Long cityId;
+
+    @ApiModelProperty(value = "所属市级id")
+    private Long countryId;
+
+    @ApiModelProperty(value = "所属企业id")
+    private Long entId;
+
+    @ApiModelProperty(value = "大平台用户ID")
+    private String ssoId;
+
+    @ApiModelProperty(value = "大平台头像")
+    private String ssoUserIcon;
+
+    @ApiModelProperty(value = "大平台邮箱")
+    private String ssoEmail;
+
+    @ApiModelProperty(value = "大平台用户类型")
+    private String ssoUserType;
+
+    @ApiModelProperty(value = "大平台姓名")
+    private String ssoName;
+
+    @ApiModelProperty(value = "大平台账户")
+    private String ssoAccount;
+
+    @ApiModelProperty(value = "大平台电话")
+    private String ssoMobile;
 
 
 }

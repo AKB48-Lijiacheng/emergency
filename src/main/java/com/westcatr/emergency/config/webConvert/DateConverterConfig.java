@@ -1,4 +1,4 @@
-package com.westcatr.emergency.config.convert;
+package com.westcatr.emergency.config.webConvert;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;

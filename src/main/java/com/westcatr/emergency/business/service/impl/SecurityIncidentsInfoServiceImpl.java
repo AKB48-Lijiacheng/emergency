@@ -10,7 +10,7 @@ import com.westcatr.emergency.business.pojo.dto.ExcelDto.SecurityIncidentsInfoEx
 import com.westcatr.emergency.business.pojo.query.SecurityIncidentsInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.SecurityIncidentsInfoVO;
 import com.westcatr.emergency.business.service.SecurityIncidentsInfoService;
-import com.westcatr.emergency.business.util.FileUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 import org.springframework.beans.factory.annotation.Value;

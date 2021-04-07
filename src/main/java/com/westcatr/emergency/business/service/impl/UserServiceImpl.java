@@ -1,14 +1,16 @@
 package com.westcatr.emergency.business.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
-import com.westcatr.emergency.business.pojo.query.UserQuery;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto.SsoUser;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.mapper.UserMapper;
+import com.westcatr.emergency.business.pojo.query.UserQuery;
 import com.westcatr.emergency.business.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
+import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -16,7 +18,7 @@ import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-07
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -44,5 +46,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean iRemove(Long id) {
         return this.removeById(id);
+    }
+
+    @Override
+    public void updateUserBySsoId(SsoUser ssoUser) {
+        User user = new User();
+        user.setSsoId(ssoUser.getId());
+        user.setSsoUserIcon(ssoUser.getUser_icon());
+        user.setSsoEmail(ssoUser.getEmail());
+        user.setSsoUserType(ssoUser.getUser_type());
+        user.setSsoAccount(ssoUser.getAccount());
+        user.setSsoMobile(ssoUser.getMobile());
+        user.setSsoName(ssoUser.getName());
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.eq("sso_id",ssoUser.getId());
+        this.update(user,qw);
     }
 }

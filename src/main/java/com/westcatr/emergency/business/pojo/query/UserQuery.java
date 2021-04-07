@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -69,4 +69,44 @@ public class UserQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "所属账户")
     @QueryCondition
     private Long accountId;
+
+    @ApiModelProperty(value = "所属区县id")
+    @QueryCondition
+    private Long cityId;
+
+    @ApiModelProperty(value = "所属市级id")
+    @QueryCondition
+    private Long countryId;
+
+    @ApiModelProperty(value = "所属企业id")
+    @QueryCondition
+    private Long entId;
+
+    @ApiModelProperty(value = "大平台用户ID")
+    @QueryCondition
+    private String ssoId;
+
+    @ApiModelProperty(value = "大平台头像")
+    @QueryCondition
+    private String ssoUserIcon;
+
+    @ApiModelProperty(value = "大平台邮箱")
+    @QueryCondition
+    private String ssoEmail;
+
+    @ApiModelProperty(value = "大平台用户类型")
+    @QueryCondition
+    private String ssoUserType;
+
+    @ApiModelProperty(value = "大平台姓名")
+    @QueryCondition
+    private String ssoName;
+
+    @ApiModelProperty(value = "大平台账户")
+    @QueryCondition
+    private String ssoAccount;
+
+    @ApiModelProperty(value = "大平台电话")
+    @QueryCondition
+    private String ssoMobile;
 }

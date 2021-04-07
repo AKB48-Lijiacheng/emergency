@@ -1,4 +1,4 @@
-package com.westcatr.emergency.config.convert;
+package com.westcatr.emergency.config.webConvert;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.util.StdDateFormat;

@@ -10,7 +10,7 @@ import com.westcatr.emergency.business.pojo.dto.ExcelDto.InfoDeliveryInfoExcelDt
 import com.westcatr.emergency.business.pojo.query.InfoDeliveryInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.InfoDeliveryInfoVO;
 import com.westcatr.emergency.business.service.InfoDeliveryInfoService;
-import com.westcatr.emergency.business.util.FileUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 import org.springframework.beans.factory.annotation.Value;

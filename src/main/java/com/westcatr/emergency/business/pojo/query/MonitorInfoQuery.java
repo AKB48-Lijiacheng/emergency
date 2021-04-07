@@ -1,15 +1,19 @@
 package com.westcatr.emergency.business.pojo.query;
 
-import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
+import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
@@ -17,7 +21,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-26
+ * @since 2021-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,11 +35,11 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "目标资产名称")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String targetAssetName;
 
     @ApiModelProperty(value = "问题名称")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String problemName;
 
     @ApiModelProperty(value = "监测时间")
@@ -43,15 +47,15 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     private Date monitorTime;
 
     @ApiModelProperty(value = "问题类别")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String problemType;
 
     @ApiModelProperty(value = "问题描述")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String problemDescribe;
 
     @ApiModelProperty(value = "相关企业")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String enterpriseName;
 
     @ApiModelProperty(value = "处置措施")
@@ -76,9 +80,9 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Long eventId;
 
-    @ApiModelProperty(value = "该事件是否通过审核")
+    @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
     @QueryCondition
-    private Integer isHandle;
+    private Integer status;
 
     @ApiModelProperty(value = "产业分类表唯一id")
     @QueryCondition

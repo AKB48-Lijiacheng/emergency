@@ -8,7 +8,7 @@ import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.service.MonitorInfoService;
-import com.westcatr.emergency.business.util.FileDownLoadUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
@@ -20,8 +20,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,36 +33,29 @@ import java.util.List;
 import static cn.hutool.core.util.StrUtil.COMMA;
 
 /**
- * MonitorInfo 控制器
- *
- * @author ls
- * @since 2021-03-26
+ *  MonitorInfo 控制器
+ *   @author ls
+ *  @since 2021-04-07
  */
 @Validated
-@Api(tags = "监测信息表接口", description = "monitorInfo")
+@Api(tags="监测信息表接口", description = "monitorInfo")
 @Slf4j
 @RestController
-@EnableTransactionManagement
 @RequestMapping("//monitorInfo")
 public class MonitorInfoController {
 
     @Autowired
     private MonitorInfoService monitorInfoService;
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
-
 
     /**
      * 获取分页列表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "监测信息表分页数据接口", module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:page")
-    @ApiOperationSupport(order = 1)
-    @ApiOperation(value = "监测信息表分页数据接口", notes = "monitorInfo:page")
+    @SaveLog(value="监测信息表分页数据接口", module="监测信息表管理")
+    @IPermissions(value="monitorInfo:page")
+    @ApiOperationSupport(order=1)
+    @ApiOperation(value="监测信息表分页数据接口", notes="monitorInfo:page")
     @GetMapping("/page")
     public IResult<IPage<MonitorInfo>> getMonitorInfoPage(MonitorInfoQuery query) {
         return IResult.ok(monitorInfoService.iPage(query));
@@ -72,14 +63,13 @@ public class MonitorInfoController {
 
     /**
      * 通过id获取监测信息表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "获取监测信息表数据接口", module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:get")
-    @ApiOperationSupport(order = 2)
-    @ApiOperation(value = "获取监测信息表数据接口", notes = "monitorInfo:get")
+    @SaveLog(value="获取监测信息表数据接口", module="监测信息表管理")
+    @IPermissions(value="monitorInfo:get")
+    @ApiOperationSupport(order=2)
+    @ApiOperation(value="获取监测信息表数据接口", notes="monitorInfo:get")
     @GetMapping("/get")
     public IResult<MonitorInfo> getMonitorInfoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         return IResult.ok(monitorInfoService.iGetById(id));
@@ -87,14 +77,13 @@ public class MonitorInfoController {
 
     /**
      * 新增监测信息表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "新增监测信息表数据接口", level = 2, module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:add")
-    @ApiOperationSupport(order = 3)
-    @ApiOperation(value = "新增监测信息表数据接口", notes = "monitorInfo:add")
+    @SaveLog(value="新增监测信息表数据接口", level = 2, module="监测信息表管理")
+    @IPermissions(value="monitorInfo:add")
+    @ApiOperationSupport(order=3)
+    @ApiOperation(value="新增监测信息表数据接口", notes="monitorInfo:add")
     @PostMapping("/add")
     public IResult addMonitorInfo(@RequestBody @Validated(Insert.class) MonitorInfo param) {
         return IResult.auto(monitorInfoService.iSave(param));
@@ -102,14 +91,13 @@ public class MonitorInfoController {
 
     /**
      * 更新监测信息表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "更新监测信息表数据接口", level = 2, module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:update")
-    @ApiOperationSupport(order = 4)
-    @ApiOperation(value = "更新监测信息表数据接口", notes = "monitorInfo:update")
+    @SaveLog(value="更新监测信息表数据接口", level = 2, module="监测信息表管理")
+    @IPermissions(value="monitorInfo:update")
+    @ApiOperationSupport(order=4)
+    @ApiOperation(value="更新监测信息表数据接口", notes="monitorInfo:update")
     @PostMapping("/update")
     public IResult updateMonitorInfoById(@RequestBody @Validated(Update.class) MonitorInfo param) {
         return IResult.auto(monitorInfoService.iUpdate(param));
@@ -117,14 +105,13 @@ public class MonitorInfoController {
 
     /**
      * 通过id删除监测信息表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "删除监测信息表数据接口", level = 3, module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:del")
-    @ApiOperationSupport(order = 5)
-    @ApiOperation(value = "删除监测信息表数据接口", notes = "monitorInfo:del")
+    @SaveLog(value="删除监测信息表数据接口", level = 3, module="监测信息表管理")
+    @IPermissions(value="monitorInfo:del")
+    @ApiOperationSupport(order=5)
+    @ApiOperation(value="删除监测信息表数据接口", notes="monitorInfo:del")
     @DeleteMapping("/delete")
     public IResult deleteMonitorInfoById(@NotBlank(message = "id不能为空") @RequestParam(value = "id") String id) {
         for (String s : id.split(COMMA)) {
@@ -135,14 +122,13 @@ public class MonitorInfoController {
 
     /**
      * 获取分页列表
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "监测信息表VO分页数据接口", module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:page:vo")
-    @ApiOperationSupport(order = 6)
-    @ApiOperation(value = "监测信息表VO分页数据接口", notes = "monitorInfo:page:vo")
+    @SaveLog(value="监测信息表VO分页数据接口", module="监测信息表管理")
+    @IPermissions(value="monitorInfo:page:vo")
+    @ApiOperationSupport(order=6)
+    @ApiOperation(value="监测信息表VO分页数据接口", notes="monitorInfo:page:vo")
     @GetMapping("/voPage")
     public IResult<IPage<MonitorInfoVO>> getMonitorInfoVoPage(MonitorInfoQuery query) {
         AssociationQuery<MonitorInfoVO> associationQuery = new AssociationQuery<>(MonitorInfoVO.class);
@@ -151,14 +137,13 @@ public class MonitorInfoController {
 
     /**
      * 通过id获取监测信息表VO
-     *
      * @author : ls
-     * @since : Create in 2021-03-26
+     * @since : Create in 2021-04-07
      */
-    @SaveLog(value = "获取监测信息表VO数据接口", module = "监测信息表管理")
-    @IPermissions(value = "monitorInfo:get:vo")
-    @ApiOperationSupport(order = 7)
-    @ApiOperation(value = "获取监测信息表VO数据接口", notes = "monitorInfo:get:vo")
+    @SaveLog(value="获取监测信息表VO数据接口", module="监测信息表管理")
+    @IPermissions(value="monitorInfo:get:vo")
+    @ApiOperationSupport(order=7)
+    @ApiOperation(value="获取监测信息表VO数据接口", notes="monitorInfo:get:vo")
     @GetMapping("/getVo")
     public IResult<MonitorInfoVO> getMonitorInfoVoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         AssociationQuery<MonitorInfoVO> associationQuery = new AssociationQuery<>(MonitorInfoVO.class);
@@ -193,13 +178,12 @@ public class MonitorInfoController {
     @ApiOperation(value = "导出文档表格", notes = "monitorInfo:export")
     @ApiOperationSupport(order = 9)
     @PostMapping ("/export")
-    public void export(MonitorInfoQuery query,@RequestParam("type") String type, HttpServletResponse response, HttpServletRequest request) {
+    public void export(MonitorInfoQuery query, @RequestParam("type") String type, HttpServletResponse response, HttpServletRequest request) {
         AssociationQuery<MonitorInfoVO> associationQuery = new AssociationQuery<>(MonitorInfoVO.class);
         query.setSize(9999);
         List<MonitorInfoVO> records = associationQuery.voPage(query).getRecords();
         File file = monitorInfoService.buildDoc(type,records);
         FileDownLoadUtil.downloadSingleFile(file, request, response);
     }
-
 
 }

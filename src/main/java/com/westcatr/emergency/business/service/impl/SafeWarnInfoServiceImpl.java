@@ -11,7 +11,7 @@ import com.westcatr.emergency.business.pojo.dto.ExcelDto.SafeWarnInfoExcelDto;
 import com.westcatr.emergency.business.pojo.query.SafeWarnInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.SafeWarnInfoVO;
 import com.westcatr.emergency.business.service.SafeWarnInfoService;
-import com.westcatr.emergency.business.util.FileUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.westcatr.emergency.config.convert;
+package com.westcatr.emergency.config.webConvert;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

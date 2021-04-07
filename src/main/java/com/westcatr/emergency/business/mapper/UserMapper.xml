@@ -14,6 +14,16 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="account_id" property="accountId" />
+        <result column="city_id" property="cityId" />
+        <result column="country_id" property="countryId" />
+        <result column="ent_id" property="entId" />
+        <result column="sso_id" property="ssoId" />
+        <result column="sso_user_icon" property="ssoUserIcon" />
+        <result column="sso_email" property="ssoEmail" />
+        <result column="sso_user_type" property="ssoUserType" />
+        <result column="sso_name" property="ssoName" />
+        <result column="sso_account" property="ssoAccount" />
+        <result column="sso_mobile" property="ssoMobile" />
     </resultMap>
 
 </mapper>

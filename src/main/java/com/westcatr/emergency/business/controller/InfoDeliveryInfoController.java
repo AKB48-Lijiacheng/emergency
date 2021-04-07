@@ -6,7 +6,7 @@ import com.westcatr.emergency.business.entity.InfoDeliveryInfo;
 import com.westcatr.emergency.business.pojo.query.InfoDeliveryInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.InfoDeliveryInfoVO;
 import com.westcatr.emergency.business.service.InfoDeliveryInfoService;
-import com.westcatr.emergency.business.util.FileDownLoadUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;

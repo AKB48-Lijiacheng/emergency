@@ -1,16 +1,17 @@
 package com.westcatr.emergency.business.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.UserQuery;
-import com.westcatr.emergency.business.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto.SsoUser;
+import com.westcatr.emergency.business.entity.User;
+import com.westcatr.emergency.business.pojo.query.UserQuery;
 /**
  * <p>
  * 系统用户 服务类
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-07
  */
 public interface UserService extends IService<User> {
 
@@ -23,4 +24,6 @@ public interface UserService extends IService<User> {
     User iGetById(Long id);
 
     boolean iRemove(Long id);
+
+    void updateUserBySsoId(SsoUser ssoUser);
 }

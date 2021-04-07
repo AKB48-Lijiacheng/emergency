@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.util;
+package com.westcatr.emergency.business.utils.filUtils;
 
 import cn.hutool.core.io.FileTypeUtil;
 

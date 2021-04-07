@@ -10,7 +10,7 @@ import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.service.MonitorInfoService;
-import com.westcatr.emergency.business.util.FileUtil;
+import com.westcatr.emergency.business.utils.filUtils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,12 +26,14 @@ import java.util.stream.Collectors;
  * </p>
  *
  * @author ls
- * @since 2021-03-26
+ * @since 2021-04-07
  */
 @Service
 public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, MonitorInfo> implements MonitorInfoService {
+
     @Value("${file.doc.path}")
     String  downLoadFilePath;
+
 
     @Override
     public IPage<MonitorInfo> iPage(MonitorInfoQuery query) {
@@ -57,14 +59,7 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
     public boolean iRemove(Long id) {
         return this.removeById(id);
     }
-//todo
 
-    /**
-     * 创建导出文档文件
-     *
-     * @param dto
-     * @return
-     */
     @Override
     public File buildDoc(String type, List<MonitorInfoVO> records) {
         String name = "监测信息表";
@@ -87,8 +82,4 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
         }
         return file;
     }
-
-
-
-
 }
