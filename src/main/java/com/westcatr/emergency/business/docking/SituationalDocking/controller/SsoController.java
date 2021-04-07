@@ -54,7 +54,6 @@ public class SsoController {
     @ApiOperation(value="大平台sso登录接口")
     @PostMapping ("/login")
     public  IResult  ssoLogin(@RequestBody SsoToken ssoToken){
-        System.out.println("fangwenle !!!");
         //通过token请求用户信息
         String ssoUserinfo = HttpRequest.get(myProperties.SsoGetUserInfoAddr).header(HttpHeaders.HOST, "netcaso.com")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer "+ssoToken.getAccess_token())
