@@ -26,4 +26,6 @@ public interface UserService extends IService<User> {
     boolean iRemove(Long id);
 
     void updateUserBySsoId(SsoUser ssoUser);
+
+    User createNewUserBySsoUser(SsoUser ssoUser);
 }

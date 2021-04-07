@@ -62,9 +62,23 @@ public class SsoController {
         SsoUser ssoUser = JSONObject.parseObject(ssoUserinfo, SsoUser.class);
         QueryWrapper<User> qw = new QueryWrapper<User>().eq("sso_id", ssoUser.getId());
         User user = userService.getOne(qw);
-        if (null==user||user.getEnable()==0){
-           throw new MyRuntimeException("没有此用户或用户状态非正常",400);
+        //如果他们那有用户,我们sso_id匹配不到，有可能我们这有这个用户，但是sso_id没有绑定。那么我们就用username再匹配一下
+        if (null==user){
+            qw = new QueryWrapper<User>().eq("username", ssoUser.getAccount());
+            user = userService.getOne(qw);
         }
+        if (null==user){//如果用username匹配还匹配不到那么说明我们这没有，那么就给他新建一个
+            user= userService.createNewUserBySsoUser(ssoUser);
+        }else {//如果有了,那么就给他sso_id绑定一下
+            User bindingSsoId = new User();
+            bindingSsoId.setId(user.getId());
+            bindingSsoId.setSsoId(ssoUser.getId());
+            userService.updateById(bindingSsoId);
+        }
+        if (user.getEnable()==0){
+           throw new MyRuntimeException("用户状态非正常",400);
+        }
+
        //异步去更新user的sso信息
         ThreadPool.executorPool.execute(()-> {
             userService.updateUserBySsoId(ssoUser);

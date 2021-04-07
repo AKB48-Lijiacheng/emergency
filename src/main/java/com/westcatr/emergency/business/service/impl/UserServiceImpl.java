@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,8 +9,10 @@ import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.mapper.UserMapper;
 import com.westcatr.emergency.business.pojo.query.UserQuery;
 import com.westcatr.emergency.business.service.UserService;
+import com.westcatr.rd.base.authority.authority.properties.ISecurityProperties;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +25,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Autowired
+    protected ISecurityProperties iSecurityProperties;
 
     @Override
     public IPage<User> iPage(UserQuery query) {
@@ -61,5 +67,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("sso_id",ssoUser.getId());
         this.update(user,qw);
+    }
+
+    @Override
+    public User createNewUserBySsoUser(SsoUser ssoUser) {
+        User user = new User();
+        user.setUsername(ssoUser.getAccount());
+        user.setPassword(SecureUtil.md5(iSecurityProperties.getBeginSalt()+"000000"+iSecurityProperties.getEndSalt()));
+        user.setPhone(ssoUser.getMobile());
+        user.setFullName(ssoUser.getName());
+        user.setEnable(1);
+        user.setSsoId(ssoUser.getId());
+        user.setSsoUserIcon(ssoUser.getUser_icon());
+        user.setSsoEmail(ssoUser.getEmail());
+        user.setSsoUserType(ssoUser.getUser_type());
+        user.setSsoName(ssoUser.getName());
+        user.setSsoAccount(ssoUser.getAccount());
+        user.setSsoMobile(ssoUser.getMobile());
+        this.save(user);
+        return user;
     }
 }
