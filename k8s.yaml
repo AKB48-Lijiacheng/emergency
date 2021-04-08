@@ -38,12 +38,13 @@ spec:
           - mountPath: /home/upload
             #会在nfs路径下建个test-data目录 
             #readOnly: false
+            subPath: emergency
             name: upload
       volumes:
         - name: upload
           nfs:
             server: 10.36.11.50
-            path: "/home/nfsdata/emergency"
+            path: "/home/nfsdata"
 
 ---
 
