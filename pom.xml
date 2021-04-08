@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <groupId>com.westcatr</groupId>
-    <artifactId>emergency</artifactId>
+    <artifactId>emergency-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>emergency</name>
     <description>经信委应急系统后台</description>
