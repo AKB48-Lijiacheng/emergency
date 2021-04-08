@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: <MODULE>
-  namespace: <MODULE>
+  namespace: emergency
   labels:
     app: <MODULE>
 spec:
@@ -41,7 +41,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: <MODULE>
-  namespace: <MODULE>
+  namespace: emergency
 spec:
   selector:
     app: <MODULE>
