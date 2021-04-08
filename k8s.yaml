@@ -45,7 +45,9 @@ metadata:
 spec:
   selector:
     app: <MODULE>
+  type: NodePort
   ports:
   - name: api-port
     port: 7700
     targetPort: api
+    nodePort: 31000
