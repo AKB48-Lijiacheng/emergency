@@ -61,10 +61,10 @@ podTemplate(label: label, containers: [
           container('docker') {
             echo "3. 构建 Docker 镜像阶段"
             sh """
-              sed -i "s@<MODULE>@${module}@g" ${module}/Dockerfile
+              sed -i "s@<MODULE>@${module}@g" Dockerfile
               cat ${module}/Dockerfile
               docker login ${dockerRegistryUrl} -u ${user} -p ${passwd}
-              docker build -t ${image}:${imageTag} -f ${module}/Dockerfile ${module}
+              docker build -t ${image}:${imageTag} -f Dockerfile .
               docker push ${image}:${imageTag}
               """
           }
