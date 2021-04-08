@@ -62,7 +62,7 @@ podTemplate(label: label, containers: [
             echo "3. 构建 Docker 镜像阶段"
             sh """
               sed -i "s@<MODULE>@${module}@g" Dockerfile
-              cat ${module}/Dockerfile
+              cat Dockerfile
               docker login ${dockerRegistryUrl} -u ${user} -p ${passwd}
               docker build -t ${image}:${imageTag} -f Dockerfile .
               docker push ${image}:${imageTag}
@@ -80,7 +80,7 @@ podTemplate(label: label, containers: [
           sed -i "s@<IMAGE>@${image}@" k8s.yaml
           sed -i "s@<MODULE>@${module}@" k8s.yaml
           sed -i "s@<IMAGE_TAG>@${imageTag}@" k8s.yaml
-          cat ${module}/k8s.yaml
+          cat k8s.yaml
           kubectl apply -f ${module}/k8s.yaml
         """
       }
