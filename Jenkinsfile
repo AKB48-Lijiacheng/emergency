@@ -81,7 +81,7 @@ podTemplate(label: label, containers: [
           sed -i "s@<MODULE>@${module}@" k8s.yaml
           sed -i "s@<IMAGE_TAG>@${imageTag}@" k8s.yaml
           cat k8s.yaml
-          kubectl apply -f ${module}/k8s.yaml
+          kubectl apply -f k8s.yaml
         """
       }
     }
