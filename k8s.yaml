@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <MODULE>
+  namespace: <MODULE>
+  labels:
+    app: <MODULE>
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: <MODULE>
+  template:
+    metadata:
+      labels:
+        app: <MODULE>
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: myreg
+      containers:
+      - image: <IMAGE>:<IMAGE_TAG>
+        name: <MODULE>
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 7700
+          name: api
+        env:
+        - name: env
+          value: test
+          #value: <ENV>
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: <MODULE>
+  namespace: <MODULE>
+spec:
+  selector:
+    app: <MODULE>
+  ports:
+  - name: api-port
+    port: 7700
+    targetPort: api
