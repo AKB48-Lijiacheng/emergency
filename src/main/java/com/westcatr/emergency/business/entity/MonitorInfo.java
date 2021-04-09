@@ -1,22 +1,18 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -24,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * </p>
  *
  * @author ls
- * @since 2021-04-07
+ * @since 2021-04-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -35,7 +31,7 @@ public class MonitorInfo extends Model<MonitorInfo> {
 
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "目标资产名称")
@@ -80,15 +76,15 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("update_time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "事件唯一id")
-    @TableField("event_id")
-    private Long eventId;
+    @ApiModelProperty(value = "态势平台事件唯一id")
+    @TableField("situ_event_id")
+    private String situEventId;
 
     @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
     @TableField("status")
     private Integer status;
 
-    @ApiModelProperty(value = "产业分类表唯一id")
+    @ApiModelProperty(value = "产业分类表id")
     @TableField("industrial_id")
     private Integer industrialId;
 
@@ -96,9 +92,17 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("is_duplicated")
     private Integer isDuplicated;
 
-    @ApiModelProperty(value = "研判信息表唯一id")
+    @ApiModelProperty(value = "研判信息表id")
     @TableField("judge_info_id")
     private Integer judgeInfoId;
+
+    @ApiModelProperty(value = "事件信息表id")
+    @TableField("event_info_id")
+    private Long eventInfoId;
+
+    @ApiModelProperty(value = "态势监测信息源表id")
+    @TableField("situ_monitor_src_id")
+    private String situMonitorSrcId;
 
 
     @Override

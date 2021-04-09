@@ -1,12 +1,12 @@
-package com.westcatr.emergency.business.docking.SituationalDocking.controller;
+package com.westcatr.emergency.business.docking.JingxinPlatformDocking.controller;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.westcatr.emergency.business.component.MyProperties;
-import com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto.SsoToken;
-import com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto.SsoUser;
-import com.westcatr.emergency.business.docking.SituationalDocking.service.SsoService;
+import com.westcatr.emergency.MyProperties;
+import com.westcatr.emergency.business.docking.JingxinPlatformDocking.pojo.dto.SsoToken;
+import com.westcatr.emergency.business.docking.JingxinPlatformDocking.pojo.dto.SsoUser;
+import com.westcatr.emergency.business.docking.JingxinPlatformDocking.service.SsoService;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.service.UserService;
 import com.westcatr.emergency.config.ThreadPool;
@@ -77,7 +77,6 @@ public class SsoController {
         if (user.getEnable()==0){
            throw new MyRuntimeException("用户状态非正常",400);
         }
-
        //异步去更新user的sso信息
         ThreadPool.executorPool.execute(()-> {
             userService.updateUserBySsoId(ssoUser);

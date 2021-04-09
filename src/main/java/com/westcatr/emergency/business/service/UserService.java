@@ -2,7 +2,7 @@ package com.westcatr.emergency.business.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto.SsoUser;
+import com.westcatr.emergency.business.docking.JingxinPlatformDocking.pojo.dto.SsoUser;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.pojo.query.UserQuery;
 /**

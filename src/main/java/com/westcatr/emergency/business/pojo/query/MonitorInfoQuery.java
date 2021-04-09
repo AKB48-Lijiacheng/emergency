@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-04-07
+ * @since 2021-04-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -76,15 +76,15 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Date updateTime;
 
-    @ApiModelProperty(value = "事件唯一id")
+    @ApiModelProperty(value = "态势平台事件唯一id")
     @QueryCondition
-    private Long eventId;
+    private String situEventId;
 
     @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
     @QueryCondition
     private Integer status;
 
-    @ApiModelProperty(value = "产业分类表唯一id")
+    @ApiModelProperty(value = "产业分类表id")
     @QueryCondition
     private Integer industrialId;
 
@@ -92,7 +92,15 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Integer isDuplicated;
 
-    @ApiModelProperty(value = "研判信息表唯一id")
+    @ApiModelProperty(value = "研判信息表id")
     @QueryCondition
     private Integer judgeInfoId;
+
+    @ApiModelProperty(value = "事件信息表id")
+    @QueryCondition
+    private Long eventInfoId;
+
+    @ApiModelProperty(value = "态势监测信息源表id")
+    @QueryCondition
+    private String situMonitorSrcId;
 }

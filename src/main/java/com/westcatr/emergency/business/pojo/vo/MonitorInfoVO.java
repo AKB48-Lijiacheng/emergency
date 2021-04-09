@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-04-07
+ * @since 2021-04-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -65,20 +65,26 @@ public class MonitorInfoVO implements Serializable {
 
     private Date updateTime;
 
-    @ApiModelProperty(value = "事件唯一id")
-    private Long eventId;
+    @ApiModelProperty(value = "态势平台事件唯一id")
+    private String situEventId;
 
     @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
     private Integer status;
 
-    @ApiModelProperty(value = "产业分类表唯一id")
+    @ApiModelProperty(value = "产业分类表id")
     private Integer industrialId;
 
     @ApiModelProperty(value = "该监测信息是否重复")
     private Integer isDuplicated;
 
-    @ApiModelProperty(value = "研判信息表唯一id")
+    @ApiModelProperty(value = "研判信息表id")
     private Integer judgeInfoId;
+
+    @ApiModelProperty(value = "事件信息表id")
+    private Long eventInfoId;
+
+    @ApiModelProperty(value = "态势监测信息源表id")
+    private String situMonitorSrcId;
 
 
 }

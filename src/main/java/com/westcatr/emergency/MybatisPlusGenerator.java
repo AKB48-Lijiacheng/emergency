@@ -46,7 +46,7 @@ public class MybatisPlusGenerator {
         String tableName = "";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
-        String[] includeTable = new String[] {"sys_user"};
+        String[] includeTable = new String[] {"bus_monitor_info"};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[] { "bus_", "sys_" };
 

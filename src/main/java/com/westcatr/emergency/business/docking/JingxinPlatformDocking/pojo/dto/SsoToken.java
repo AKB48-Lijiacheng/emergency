@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.docking.SituationalDocking.pojo.dto;
+package com.westcatr.emergency.business.docking.JingxinPlatformDocking.pojo.dto;
 
 import lombok.Data;
 

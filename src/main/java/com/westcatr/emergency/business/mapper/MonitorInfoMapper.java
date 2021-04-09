@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author ls
- * @since 2021-04-07
+ * @since 2021-04-09
  */
 public interface MonitorInfoMapper extends BaseMapper<MonitorInfo> {
 

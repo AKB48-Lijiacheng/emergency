@@ -6,7 +6,7 @@ import com.westcatr.emergency.business.entity.SafeWarnInfo;
 import com.westcatr.emergency.business.pojo.query.SafeWarnInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.SafeWarnInfoVO;
 import com.westcatr.emergency.business.service.SafeWarnInfoService;
-import com.westcatr.emergency.business.utils.filUtils.FileDownLoadUtil;
+import com.westcatr.emergency.business.utils.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;

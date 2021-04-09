@@ -8,7 +8,7 @@ import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.service.MonitorInfoService;
-import com.westcatr.emergency.business.utils.filUtils.FileDownLoadUtil;
+import com.westcatr.emergency.business.utils.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;

@@ -1,4 +1,4 @@
-package com.westcatr.emergency.business.docking.SituationalDocking.service;
+package com.westcatr.emergency.business.docking.JingxinPlatformDocking.service;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
