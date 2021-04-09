@@ -30,28 +30,24 @@ import java.util.Map;
 /**
  * 去态势主平台获取数据
  * @author lijiacheng
- * @since  2021/4/8
+ * @since  2021/3/29
  **/
 @Slf4j
 @Configurable
+@Transactional(rollbackForClassName="RuntimeException")
 public class getMonitorDataFromSituationlScheduleTask {
-    @Autowired
-    SituMonitorSrcInfoService situMonitorSrcInfoService;
-    private String indexs = "security_event_2021.03";
+    private final   String  indexs ="security_event_2021.03";
     @Autowired
     MonitorInfoService monitorInfoService;
     @Autowired
-    RestHighLevelClient client;
+    SituMonitorSrcInfoService situMonitorSrcInfoService;
 
-  /**
-   * 每天0点向态势平台请求数据
-   * @author lijiacheng
-   * @since  2021/4/9
-   **/
-    @Transactional(rollbackFor = MyRuntimeException.class)
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void getMonitorData() {
-        int situSaveCount=0;
+    @Autowired
+    RestHighLevelClient client;
+//todo
+    @Scheduled(cron = "0 0 24 * * ?")
+    public void  getMonitorData(){
+        int  situSaveCount=0;
         int situUpdateCount=0;
         int monitSaveCount=0;
         int monitUpdateCount=0;
@@ -73,7 +69,6 @@ public class getMonitorDataFromSituationlScheduleTask {
                 SecurityEventDto securityEventDto = BeanUtil.copyProperties(sourceMap, SecurityEventDto.class);
                 lis.add(securityEventDto);
             }
-            System.out.println(lis);
             log.info("  "+indexs+"   态势平台请求数据完成!  共 "+hits.length+"条数据！！");
             for (SecurityEventDto dto : lis) {
 //                //去数据库更新或存储源数据，由于数据源不是驼峰命名，所以我们要进行处理
@@ -86,7 +81,9 @@ public class getMonitorDataFromSituationlScheduleTask {
                         ReflectUtil.setFieldValue(situMonitorSrcInfo, field, value);
                     }
                 }
+                situMonitorSrcInfo.setId(null);//因为上面转换会把id字段也写进来，写到主键去了
                 situMonitorSrcInfo.setSrcId(dto.getId());//id单独拿出来设置
+
                 int count = situMonitorSrcInfoService.count(new QueryWrapper<SituMonitorSrcInfo>().eq("src_id", situMonitorSrcInfo.getSrcId()));
                 if (count<1){
                     situMonitorSrcInfoService.save(situMonitorSrcInfo);
@@ -94,7 +91,7 @@ public class getMonitorDataFromSituationlScheduleTask {
                     situSaveCount++;
                 }else {
                     situMonitorSrcInfoService.update(situMonitorSrcInfo,new QueryWrapper<SituMonitorSrcInfo>().eq("src_id", situMonitorSrcInfo.getSrcId()));
-                    log.info("situ_monitor_src_info表更新数据： id= "+situMonitorSrcInfo.getId());
+                    log.info("situ_monitor_src_info表更新数据： src_id= "+situMonitorSrcInfo.getSrcId());
                     situUpdateCount++;
                 }
 
@@ -140,5 +137,5 @@ public class getMonitorDataFromSituationlScheduleTask {
         monitorInfo.setSituMonitorSrcId(situMonitorSrcInfo.getId());
         return monitorInfo;
     }
-}
 
+}
