@@ -4,7 +4,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.westcatr.emergency.business.docking.JingxinPlatformDocking.pojo.dto.SsoUser;
+import com.westcatr.emergency.business.docking.JingxinPlatform.pojo.dto.SsoUser;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.mapper.UserMapper;
 import com.westcatr.emergency.business.pojo.query.UserQuery;

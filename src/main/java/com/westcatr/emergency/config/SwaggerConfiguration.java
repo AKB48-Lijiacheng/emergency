@@ -26,6 +26,7 @@ public class SwaggerConfiguration {
     static {
         PATH_LIST.add("com.westcatr.emergency.business.controller");
         PATH_LIST.add("com.westcatr.emergency.business.docking.SituationalDocking.controller");
+        PATH_LIST.add("com.westcatr.emergency.business.docking.h3.controller");
     }
 
     @Bean

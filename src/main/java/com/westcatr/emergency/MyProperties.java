@@ -12,4 +12,13 @@ public class MyProperties {
 
     @Value("${sso.getUserInfo.url}")
   public   String  SsoGetUserInfoAddr;
+    @Value("${h3.portal.bpm.address}")
+    public   String h3bpmAddress;
+    @Value("${h3.portal.address}")
+    public String h3Address;
+
+
+
+
+
 }

@@ -1,33 +1,35 @@
 package com.westcatr.emergency.business.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.pojo.query.UserQuery;
-import com.westcatr.emergency.business.pojo.vo.UserVO;
-import com.westcatr.emergency.business.service.UserService;
-import com.westcatr.rd.base.acommon.annotation.IPermissions;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.SaveLog;
 import com.westcatr.rd.base.acommon.annotation.Update;
-import com.westcatr.rd.base.acommon.vo.IResult;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.westcatr.emergency.business.service.UserService;
+import com.westcatr.emergency.business.entity.User;
+import com.westcatr.rd.base.acommon.annotation.IPermissions;
+import com.westcatr.rd.base.acommon.annotation.SaveLog;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import com.westcatr.emergency.business.pojo.vo.UserVO;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
+import io.swagger.annotations.ApiOperation;
+import com.westcatr.rd.base.acommon.vo.IResult;
+import lombok.extern.slf4j.Slf4j;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
 /**
  *  User 控制器
  *   @author ls
- *  @since 2021-04-07
+ *  @since 2021-04-09
  */
 @Validated
 @Api(tags="系统用户接口", description = "user")
@@ -42,7 +44,7 @@ public class UserController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="系统用户分页数据接口", module="系统用户管理")
     @IPermissions(value="user:page")
@@ -56,7 +58,7 @@ public class UserController {
     /**
      * 通过id获取系统用户
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="获取系统用户数据接口", module="系统用户管理")
     @IPermissions(value="user:get")
@@ -70,7 +72,7 @@ public class UserController {
     /**
      * 新增系统用户
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="新增系统用户数据接口", level = 2, module="系统用户管理")
     @IPermissions(value="user:add")
@@ -84,7 +86,7 @@ public class UserController {
     /**
      * 更新系统用户
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="更新系统用户数据接口", level = 2, module="系统用户管理")
     @IPermissions(value="user:update")
@@ -98,7 +100,7 @@ public class UserController {
     /**
      * 通过id删除系统用户
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="删除系统用户数据接口", level = 3, module="系统用户管理")
     @IPermissions(value="user:del")
@@ -115,7 +117,7 @@ public class UserController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="系统用户VO分页数据接口", module="系统用户管理")
     @IPermissions(value="user:page:vo")
@@ -130,7 +132,7 @@ public class UserController {
     /**
      * 通过id获取系统用户VO
      * @author : ls
-     * @since : Create in 2021-04-07
+     * @since : Create in 2021-04-09
      */
     @SaveLog(value="获取系统用户VO数据接口", module="系统用户管理")
     @IPermissions(value="user:get:vo")
