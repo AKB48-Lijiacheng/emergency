@@ -42,7 +42,8 @@ public class H3YJController {
     RestTemplate restTemplate;
     @Value("${h3.portal.bpm.address}")
     private String h3bpmAddress;
-
+    @Value("${h3.portal.address}")
+    private String h3Address;
 
     // H3流程模板编码
     private final String H3_YJ_WORKFLOWS = "yjlc2";
@@ -141,7 +142,7 @@ public class H3YJController {
     @GetMapping("/fileDown")
     public void fileDown(@RequestParam(value = "attachmentId", required = true) String attachmentId, HttpServletResponse response) throws Exception {
         ResponseEntity<Resource> responseEntity = restTemplate
-                .getForEntity(h3bpmAddress + "/file/down/Read?BizObjectSchemaCode=yjlc2&BizObjectID=&AttachmentID="
+                .getForEntity(h3Address+ "/file/down/Read?BizObjectSchemaCode=yjlc2&BizObjectID=&AttachmentID="
                         + attachmentId + "&OpenMethod=0", Resource.class);
         Resource resource = responseEntity.getBody();
         InputStream inputStream = resource.getInputStream();

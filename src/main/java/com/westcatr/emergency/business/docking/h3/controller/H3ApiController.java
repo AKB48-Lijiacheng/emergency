@@ -8,14 +8,12 @@ import com.westcatr.emergency.business.docking.h3.dto.DataItemParam;
 import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
 import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3Organizationunit;
 import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3User;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3BPMServiceResult;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3FlowEndDTO;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3FlowStartDto;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3FlowSubmitDTO;
+import com.westcatr.emergency.business.docking.h3.dto.flowDto.*;
 import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3Result;
 import com.westcatr.emergency.business.docking.h3.vo.YjFormVo;
 import com.westcatr.rd.base.acommon.vo.IResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -40,6 +38,7 @@ import java.util.*;
  * @Date 2021/4/13
  */
 @Controller
+@Slf4j
 public class H3ApiController {
     // H3系统编码
     private final String H3_SYSTEM_CODE = "H3";
@@ -66,13 +65,13 @@ public class H3ApiController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    public IResult startFlow(H3FlowStartDto startDto,String flowModelType) {
+    public IResult startFlow(H3FlowStartDto startDto,String workFlowTpye) {
        String url = h3bpmAddress + "/west/newStartWorkFlow";
 //        String url = h3bpmAddress + "/workflows/yjlc2//;
         Map<String, Object> postParameters = new HashMap<>();
         postParameters.put("systemCode",H3_SYSTEM_CODE);
        postParameters.put("secret",H3_SECRET);
-        postParameters.put("workflowCode", flowModelType);
+        postParameters.put("workflowCode", workFlowTpye);
         postParameters.put("userCode", startDto.getUserCode());
         postParameters.put("finishStart", startDto.isFinishStart());
         postParameters.put("paramValues", startDto.getParamValues());
@@ -89,19 +88,27 @@ public class H3ApiController {
      * @since 2021/4/13
      **/
     public IResult saveFormDate(H3PushFormDataDto formDto) {
-        String url = h3bpmAddress + "/bpm-api/itemvalues";
+        String url = h3bpmAddress + "/itemvalues";
         formDto.setSystemCode(H3_SYSTEM_CODE);
         formDto.setBizObjectSchemaCode(H3_YJ_WORKFLOWS);
         formDto.setSecret(H3_SECRET);
-        List<DataItemParam> dataItemParam = getDataItemParam(formDto.getFormDto());
-        formDto.setKeyValues(dataItemParam);
+
+        // 先把数据保存到H3系统中去,并没有插入数据库
+        H3PushInfoDTO h3PushInfoDTO = new H3PushInfoDTO();
+        h3PushInfoDTO.setBizObjectSchemaCode(H3_YJ_WORKFLOWS); // 根据typename取出相应的BIZ_OBJECT_SCHEMA_CODE
+        h3PushInfoDTO.setBizObjectId(formDto.getBizObjectId());
+        h3PushInfoDTO.setSecret(H3_SECRET);
+        h3PushInfoDTO.setSystemCode(H3_SYSTEM_CODE);
+        h3PushInfoDTO.setUserId(formDto.getUserId());
+        List<DataItemParam> dataItemParam = getDataItemParam(formDto.getFormDto());//获取流程数据项
+        h3PushInfoDTO.setKeyValues(dataItemParam);
+        String jsonStr = JSON.toJSONString(h3PushInfoDTO, SerializerFeature.WriteMapNullValue);
+        log.info("接收的json为:  " + jsonStr);
         //设置请求
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entitySubmit = new HttpEntity<String>(JSON.toJSONString(formDto, SerializerFeature.WriteMapNullValue), headers);
-        H3Result body = restTemplate.exchange(
-                url, HttpMethod.PUT, entitySubmit, H3Result.class)
-                .getBody();
+        HttpEntity<String> entitySubmit = new HttpEntity<String>(jsonStr, headers);
+        H3Result body = restTemplate.exchange(url, HttpMethod.PUT, entitySubmit, H3Result.class).getBody();
         if (body.getCode() != 0) {
             return IResult.fail(body.getMsg());
         }

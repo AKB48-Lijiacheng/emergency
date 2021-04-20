@@ -1,13 +1,13 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
 import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3FlowStartDto;
+import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * h3的流程接口
@@ -38,12 +38,18 @@ public class H3EventController {
 
     /**
      * h3提交流程
+     *
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    @GetMapping("/submitFlow")
-    public IResult submitWorkflow(String userId, String workItemId) {
-        return h3ApiController.submitWorkflow(userId, workItemId );
+    @ApiOperation(value = "h3预警流程提交接口")
+    @PostMapping("/submitFlow")
+    public IResult submitWorkflow(@RequestBody @Validated H3PushFormDataDto formDto) {
+        IResult res = h3ApiController.saveFormDate(formDto);
+        if (res.getStatus() == 200) {
+            return h3ApiController.submitWorkflow(formDto.getUserId(),formDto.getWorkItemId());
+        }
+        return res;
     }
 
 
