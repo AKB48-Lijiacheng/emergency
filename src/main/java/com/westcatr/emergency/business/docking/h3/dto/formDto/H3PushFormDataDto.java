@@ -9,6 +9,7 @@
 package com.westcatr.emergency.business.docking.h3.dto.formDto;
 
 import com.westcatr.emergency.business.docking.h3.dto.DataItemParam;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -22,14 +23,14 @@ public class H3PushFormDataDto {
 
     private String systemCode;
     private String secret;
-    @NotBlank(message = "流程模板code不能为空")
+    @ApiModelProperty("流程模板code")
     private String bizObjectSchemaCode;
 
     @NotBlank(message = "流程用户id不能为空")
     private String userId;
-    @NotBlank(message = "流程实例id不能为空")
+    @NotBlank(message = "流程表单id不能为空")
     private String bizObjectId;
-
+    @NotBlank(message = "待办任务id不能为空")
     private String workItemId;
     private List<DataItemParam> keyValues;
     private YjFormDto formDto; //前端表单提交的数据

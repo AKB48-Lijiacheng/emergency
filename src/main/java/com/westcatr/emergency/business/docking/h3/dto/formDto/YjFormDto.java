@@ -37,8 +37,8 @@ public class YjFormDto {
     @ApiModelProperty("表单上传的附件ids")
     private List<String> attachIds;
 
-    @ApiModelProperty("备注信息")
-    private List<String> RemakeInfo;
+    @ApiModelProperty("审批意见")
+    private String CommentText;
 
 
 

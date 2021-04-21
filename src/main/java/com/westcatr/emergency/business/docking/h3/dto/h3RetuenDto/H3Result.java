@@ -11,5 +11,5 @@ public class H3Result {
 
     private Integer code;
     private String msg;
-    private String data;
+    private Object data;
 }

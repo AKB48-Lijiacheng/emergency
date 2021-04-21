@@ -2,7 +2,6 @@ package com.westcatr.emergency.business.docking.h3.controller;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.westcatr.emergency.business.docking.h3.dto.DataItemParam;
 import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
@@ -11,8 +10,10 @@ import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3User;
 import com.westcatr.emergency.business.docking.h3.dto.flowDto.*;
 import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3Result;
+import com.westcatr.emergency.business.docking.h3.vo.H3CommentVo;
 import com.westcatr.emergency.business.docking.h3.vo.YjFormVo;
 import com.westcatr.rd.base.acommon.vo.IResult;
+import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,8 +45,11 @@ public class H3ApiController {
     private final String H3_SYSTEM_CODE = "H3";
     // H3系统密钥
     private final String H3_SECRET = "Authine";
-    // H3流程模板编码
-    private final String H3_YJ_WORKFLOWS = "yjlc2";
+    // H3表单编码
+    private final String H3_YJ_FORMCODE = "Syjlcjxw";
+    // H3业务对象模式编码
+    private final String BizObjectSchemaCode = "yjlcjxw";
+
     // 应急平台管理员userCode
     private final String YJADMIN_USERCODE = "yjadmin";
 
@@ -66,18 +70,20 @@ public class H3ApiController {
      * @since 2021/4/13
      **/
     public IResult startFlow(H3FlowStartDto startDto,String workFlowTpye) {
-       String url = h3bpmAddress + "/west/newStartWorkFlow";
-//        String url = h3bpmAddress + "/workflows/yjlc2//;
-        Map<String, Object> postParameters = new HashMap<>();
-        postParameters.put("systemCode",H3_SYSTEM_CODE);
-       postParameters.put("secret",H3_SECRET);
-        postParameters.put("workflowCode", workFlowTpye);
-        postParameters.put("userCode", startDto.getUserCode());
-        postParameters.put("finishStart", startDto.isFinishStart());
-        postParameters.put("paramValues", startDto.getParamValues());
-        Object json = JSONObject.parse(JSON.toJSONString(postParameters));
+       String url = h3bpmAddress + "/workflows/"+workFlowTpye;
+        H3StartPushInfo starInfo = new H3StartPushInfo();
+        starInfo.setSystemCode(H3_SYSTEM_CODE);
+        starInfo.setSecret(H3_SECRET);
+        starInfo.setWorkflowCode(workFlowTpye);
+        starInfo.setUserCode(startDto.getUserCode());
+        starInfo.setFinishStart(true);
+        starInfo.setParamValues(getDataItemParam(startDto.getFormDto()));
+        String json = JSON.toJSONString(starInfo, SerializerFeature.WriteMapNullValue);
         //设置请求
-        H3BPMServiceResult body = restTemplate.postForEntity(url, json, H3BPMServiceResult.class).getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
+        H3Result body = restTemplate.exchange(url, HttpMethod.POST, entity, H3Result.class).getBody();
         return IResult.ok(body);
     }
 
@@ -87,15 +93,15 @@ public class H3ApiController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    public IResult saveFormDate(H3PushFormDataDto formDto) {
+    public IResult saveFormDate(H3PushFormDataDto formDto,String bizObjectSchemaCode) {
         String url = h3bpmAddress + "/itemvalues";
         formDto.setSystemCode(H3_SYSTEM_CODE);
-        formDto.setBizObjectSchemaCode(H3_YJ_WORKFLOWS);
+        formDto.setBizObjectSchemaCode(bizObjectSchemaCode);
         formDto.setSecret(H3_SECRET);
 
         // 先把数据保存到H3系统中去,并没有插入数据库
         H3PushInfoDTO h3PushInfoDTO = new H3PushInfoDTO();
-        h3PushInfoDTO.setBizObjectSchemaCode(H3_YJ_WORKFLOWS); // 根据typename取出相应的BIZ_OBJECT_SCHEMA_CODE
+        h3PushInfoDTO.setBizObjectSchemaCode(bizObjectSchemaCode); // 根据typename取出相应的BIZ_OBJECT_SCHEMA_CODE
         h3PushInfoDTO.setBizObjectId(formDto.getBizObjectId());
         h3PushInfoDTO.setSecret(H3_SECRET);
         h3PushInfoDTO.setSystemCode(H3_SYSTEM_CODE);
@@ -113,10 +119,14 @@ public class H3ApiController {
             return IResult.fail(body.getMsg());
         }
         //数据保存成功了 那么就去把表单模板和附件表进行绑定
-        formDto.getFormDto().getAttachIds().forEach(fileId->{
-            String sql="UPDATE ot_attachment o set o.BizObjectId ='"+ formDto.getBizObjectId()+"' where o.ObjectID='"+fileId+"'";
-            h3JdbcTemplate.update(sql);
-        });
+        List<String> attachIds = formDto.getFormDto().getAttachIds();
+        if (null!=attachIds&&attachIds.size()>0) {
+            attachIds.forEach(fileId -> {
+                String sql = "UPDATE ot_attachment o set o.BizObjectId =? where o.ObjectID=?";
+                h3JdbcTemplate.update(sql, formDto.getBizObjectId(),fileId);
+            });
+        }
+
         return IResult.ok(body.getData());
     }
 
@@ -128,7 +138,7 @@ public class H3ApiController {
      * @since 2021/4/13
      **/
     public IResult submitWorkflow(String userId, String workItemId) {
-        String url = h3bpmAddress + "/bpm-api/workitems/submit/" + workItemId;
+        String url = h3bpmAddress + "/workitems/submit/" + workItemId;
         H3FlowSubmitDTO flowSubmitDTO = new H3FlowSubmitDTO();
         flowSubmitDTO.setSystemCode(H3_SYSTEM_CODE);
         flowSubmitDTO.setSecret(H3_SECRET);
@@ -156,7 +166,7 @@ public class H3ApiController {
      * @since 2021/4/13
      **/
     public IResult endWorkflow(String instanceId) {
-        String url = h3bpmAddress + "/bpm-api/instances/finish/" + instanceId;
+        String url = h3bpmAddress + "/instances/finish/" + instanceId;
         H3FlowEndDTO endDTO = new H3FlowEndDTO();
         endDTO.setSystemCode(H3_SYSTEM_CODE);
         endDTO.setSecret(H3_SECRET);
@@ -171,7 +181,7 @@ public class H3ApiController {
         if (body.getCode() != 0) {
             return IResult.fail(body.getMsg());
         }
-        return IResult.ok(body.getData());
+        return IResult.ok("结束流程成功！");
     }
 
     /**
@@ -205,7 +215,7 @@ public class H3ApiController {
         ArrayList<DataItemParam> list = new ArrayList<>();
         for (Field field : fields) {
             Object fieldValue = ReflectUtil.getFieldValue(formDto, field);
-            if (fieldValue != null) {
+            if (fieldValue != null&&!fieldValue.equals("")) {
                 DataItemParam dataItemParam = new DataItemParam(field.getName(), fieldValue);
                 list.add(dataItemParam);
             }
@@ -213,23 +223,36 @@ public class H3ApiController {
         return list;
     }
 
-    public void getFlowFomDataById(String id,String flowModelType) {
-        String sql = "SELECT ,i.OriginatorName ,y.CreatedTime ,o.`Name`,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.Approved,y.attachFileIds from i_yjlc y " +
-                "LEFT JOIN ot_instancecontext i   on y.RunningInstanceId=i.ObjectID " +
-                "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit\n where y.ObjectID='" + id + "'";
-        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql);
+    public IResult getFlowFomDataById(String workItemId,String workFlowType) {
+        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved from ot_workitem w " +
+                "LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID left JOIN i_yjlcjxw  y on i.BizObjectId=y.ObjectID " +
+                "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
+       Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,workItemId);
+        Object bizObjectId=  map.get("bizId");
+        Object instanceId = map.get("instanceId");
+       if (map==null){
+           throw new MyRuntimeException("该待办流程id绑定的表单信息不存在！");
+       }
         YjFormVo yjFormVo = new YjFormVo();
+       yjFormVo.setBizObjectId(String.valueOf(bizObjectId));
         yjFormVo.setStartUserName((String) map.get("OriginatorName"));
-        yjFormVo.setStartTime((Date) map.get("CreatedTime"));
+        yjFormVo.setStartTime((Date) map.get("StartTime"));
         yjFormVo.setStartUserOrgan((String) map.get("Name"));
         yjFormVo.setSequenceNo((String) map.get("SequenceNo"));
-        yjFormVo.setTfDevCenter((String) map.get("TfDevCenter"));
-        yjFormVo.setEarlyWarnLevel((String) map.get("EarlyWarnLevel"));
+        yjFormVo.setTfDevCenter( String.valueOf(map.get("TfDevCenter")));
+        yjFormVo.setEarlyWarnLevel(String.valueOf(map.get("EarlyWarnLevel")));
         yjFormVo.setApproved((String) map.get("Approved"));
-        yjFormVo.setRemakeInfos(null);
+
+
+
+        //设置审批意见
+        String str="RemakeInfo";
+        String commentSql="SELECT * from ot_comment c where c.InstanceId=? and DataField  IN ('"+str+"') ORDER BY CreatedTime ";
+        List<H3CommentVo> commentList = h3JdbcTemplate.queryForList(sql, H3CommentVo.class, instanceId);
+        yjFormVo.setCommentTexts(commentList);
+
         //设置附件信息
-        String fileSql = "SELECT ContentType,FileName,ContentLength,CONCAT( '/Portal/MyReadAttachment/Read?BizObjectSchemaCode="+flowModelType+ "&BizObjectID=',BizObjectId, '&AttachmentID=', ObjectID, '&OpenMethod=0&userName="
-                + "admin" + "' ) Url FROM ot_attachment WHERE BizObjectId = '" +id+ "'";//username先写死 admin
+       String fileSql="SELECT ContentType,FileName,ContentLength,DownloadUrl as Url from ot_attachment a where a.BizObjectId=?";
         List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql, new RowMapper<H3AttachFileInfoDto>() {
             @Override
             public H3AttachFileInfoDto mapRow(ResultSet rs, int i) throws SQLException {
@@ -240,8 +263,9 @@ public class H3ApiController {
                 fileInfoDto.setUrl(rs.getString("Url"));
                 return fileInfoDto;
             }
-        });
+        },bizObjectId);
         yjFormVo.setAttachFilesInfo(listFiles);
+        return IResult.ok(yjFormVo);
 
 
     }

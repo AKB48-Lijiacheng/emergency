@@ -1,14 +1,22 @@
 package com.westcatr.emergency.business.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.westcatr.emergency.business.pojo.query.UserQuery;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
 
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.westcatr.emergency.business.pojo.vo.MyInfoVo;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.Update;
+import com.westcatr.rd.base.acommon.domain.IUser;
+import com.westcatr.rd.base.authority.authority.domain.UserInfoVO;
+import com.westcatr.rd.base.authority.authority.provider.AuthenticationProvider;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +48,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
     /**
      * 获取分页列表
@@ -143,5 +153,9 @@ public class UserController {
         AssociationQuery<UserVO> associationQuery = new AssociationQuery<>(UserVO.class);
         return IResult.ok(associationQuery.getVo(id, new UserQuery()));
     }
+
+
+
+
 
 }

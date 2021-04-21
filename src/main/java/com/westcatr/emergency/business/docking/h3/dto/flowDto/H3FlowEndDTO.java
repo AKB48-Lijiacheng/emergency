@@ -1,6 +1,7 @@
 
 package com.westcatr.emergency.business.docking.h3.dto.flowDto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -13,5 +14,6 @@ public class H3FlowEndDTO {
 
     private String secret;
 
+    @ApiModelProperty("流程实例ID")
     private String instanceId;
 }

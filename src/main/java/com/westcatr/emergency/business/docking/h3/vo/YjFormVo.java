@@ -14,6 +14,11 @@ import java.util.List;
  */
 @Data
 public class YjFormVo {
+    //前端表单提交
+    @ApiModelProperty("表单Id")
+    private String bizObjectId;
+
+
 //前端表单提交
     @ApiModelProperty("发起人")
     private String startUserName;
@@ -36,10 +41,13 @@ public class YjFormVo {
     @ApiModelProperty("审批人")
     private String approved;
 
+    @ApiModelProperty("备注信息")
+    private String CommentText;
+
 
     //H3返回表单信息
     @ApiModelProperty("H3返回备注信息")
-    private List<String> RemakeInfos;
+    private List<H3CommentVo> CommentTexts;
 
     @ApiModelProperty("H3返回信息附件")
     private List<H3AttachFileInfoDto> attachFilesInfo;

@@ -1,6 +1,7 @@
 
 package com.westcatr.emergency.business.docking.h3.dto.flowDto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -12,10 +13,9 @@ public class H3FlowSubmitDTO {
     private String systemCode;
 
     private String secret;
-
+    @ApiModelProperty("H3UserId")
     private String userId;
-
+    @ApiModelProperty("待办流程id")
     private String workItemId;
-
     private String commentText;
 }

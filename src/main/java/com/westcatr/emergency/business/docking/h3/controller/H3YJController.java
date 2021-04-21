@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,11 +43,10 @@ public class H3YJController {
     private String h3bpmAddress;
     @Value("${h3.portal.address}")
     private String h3Address;
-
-    // H3流程模板编码
-    private final String H3_YJ_WORKFLOWS = "yjlc2";
-    // 应急平台管理员userCode
-    private final String YJADMIN_USERCODE = "yjadmin";
+    // H3预警表单编码
+    private final String H3_YJ_FORMCODE = "Syjlcjxw";
+    // H3业务对象模式编码
+    private final String BizObjectSchemaCode = "yjlcjxw";
 
     /**
      * h3开启流程
@@ -59,7 +57,7 @@ public class H3YJController {
     @ApiOperation(value = "h3预警流程开启接口")
     @PostMapping("/startFlow")
     public IResult startFlow(@RequestBody @Validated H3FlowStartDto flowStartDTO) {
-        return h3ApiController.startFlow(flowStartDTO,H3_YJ_WORKFLOWS);
+        return h3ApiController.startFlow(flowStartDTO, BizObjectSchemaCode);
 
     }
 
@@ -72,7 +70,7 @@ public class H3YJController {
     @ApiOperation(value = "h3预警流程提交接口")
     @PostMapping("/submitFlow")
     public IResult submitWorkflow(@RequestBody @Validated H3PushFormDataDto formDto) {
-        IResult res = h3ApiController.saveFormDate(formDto);
+        IResult res = h3ApiController.saveFormDate(formDto, BizObjectSchemaCode);
         if (res.getStatus() == 200) {
             return h3ApiController.submitWorkflow(formDto.getUserId(),formDto.getWorkItemId());
         }
@@ -86,59 +84,24 @@ public class H3YJController {
      * @since 2021/4/13
      **/
     @ApiOperation(value = "h3预警流程结束接口")
-    @GetMapping("/endFlow")
-    public IResult endWorkflow(@NotNull String instanceId) {
+    @GetMapping("/endFlow/{instanceId}")
+    public IResult endWorkflow(@PathVariable(value = "instanceId")String instanceId) {
         return h3ApiController.endWorkflow(instanceId);
     }
 
 
-    /**
-     * h3Yj获取组织
-     *
-     * @author lijiacheng
-     * @since 2021/4/13
-     **/
-    @ApiOperation(value = "h3Yj获取所有组织")
-    @GetMapping("/getOrgs")
-    public IResult getOrgs() {
-        return h3ApiController.getOrgs();
-    }
-
-    /**
-     * h3Yj根据组织Id获取用户列表
-     *
-     * @author lijiacheng
-     * @since 2021/4/13
-     **/
-    @ApiOperation(value = "h3Yj获取用户列表，通过组织id")
-    @GetMapping("/getUsersByOrgId")
-    public IResult getUsersByOrgId(@RequestParam("id") String orgId) {
-        return h3ApiController.getUsersByOrgId(orgId);
-    }
 
 
-    /**
-     * todo
-     * h3Yj获取流程表单信息
-     * @author lijiacheng
-     * @since 2021/4/13
-     **/
-    @ApiOperation(value = "h3Yj获取流程表单信息,通过表单流程id")
-    @GetMapping("/getFlowFomData")
-    public IResult getFlowFomDataById(@RequestParam("id") String id) {
-        h3ApiController.getFlowFomDataById(id,H3_YJ_WORKFLOWS);
-        return null;
-    }
 
     //附件上传
-    @ApiOperation(value = "h3Yj附件上传")
+    @ApiOperation(value = "h3预警附件上传")
     @PostMapping("/fileUpload")
     public IResult fileUpload(@RequestParam(value = "file", required = true) MultipartFile file) throws Exception {
         return IResult.ok("成功", h3ApiController.uploadAttachFile(file));
     }
 
     //附件下载
-    @ApiOperation(value = "h3Yj附件下载")
+    @ApiOperation(value = "h3预警附件下载")
     @GetMapping("/fileDown")
     public void fileDown(@RequestParam(value = "attachmentId", required = true) String attachmentId, HttpServletResponse response) throws Exception {
         ResponseEntity<Resource> responseEntity = restTemplate

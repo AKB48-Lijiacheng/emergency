@@ -21,19 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class H3EventController {
     @Autowired
     H3ApiController h3ApiController;
-    // H3流程模板编码
-    private final String H3_YJ_WORKFLOWS = "event";
-
-    /**
-     * h3开启流程
-     * @author lijiacheng
-     * @since 2021/4/14
-     **/
-    @GetMapping("/startFlow")
-    public IResult startFlow(@RequestBody H3FlowStartDto flowStartDTO) {
-        return h3ApiController.startFlow(flowStartDTO,H3_YJ_WORKFLOWS);
-
-    }
+    // H3事件流程模板编码
+    private final String H3_EVENT_WORKFLOWSCode = "EventFlow";
+    // H3事件表单编码
+    private final String H3_EVENT_FORMCODE = "SEventFlow";
 
 
     /**
@@ -42,10 +33,10 @@ public class H3EventController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    @ApiOperation(value = "h3预警流程提交接口")
+    @ApiOperation(value = "h3事件流程提交接口")
     @PostMapping("/submitFlow")
     public IResult submitWorkflow(@RequestBody @Validated H3PushFormDataDto formDto) {
-        IResult res = h3ApiController.saveFormDate(formDto);
+        IResult res = h3ApiController.saveFormDate(formDto,H3_EVENT_WORKFLOWSCode);
         if (res.getStatus() == 200) {
             return h3ApiController.submitWorkflow(formDto.getUserId(),formDto.getWorkItemId());
         }

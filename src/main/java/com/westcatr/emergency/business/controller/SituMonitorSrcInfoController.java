@@ -32,7 +32,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
  *  @since 2021-04-08
  */
 @Validated
-@Api(tags="接口", description = "situMonitorSrcInfo")
+@Api(tags="监测信息数据源接口", description = "situMonitorSrcInfo")
 @Slf4j
 @RestController
 @RequestMapping("//situMonitorSrcInfo")

@@ -186,4 +186,12 @@ public class MonitorInfoController {
         FileDownLoadUtil.downloadSingleFile(file, request, response);
     }
 
+    @SaveLog(value = "监测信息去重", module = "监测信息表管理")
+    @ApiOperation(value = "监测信息去重", notes = "monitorInfo:duplicated")
+    @ApiOperationSupport(order = 9)
+    @PostMapping ("/duplicated")
+    public IResult export() {
+        return IResult.ok("去重成功");
+    }
+
 }
