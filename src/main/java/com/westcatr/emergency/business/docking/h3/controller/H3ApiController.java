@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.westcatr.emergency.business.docking.h3.dto.DataItemParam;
 import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
 import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3Organizationunit;
@@ -13,6 +14,8 @@ import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3Result;
 import com.westcatr.emergency.business.docking.h3.vo.H3CommentVo;
 import com.westcatr.emergency.business.docking.h3.vo.YjFormVo;
+import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,18 +46,11 @@ public class H3ApiController {
     private final String H3_SYSTEM_CODE = "H3";
     // H3系统密钥
     private final String H3_SECRET = "Authine";
-    // H3表单编码
-    private final String H3_YJ_FORMCODE = "Syjlcjxw";
     // H3预警业务对象模式编码
     private final String H3_YJ_WORKFLOWSCODE = "yjlcjxw";
-
-    // 应急平台管理员userCode
-    private final String YJADMIN_USERCODE = "yjadmin";
-
     // H3事件流程模板编码
     private final String H3_EVENT_WORKFLOWSCode = "EventFlow";
-    // H3事件表单编码
-    private final String H3_EVENT_FORMCODE = "SEventFlow";
+
 
     @Value("${h3.portal.bpm.address}")
     private String h3bpmAddress;
@@ -64,6 +60,8 @@ public class H3ApiController {
     RestTemplate restTemplate;
     @Autowired
     JdbcTemplate h3JdbcTemplate;
+    @Autowired
+    MonitorNextService monitorNextService;
 
 
     /**
@@ -105,6 +103,18 @@ public class H3ApiController {
                 h3JdbcTemplate.update(fileSql, bizObjectId,fileId);
             });
         }
+
+        //将开启的流程id绑定到数据体
+        String monitorNextId = startDto.getMonitorNextId();
+        int num = monitorNextService.count(new QueryWrapper<MonitorNext>().eq("id", monitorNextId));
+    if (num<1){
+        throw  new MyRuntimeException("监测信息id传入错误，没有此id");
+    }else {
+        MonitorNext monitorNext = new MonitorNext();
+        monitorNext.setId(Long.parseLong(monitorNextId));
+        monitorNext.setH3InstanceId(instanceId);
+       monitorNextService.updateById(monitorNext);
+    }
         return IResult.ok(body);
     }
 
@@ -224,6 +234,7 @@ public class H3ApiController {
         if (body.getCode() != 0) {
             return IResult.fail(body.getMsg());
         }
+
         return IResult.ok("结束流程成功！");
     }
 

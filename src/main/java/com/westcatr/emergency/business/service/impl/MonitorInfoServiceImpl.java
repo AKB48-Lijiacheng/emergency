@@ -1,11 +1,13 @@
 package com.westcatr.emergency.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.westcatr.emergency.business.entity.MonitorInfo;
+import com.westcatr.emergency.business.entity.MonitorNext;
 import com.westcatr.emergency.business.mapper.MonitorInfoMapper;
 import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
 import com.westcatr.emergency.business.pojo.dto.MonitorDto;
@@ -99,6 +101,7 @@ MonitorNextService monitorNextService;
         }
         QueryWrapper<MonitorInfo> likeQw = new QueryWrapper<MonitorInfo>()
                 .eq(enty.getIsDuplicated()!=null,"is_duplicated",0)
+                .eq(enty.getStatus()!=null,"status",0)
                 .like(enty.getTargetAssetName() != null, "target_asset_name", enty.getTargetAssetName())
                 .or(enty.getProblemName() != null).like("problem_name", enty.getProblemName())
                 .or(enty.getProblemType() != null).like("problem_type", enty.getProblemType())
@@ -133,15 +136,30 @@ MonitorNextService monitorNextService;
     @Transactional
     @Override
     public String duplicatedMonitor(MonitorDto dto) {
-        monitorNextService.save(dto.getMonitorNext());
+        MonitorNext monitorNext = dto.getMonitorNext();
 
-        for (Long id : dto.getIds()) {
-            MonitorInfo monitorInfo = new MonitorInfo();
-            monitorInfo.setId(id);
-            monitorInfo.setIsDuplicated(1);
-            monitorInfo.setStatus(1);
-            this.updateById(monitorInfo);
+        monitorNext.setStatus(0);
+        monitorNext.setEventInfoId(null);
+        monitorNext.setSituMonitorSrcId(null);
+        boolean save = monitorNextService.save(dto.getMonitorNext());
+        if (save){
+            throw new MyRuntimeException("生成新数据失败！");
         }
+        List<Long> ids = dto.getIds();
+       if ( !CollUtil.isEmpty(ids)){
+           for (Long id : ids) {
+               MonitorInfo monitorInfo = new MonitorInfo();
+               monitorInfo.setId(id);
+               monitorInfo.setIsDuplicated(1);
+               monitorInfo.setStatus(1);
+               monitorInfo.setMonitorNextId(monitorNext.getId());
+               boolean b = this.updateById(monitorInfo);
+               if (b){
+                   throw new MyRuntimeException("监测信息更新数据失败！ id="+id);
+               }
+           }
+       }
+
 
         return String.valueOf(dto.getMonitorNext().getId());
     }

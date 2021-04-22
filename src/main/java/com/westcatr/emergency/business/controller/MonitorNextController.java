@@ -31,7 +31,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
  *  @since 2021-04-21
  */
 @Validated
-@Api(tags="监测信息表---去重后 等待开启流程的检测信息表接口", description = "monitorNext")
+@Api(tags="监测信息去重后表", description = "monitorNext")
 @Slf4j
 @RestController
 @RequestMapping("//monitorNext")
@@ -143,6 +143,36 @@ public class MonitorNextController {
     public IResult<MonitorNextVO> getMonitorNextVoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         AssociationQuery<MonitorNextVO> associationQuery = new AssociationQuery<>(MonitorNextVO.class);
         return IResult.ok(associationQuery.getVo(id, new MonitorNextQuery()));
+    }
+
+
+
+
+
+
+
+    /**
+     * 流程完成后回调这个接口去解除绑定
+     * @author : ls
+     * @since : Create in 2021-04-21
+     */
+    @SaveLog(value="获取监测信息表---去重后 流程完成后回调这个接口去解除绑定", module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @IPermissions(value="monitorNext:get:vo")
+    @ApiOperationSupport(order=7)
+    @ApiOperation(value="流程完成后回调这个接口去解除绑定", notes="monitorNext:get:disBindInstance")
+    @PostMapping("/disBindInstance")
+    public IResult disBindInstanceByInstanceId(@NotNull(message = "流程实例id不能为空") String instanceId) {
+        log.info("sss");
+        if (null==instanceId){
+            return IResult.fail("请传入流程实例id");
+        }
+        Boolean flag = monitorNextService.endFlow(instanceId);
+        if (!flag){
+            return IResult.fail("监测信息解绑失败");
+        }else {
+            return IResult.fail("监测信息解绑成功");
+        }
+
     }
 
 }

@@ -106,7 +106,7 @@ public class MonitorInfo extends Model<MonitorInfo> {
 
     @ApiModelProperty(value = "去重后检测信息表id")
     @TableField("monitor_next_id")
-    private String monitorNextId;
+    private Long monitorNextId;
 
 
 
@@ -115,4 +115,9 @@ public class MonitorInfo extends Model<MonitorInfo> {
         return this.id;
     }
 
+    public void setCreateTime(Date createTime) {
+    }
+
+    public void setUpdateTime(Date updateTime) {
+    }
 }

@@ -23,4 +23,6 @@ public interface MonitorNextService extends IService<MonitorNext> {
     MonitorNext iGetById(Long id);
 
     boolean iRemove(Long id);
+
+    Boolean endFlow(String instanceId);
 }

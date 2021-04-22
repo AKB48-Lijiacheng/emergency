@@ -84,7 +84,7 @@ public class MonitorInfoVO implements Serializable {
     private String situMonitorSrcId;
 
     @ApiModelProperty(value = "去重后检测信息表id")
-    private String monitorNextId;
+    private Long monitorNextId;
 
 
 }

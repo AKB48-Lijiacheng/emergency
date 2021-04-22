@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.emergency.business.pojo.query.MonitorNextQuery;
@@ -44,5 +45,17 @@ public class MonitorNextServiceImpl extends ServiceImpl<MonitorNextMapper, Monit
     @Override
     public boolean iRemove(Long id) {
         return this.removeById(id);
+    }
+
+    @Override
+    public Boolean endFlow(String instanceId) {
+        Boolean aBoolean = baseMapper.endFlowByInstanceId(instanceId);
+        QueryWrapper<MonitorNext> qw = new QueryWrapper<MonitorNext>().eq("h3_instance_id", instanceId);
+        int count = this.count(qw);
+        if (count<1){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

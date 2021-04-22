@@ -2,6 +2,7 @@ package com.westcatr.emergency.business.mapper;
 
 import com.westcatr.emergency.business.entity.MonitorNext;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MonitorNextMapper extends BaseMapper<MonitorNext> {
 
+    @Update("update bus_monitor_next b set h3_instance_id=null,status=2 where b.h3_instance_id=#{instanceId} ")
+    Boolean endFlowByInstanceId(String instanceId);
 }
