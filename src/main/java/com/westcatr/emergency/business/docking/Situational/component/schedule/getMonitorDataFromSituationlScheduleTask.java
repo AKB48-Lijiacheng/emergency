@@ -18,6 +18,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ import java.util.Map;
  * @since  2021/3/29
  **/
 @Slf4j
-@Configurable
+@Configuration
 @Transactional(rollbackForClassName="RuntimeException")
 public class getMonitorDataFromSituationlScheduleTask {
     private final   String  indexs ="security_event_2021.03";

@@ -277,7 +277,7 @@ public class H3ApiController {
         return list;
     }
 
-    public IResult getFlowFomDataById(String workItemId) {
+    public YjFormVo getFlowFomDataById(String workItemId) {
         String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved,w.SheetCode,w.WorkflowCode,i.InstanceName from ot_workitem w " +
                 "LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID left JOIN i_yjlcjxw  y on i.BizObjectId=y.ObjectID " +
                 "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
@@ -288,6 +288,9 @@ public class H3ApiController {
         if (map==null){
            throw new MyRuntimeException("该待办流程id绑定的表单信息不存在！");
        }
+
+
+
         YjFormVo yjFormVo = new YjFormVo();
        yjFormVo.setBizObjectId(String.valueOf(bizObjectId));
         yjFormVo.setStartUserName((String) map.get("OriginatorName"));
@@ -309,7 +312,15 @@ public class H3ApiController {
                "as Url from ot_attachment a where a.BizObjectId=?  ORDER BY CreatedTime";
         List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql,new BeanPropertyRowMapper<>(H3AttachFileInfoDto.class),bizObjectId);
         yjFormVo.setAttachFilesInfo(listFiles);
-        return IResult.ok(yjFormVo);
+
+        //设置绑定的监测信息
+       /* MonitorNext monitorNext = monitorNextService.getOne(new QueryWrapper<MonitorNext>().eq("h3_instance_id", instanceId));
+        if (monitorNext==null){
+            throw  new MyRuntimeException("获取对应监测信息失败,没有绑定该流程的监测信息");
+        }
+        yjFormVo.setMonitorNext(monitorNext);*/
+
+        return yjFormVo;
     }
 /**
  * 上传附件

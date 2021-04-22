@@ -137,12 +137,12 @@ MonitorNextService monitorNextService;
     @Override
     public String duplicatedMonitor(MonitorDto dto) {
         MonitorNext monitorNext = dto.getMonitorNext();
-
+        monitorNext.setId(null);
         monitorNext.setStatus(0);
         monitorNext.setEventInfoId(null);
         monitorNext.setSituMonitorSrcId(null);
-        boolean save = monitorNextService.save(dto.getMonitorNext());
-        if (save){
+        boolean save = monitorNextService.save(monitorNext);
+        if (!save){
             throw new MyRuntimeException("生成新数据失败！");
         }
         List<Long> ids = dto.getIds();
@@ -154,7 +154,7 @@ MonitorNextService monitorNextService;
                monitorInfo.setStatus(1);
                monitorInfo.setMonitorNextId(monitorNext.getId());
                boolean b = this.updateById(monitorInfo);
-               if (b){
+               if (!b){
                    throw new MyRuntimeException("监测信息更新数据失败！ id="+id);
                }
            }

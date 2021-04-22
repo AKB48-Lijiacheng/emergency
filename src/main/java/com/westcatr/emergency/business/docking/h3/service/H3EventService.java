@@ -3,7 +3,7 @@ package com.westcatr.emergency.business.docking.h3.service;
 import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
 import com.westcatr.emergency.business.docking.h3.vo.EventFormVo;
 import com.westcatr.emergency.business.docking.h3.vo.H3CommentVo;
-import com.westcatr.rd.base.acommon.vo.IResult;
+import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,14 @@ import java.util.Map;
 public class H3EventService {
     @Autowired
     JdbcTemplate h3JdbcTemplate;
-
+    @Autowired
+    MonitorNextService monitorNextService;
 
 
     /**
      * 获取事件流程的表单信息
      **/
-    public IResult getFlowFomDataById(String workItemId) {
+    public EventFormVo getFlowFomDataById(String workItemId) {
         String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan " +
                 "from ot_workitem w LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID " +
                 "left JOIN i_eventflow  y on i.BizObjectId=y.ObjectID LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
@@ -58,13 +59,20 @@ public class H3EventService {
         List<H3CommentVo> commentList = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(H3CommentVo.class), instanceId);
         eventFormVo.setCommentTexts(commentList);
 
-        //设置附件信息
+
         //设置附件信息
         String fileSql="SELECT ObjectID,BizObjectId,BizObjectSchemaCode,CreatedBy,CreatedTime,Description,FileName,ContentType,FileName,ContentLength,DownloadUrl " +
                 "as Url from ot_attachment a where a.BizObjectId=?  ORDER BY CreatedTime";
         List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql,new BeanPropertyRowMapper<>(H3AttachFileInfoDto.class),bizObjectId);
         eventFormVo.setAttachFilesInfo(listFiles);
-        return IResult.ok(eventFormVo);
+
+        //设置绑定的监测信息
+     /*   MonitorNext monitorNext = monitorNextService.getOne(new QueryWrapper<MonitorNext>().eq("h3_instance_id", instanceId));
+        if (monitorNext==null){
+            throw  new MyRuntimeException("获取对应监测信息失败,没有绑定该流程的监测信息");
+        }
+        eventFormVo.setMonitorNext(monitorNext);*/
+        return eventFormVo;
 
 
     }

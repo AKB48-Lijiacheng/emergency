@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.MonitorInfo;
-import com.westcatr.emergency.business.entity.MonitorNext;
 import com.westcatr.emergency.business.entity.SituMonitorSrcInfo;
 import com.westcatr.emergency.business.pojo.dto.MonitorDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
@@ -23,7 +22,6 @@ import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -212,7 +210,7 @@ public class MonitorInfoController {
         if (monitorNextId == null) {
             return IResult.fail("去重失败");
         }
-        return IResult.ok(monitorNextId);
+        return IResult.ok("",monitorNextId);
     }
 
     @SaveLog(value = "查找可能重复的数据", module = "监测信息表管理")

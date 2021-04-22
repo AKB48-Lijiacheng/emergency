@@ -66,7 +66,11 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Integer tfSuperiorInstructions;
 
-    @QueryCondition
+    @ApiModelProperty(value = "该监测信息是否重复")
+    @QueryCondition(sort = QueryCondition.Sort.ASC)
+    private Integer isDuplicated;
+
+    @QueryCondition(sort = QueryCondition.Sort.ASC)
     private Date createTime;
 
     @QueryCondition
@@ -84,9 +88,7 @@ public class MonitorInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Integer industrialId;
 
-    @ApiModelProperty(value = "该监测信息是否重复")
-    @QueryCondition
-    private Integer isDuplicated;
+
 
     @ApiModelProperty(value = "研判信息表id")
     @QueryCondition

@@ -1,6 +1,7 @@
 package com.westcatr.emergency.business.docking.h3.vo;
 
 import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
+import com.westcatr.emergency.business.entity.MonitorNext;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -50,6 +51,9 @@ public class EventFormVo {
 
     @ApiModelProperty("H3返回信息附件")
     private List<H3AttachFileInfoDto> attachFilesInfo;
+
+    //对应数据项信息
+    MonitorNext monitorNext;
 
 
 

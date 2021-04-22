@@ -2,6 +2,7 @@ package com.westcatr.emergency.business.docking.h3.controller;
 
 import com.westcatr.emergency.business.docking.h3.query.H3WorkItemQuery;
 import com.westcatr.emergency.business.docking.h3.service.H3FlowService;
+import com.westcatr.emergency.business.docking.h3.vo.YjFormVo;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,8 +55,8 @@ public class H3FlowController {
     @ApiOperation(value = "获取流程表单信息")
     @GetMapping("/getFlowFomDataByWorkItemId/{workItemId}")
     public IResult getFlowFomDataByWorkItemId(@PathVariable("workItemId") String workItemId) {
-        IResult fomData = h3ApiController.getFlowFomDataById(workItemId);
-        return fomData;
+        YjFormVo fomData = h3ApiController.getFlowFomDataById(workItemId);
+        return IResult.ok(fomData);
     }
 
 
