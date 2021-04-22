@@ -47,14 +47,14 @@ public class H3FlowController {
     }
 
     /**
-     * h3Yj获取流程表单信息
+     * h3预警获取流程表单信息,通过待办流程id,
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    @ApiOperation(value = "通过待办流程id,获取流程表单信息")
+    @ApiOperation(value = "获取流程表单信息")
     @GetMapping("/getFlowFomDataByWorkItemId/{workItemId}")
     public IResult getFlowFomDataByWorkItemId(@PathVariable("workItemId") String workItemId) {
-        IResult fomData = h3ApiController.getFlowFomDataById(workItemId, H3_YJ_WORKFLOWSCODE);
+        IResult fomData = h3ApiController.getFlowFomDataById(workItemId);
         return fomData;
     }
 

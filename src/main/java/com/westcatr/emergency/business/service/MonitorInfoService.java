@@ -3,8 +3,10 @@ package com.westcatr.emergency.business.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.westcatr.emergency.business.entity.MonitorInfo;
+import com.westcatr.emergency.business.pojo.dto.MonitorDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
+import com.westcatr.emergency.business.pojo.vo.MonitorSimilarDto;
 
 import java.io.File;
 import java.util.List;
@@ -31,4 +33,7 @@ public interface MonitorInfoService extends IService<MonitorInfo> {
 
     File buildDoc(String type, List<MonitorInfoVO> records);
 
+    MonitorSimilarDto getSimiliar(String id);
+
+    String duplicatedMonitor(MonitorDto dto);
 }

@@ -33,5 +33,6 @@ public class H3PushFormDataDto {
     @NotBlank(message = "待办任务id不能为空")
     private String workItemId;
     private List<DataItemParam> keyValues;
-    private YjFormDto formDto; //前端表单提交的数据
+    private YjFormDto formDto; //前端预警表单提交的数据
+    private EventFormDto eventFormDto;//前端事件表单提交数据
 }

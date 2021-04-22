@@ -1,30 +1,33 @@
 package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * <p>
- * 监测信息表
+ * 监测信息表---去重后 等待开启流程的检测信息表
  * </p>
  *
  * @author ls
- * @since 2021-04-09
+ * @since 2021-04-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_monitor_info")
-@ApiModel(value="MonitorInfoVO对象", description="监测信息表VO对象")
-public class MonitorInfoVO implements Serializable {
+@TableName("bus_monitor_next")
+@ApiModel(value="MonitorNextVO对象", description="监测信息表---去重后 等待开启流程的检测信息表VO对象")
+public class MonitorNextVO implements Serializable {
 
     @Select(exist = false)
     private static final long serialVersionUID=1L;
@@ -71,9 +74,6 @@ public class MonitorInfoVO implements Serializable {
     @ApiModelProperty(value = "产业分类表id")
     private Integer industrialId;
 
-    @ApiModelProperty(value = "该监测信息是否重复")
-    private Integer isDuplicated;
-
     @ApiModelProperty(value = "研判信息表id")
     private Integer judgeInfoId;
 
@@ -82,9 +82,6 @@ public class MonitorInfoVO implements Serializable {
 
     @ApiModelProperty(value = "态势监测信息源表id")
     private String situMonitorSrcId;
-
-    @ApiModelProperty(value = "去重后检测信息表id")
-    private String monitorNextId;
 
 
 }

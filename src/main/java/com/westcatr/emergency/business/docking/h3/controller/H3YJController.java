@@ -94,14 +94,14 @@ public class H3YJController {
 
 
     //附件上传
-    @ApiOperation(value = "h3预警附件上传")
+    @ApiOperation(value = "h3附件上传")
     @PostMapping("/fileUpload")
     public IResult fileUpload(@RequestParam(value = "file", required = true) MultipartFile file) throws Exception {
         return IResult.ok("成功", h3ApiController.uploadAttachFile(file));
     }
 
     //附件下载
-    @ApiOperation(value = "h3预警附件下载")
+    @ApiOperation(value = "h3附件下载")
     @GetMapping("/fileDown")
     public void fileDown(@RequestParam(value = "attachmentId", required = true) String attachmentId, HttpServletResponse response) throws Exception {
         ResponseEntity<Resource> responseEntity = restTemplate

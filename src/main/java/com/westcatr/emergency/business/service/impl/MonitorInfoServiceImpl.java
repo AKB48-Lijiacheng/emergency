@@ -2,19 +2,26 @@ package com.westcatr.emergency.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.excel.EasyExcel;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.mapper.MonitorInfoMapper;
 import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
+import com.westcatr.emergency.business.pojo.dto.MonitorDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
+import com.westcatr.emergency.business.pojo.vo.MonitorSimilarDto;
 import com.westcatr.emergency.business.service.MonitorInfoService;
+import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.emergency.business.utils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
+import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.List;
@@ -32,8 +39,9 @@ import java.util.stream.Collectors;
 public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, MonitorInfo> implements MonitorInfoService {
 
     @Value("${file.doc.path}")
-    String  downLoadFilePath;
-
+    String downLoadFilePath;
+@Autowired
+MonitorNextService monitorNextService;
 
     @Override
     public IPage<MonitorInfo> iPage(MonitorInfoQuery query) {
@@ -81,5 +89,60 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
             new RuntimeException("文件生成失败!");
         }
         return file;
+    }
+
+    @Override
+    public MonitorSimilarDto getSimiliar(String id) {
+        MonitorInfo enty = this.getById(id);
+        if (null == enty) {
+            throw new MyRuntimeException("此检测信息不存在！");
+        }
+        QueryWrapper<MonitorInfo> likeQw = new QueryWrapper<MonitorInfo>()
+                .eq(enty.getIsDuplicated()!=null,"is_duplicated",0)
+                .like(enty.getTargetAssetName() != null, "target_asset_name", enty.getTargetAssetName())
+                .or(enty.getProblemName() != null).like("problem_name", enty.getProblemName())
+                .or(enty.getProblemType() != null).like("problem_type", enty.getProblemType())
+                .or(enty.getProblemDescribe() != null).like("problem_describe", enty.getProblemDescribe())
+                .or(enty.getEnterpriseName() != null).like("enterprise_name", enty.getEnterpriseName()).orderByAsc("create_time");
+        List<MonitorInfo> similiarList = this.list(likeQw);
+
+        List<Object> ids = similiarList.stream().map(e -> e.getId()).collect(Collectors.toList());
+        QueryWrapper<MonitorInfo> qw = new QueryWrapper<MonitorInfo>()
+                .eq(enty.getIsDuplicated()!=null,"is_duplicated",0)
+                .notIn("id", ids)
+                .orderByAsc("create_time");
+        List<MonitorInfo> notSimiliar = this.list(qw);
+
+//去除查找的本数据项
+        for (int i = 0; i < similiarList.size(); i++) {
+            if (id.equals(similiarList.get(i).getId().toString())) {
+                similiarList.remove(i);
+                break;
+            }
+        }
+
+        MonitorSimilarDto dto = new MonitorSimilarDto();
+        dto.setMonitor(enty);
+        dto.setSimiliars(similiarList);
+        dto.setNotSimiliars(notSimiliar);
+        dto.setSimiliarsTotal(similiarList.size());
+        dto.setNotSimiliarsTotal(notSimiliar.size());
+        return dto;
+    }
+
+    @Transactional
+    @Override
+    public String duplicatedMonitor(MonitorDto dto) {
+        monitorNextService.save(dto.getMonitorNext());
+
+        for (Long id : dto.getIds()) {
+            MonitorInfo monitorInfo = new MonitorInfo();
+            monitorInfo.setId(id);
+            monitorInfo.setIsDuplicated(1);
+            monitorInfo.setStatus(1);
+            this.updateById(monitorInfo);
+        }
+
+        return String.valueOf(dto.getMonitorNext().getId());
     }
 }

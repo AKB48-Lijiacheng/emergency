@@ -88,7 +88,7 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @TableField("industrial_id")
     private Integer industrialId;
 
-    @ApiModelProperty(value = "该监测信息是否重复")
+    @ApiModelProperty(value = "该监测信息是否重复:0否 1重复")
     @TableField("is_duplicated")
     private Integer isDuplicated;
 
@@ -103,6 +103,11 @@ public class MonitorInfo extends Model<MonitorInfo> {
     @ApiModelProperty(value = "态势监测信息源表id")
     @TableField("situ_monitor_src_id")
     private String situMonitorSrcId;
+
+    @ApiModelProperty(value = "去重后检测信息表id")
+    @TableField("monitor_next_id")
+    private String monitorNextId;
+
 
 
     @Override

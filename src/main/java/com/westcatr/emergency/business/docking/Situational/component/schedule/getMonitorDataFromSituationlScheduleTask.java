@@ -99,6 +99,7 @@ public class getMonitorDataFromSituationlScheduleTask {
                 MonitorInfo monitorInfo = getMonitorInfo(situMonitorSrcInfo);
                 int monitorCount = monitorInfoService.count(new QueryWrapper<MonitorInfo>().eq("situ_event_id", monitorInfo.getSituEventId()));
                 if (monitorCount<1){
+                    monitorInfo.setIsDuplicated(0);//先设置为不重复
                     monitorInfoService.save(monitorInfo);
                     log.info("bus_monitor_info表插入数据： id= "+monitorInfo.getId());
                     monitSaveCount++;

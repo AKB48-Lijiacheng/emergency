@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,8 +28,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -47,11 +45,16 @@ public class H3ApiController {
     private final String H3_SECRET = "Authine";
     // H3表单编码
     private final String H3_YJ_FORMCODE = "Syjlcjxw";
-    // H3业务对象模式编码
-    private final String BizObjectSchemaCode = "yjlcjxw";
+    // H3预警业务对象模式编码
+    private final String H3_YJ_WORKFLOWSCODE = "yjlcjxw";
 
     // 应急平台管理员userCode
     private final String YJADMIN_USERCODE = "yjadmin";
+
+    // H3事件流程模板编码
+    private final String H3_EVENT_WORKFLOWSCode = "EventFlow";
+    // H3事件表单编码
+    private final String H3_EVENT_FORMCODE = "SEventFlow";
 
     @Value("${h3.portal.bpm.address}")
     private String h3bpmAddress;
@@ -77,6 +80,7 @@ public class H3ApiController {
         starInfo.setWorkflowCode(workFlowTpye);
         starInfo.setUserCode(startDto.getUserCode());
         starInfo.setFinishStart(true);
+
         starInfo.setParamValues(getDataItemParam(startDto.getFormDto()));
         String json = JSON.toJSONString(starInfo, SerializerFeature.WriteMapNullValue);
         //设置请求
@@ -84,6 +88,23 @@ public class H3ApiController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         H3Result body = restTemplate.exchange(url, HttpMethod.POST, entity, H3Result.class).getBody();
+        if (body.getCode()!=0){
+            throw new MyRuntimeException("请求h3失败，发起流程失败，请检查参数！！");
+        }
+        //去把附件和流程进行绑定
+        Map<String,Object> data = (Map) body.getData();
+        String instanceId = (String) data.get("instanceId");
+        String sql="SELECT BizObjectId from ot_instancecontext where ObjectID=?";
+        //数据保存成功了 那么就去把表单模板和附件表进行绑定
+        List<String> attachIds = startDto.getFormDto().getAttachIds();
+        Map<String, Object> InstanceParam = h3JdbcTemplate.queryForMap(sql,instanceId);
+        Object bizObjectId = InstanceParam.get("BizObjectId");
+        if (null!=attachIds&&attachIds.size()>0) {
+            attachIds.forEach(fileId -> {
+                String fileSql = "UPDATE ot_attachment o set o.BizObjectId =? where o.ObjectID=?";
+                h3JdbcTemplate.update(fileSql, bizObjectId,fileId);
+            });
+        }
         return IResult.ok(body);
     }
 
@@ -106,7 +127,14 @@ public class H3ApiController {
         h3PushInfoDTO.setSecret(H3_SECRET);
         h3PushInfoDTO.setSystemCode(H3_SYSTEM_CODE);
         h3PushInfoDTO.setUserId(formDto.getUserId());
-        List<DataItemParam> dataItemParam = getDataItemParam(formDto.getFormDto());//获取流程数据项
+        List<DataItemParam> dataItemParam=new LinkedList<>();
+        if (h3PushInfoDTO.getBizObjectSchemaCode().equalsIgnoreCase(H3_EVENT_WORKFLOWSCode)){
+        dataItemParam = getDataItemParam(formDto.getEventFormDto());//获取事件流程数据
+        }
+        if (h3PushInfoDTO.getBizObjectSchemaCode().equalsIgnoreCase(H3_YJ_WORKFLOWSCODE)){
+        dataItemParam = getDataItemParam(formDto.getFormDto());//获取预警流程数据项
+        }
+
         h3PushInfoDTO.setKeyValues(dataItemParam);
         String jsonStr = JSON.toJSONString(h3PushInfoDTO, SerializerFeature.WriteMapNullValue);
         log.info("接收的json为:  " + jsonStr);
@@ -119,7 +147,22 @@ public class H3ApiController {
             return IResult.fail(body.getMsg());
         }
         //数据保存成功了 那么就去把表单模板和附件表进行绑定
-        List<String> attachIds = formDto.getFormDto().getAttachIds();
+        List<String> attachIds =new ArrayList<>();
+        if (h3PushInfoDTO.getBizObjectSchemaCode().equalsIgnoreCase(H3_YJ_WORKFLOWSCODE)){
+        attachIds = formDto.getFormDto().getAttachIds();
+        }
+        if (h3PushInfoDTO.getBizObjectSchemaCode().equalsIgnoreCase(H3_EVENT_WORKFLOWSCode)){
+            List<String> miitAttachment = formDto.getEventFormDto().getMiitAttachment();
+            if (!CollUtil.isEmpty(miitAttachment)){
+                attachIds.addAll(miitAttachment);
+            }
+            List<String> relevantAttachmen = formDto.getEventFormDto().getRelevantAttachmen();
+            if (!CollUtil.isEmpty(relevantAttachmen)){
+                attachIds.addAll(relevantAttachmen);
+            }
+
+        }
+
         if (null!=attachIds&&attachIds.size()>0) {
             attachIds.forEach(fileId -> {
                 String sql = "UPDATE ot_attachment o set o.BizObjectId =? where o.ObjectID=?";
@@ -223,14 +266,15 @@ public class H3ApiController {
         return list;
     }
 
-    public IResult getFlowFomDataById(String workItemId,String workFlowType) {
-        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved from ot_workitem w " +
+    public IResult getFlowFomDataById(String workItemId) {
+        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved,w.SheetCode,w.WorkflowCode,i.InstanceName from ot_workitem w " +
                 "LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID left JOIN i_yjlcjxw  y on i.BizObjectId=y.ObjectID " +
                 "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,workItemId);
         Object bizObjectId=  map.get("bizId");
         Object instanceId = map.get("instanceId");
-       if (map==null){
+        String workflowCode = (String) map.get("WorkflowCode");
+        if (map==null){
            throw new MyRuntimeException("该待办流程id绑定的表单信息不存在！");
        }
         YjFormVo yjFormVo = new YjFormVo();
@@ -243,31 +287,18 @@ public class H3ApiController {
         yjFormVo.setEarlyWarnLevel(String.valueOf(map.get("EarlyWarnLevel")));
         yjFormVo.setApproved((String) map.get("Approved"));
 
-
-
         //设置审批意见
         String str="RemakeInfo";
         String commentSql="SELECT * from ot_comment c where c.InstanceId=? and DataField  IN ('"+str+"') ORDER BY CreatedTime ";
-        List<H3CommentVo> commentList = h3JdbcTemplate.queryForList(sql, H3CommentVo.class, instanceId);
+        List<H3CommentVo> commentList = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(H3CommentVo.class), instanceId);
         yjFormVo.setCommentTexts(commentList);
 
         //设置附件信息
-       String fileSql="SELECT ContentType,FileName,ContentLength,DownloadUrl as Url from ot_attachment a where a.BizObjectId=?";
-        List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql, new RowMapper<H3AttachFileInfoDto>() {
-            @Override
-            public H3AttachFileInfoDto mapRow(ResultSet rs, int i) throws SQLException {
-                H3AttachFileInfoDto fileInfoDto = new H3AttachFileInfoDto();
-                fileInfoDto.setContentType(rs.getString("ContentType"));
-                fileInfoDto.setName(rs.getString("FileName"));
-                fileInfoDto.setSize(rs.getInt("ContentLength"));
-                fileInfoDto.setUrl(rs.getString("Url"));
-                return fileInfoDto;
-            }
-        },bizObjectId);
+       String fileSql="SELECT ObjectID,BizObjectId,BizObjectSchemaCode,CreatedBy,CreatedTime,Description,FileName,ContentType,FileName,ContentLength,DownloadUrl " +
+               "as Url from ot_attachment a where a.BizObjectId=?  ORDER BY CreatedTime";
+        List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql,new BeanPropertyRowMapper<>(H3AttachFileInfoDto.class),bizObjectId);
         yjFormVo.setAttachFilesInfo(listFiles);
         return IResult.ok(yjFormVo);
-
-
     }
 /**
  * 上传附件
