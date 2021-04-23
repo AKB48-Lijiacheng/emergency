@@ -1,19 +1,15 @@
 package com.westcatr.emergency.business.pojo.query;
 
-import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -41,6 +37,9 @@ public class UserQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "密码")
     @QueryCondition
     private String password;
+
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
     @ApiModelProperty(value = "手机号")
     @QueryCondition

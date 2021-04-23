@@ -5,15 +5,15 @@ import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.westcatr.emergency.business.docking.h3.dto.DataItemParam;
-import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
-import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3Organizationunit;
-import com.westcatr.emergency.business.docking.h3.dto.entityDto.H3User;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.*;
-import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
-import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3Result;
-import com.westcatr.emergency.business.docking.h3.vo.H3CommentVo;
-import com.westcatr.emergency.business.docking.h3.vo.YjFormVo;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.DataItemParam;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.attachFileDto.H3AttachFileInfoDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.entityDto.H3Organizationunit;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.entityDto.H3User;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.flowDto.*;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.H3CommentVo;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.YjFormVo;
 import com.westcatr.emergency.business.entity.MonitorNext;
 import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.acommon.vo.IResult;
@@ -108,7 +108,7 @@ public class H3ApiController {
         String monitorNextId = startDto.getMonitorNextId();
         int num = monitorNextService.count(new QueryWrapper<MonitorNext>().eq("id", monitorNextId));
     if (num<1){
-        throw  new MyRuntimeException("监测信息id传入错误，没有此id");
+        throw  new MyRuntimeException("监测信息id传入错误，没有此数据");
     }else {
         MonitorNext monitorNext = new MonitorNext();
         monitorNext.setId(Long.parseLong(monitorNextId));
@@ -288,8 +288,6 @@ public class H3ApiController {
         if (map==null){
            throw new MyRuntimeException("该待办流程id绑定的表单信息不存在！");
        }
-
-
 
         YjFormVo yjFormVo = new YjFormVo();
        yjFormVo.setBizObjectId(String.valueOf(bizObjectId));

@@ -1,6 +1,5 @@
 package com.westcatr.emergency.business.service.impl;
 
-import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -73,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User createNewUserBySsoUser(SsoUser ssoUser) {
         User user = new User();
         user.setUsername(ssoUser.getAccount());
-        user.setPassword(SecureUtil.md5(iSecurityProperties.getBeginSalt()+"000000"+iSecurityProperties.getEndSalt()));
+//        user.setPassword(SecureUtil.md5(iSecurityProperties.getBeginSalt()+"westcatr110,./"+iSecurityProperties.getEndSalt()));
         user.setPhone(ssoUser.getMobile());
         user.setFullName(ssoUser.getName());
         user.setEnable(1);

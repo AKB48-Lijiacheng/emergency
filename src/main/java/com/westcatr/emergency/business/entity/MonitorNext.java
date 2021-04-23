@@ -70,6 +70,10 @@ public class MonitorNext extends Model<MonitorNext> {
     @TableField("tf_superior_instructions")
     private Integer tfSuperiorInstructions;
 
+    @ApiModelProperty(value = "预警等级")
+    @TableField("warning_level")
+    private Integer warningLevel;
+
     @TableField("create_time")
     private Date createTime;
 
@@ -100,10 +104,13 @@ public class MonitorNext extends Model<MonitorNext> {
     @TableField("situ_monitor_src_id")
     private String situMonitorSrcId;
 
-    @ApiModelProperty(value = "h3流程实例id")
+    @ApiModelProperty(value = "h3预警流程实例id")
     @TableField("h3_instance_id")
     private String h3InstanceId;
 
+    @ApiModelProperty(value = "h3预警流程实例id")
+    @TableField("h3_event_instance_id")
+    private String h3EventInstanceId;
 
 
     @Override

@@ -66,6 +66,11 @@ public class MonitorNextQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Integer tfSuperiorInstructions;
 
+
+    @ApiModelProperty(value = "预警等级")
+    @QueryCondition
+    private Integer warningLevel;
+
     @QueryCondition
     private Date createTime;
 

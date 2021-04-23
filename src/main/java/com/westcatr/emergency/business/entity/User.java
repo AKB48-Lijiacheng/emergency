@@ -1,22 +1,18 @@
 package com.westcatr.emergency.business.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -30,10 +26,10 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("sys_user")
-@ApiModel(value="User对象", description="系统用户")
+@ApiModel(value = "User对象", description = "系统用户")
 public class User extends Model<User> {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -49,6 +45,10 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "手机号")
     @TableField("phone")
     private String phone;
+
+    @ApiModelProperty(value = "邮箱")
+    @TableField("email")
+    private String email;
 
     @ApiModelProperty(value = "真实姓名")
     @TableField("full_name")

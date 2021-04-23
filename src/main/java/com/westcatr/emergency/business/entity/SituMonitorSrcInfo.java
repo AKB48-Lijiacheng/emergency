@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,7 +26,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("situ_monitor_src_info")
+@TableName("bus_situ_monitor_src_info")
 @ApiModel(value="SituMonitorSrcInfo对象", description="")
 public class SituMonitorSrcInfo extends Model<SituMonitorSrcInfo> {
 
@@ -193,18 +194,23 @@ public class SituMonitorSrcInfo extends Model<SituMonitorSrcInfo> {
     @TableField("src_province")
     private String srcProvince;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ApiModelProperty(value = "创建时间")
     @TableField("icreate_time")
     private Date icreateTime;
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ApiModelProperty(value = "更新时间")
     @TableField("update_time")
     private Date updateTime;
 
-
+    @ApiModelProperty(value = "去重后数据源表id")
+    @TableField("monitor_next_src_id")
+    private String monitorNextSrcId;
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
+
+
 
 }

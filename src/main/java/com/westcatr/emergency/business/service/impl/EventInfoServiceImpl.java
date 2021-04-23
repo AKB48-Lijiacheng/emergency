@@ -16,7 +16,7 @@ import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-23
  */
 @Service
 public class EventInfoServiceImpl extends ServiceImpl<EventInfoMapper, EventInfo> implements EventInfoService {

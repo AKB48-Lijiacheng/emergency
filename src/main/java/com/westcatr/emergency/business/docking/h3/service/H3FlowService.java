@@ -6,9 +6,9 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3Result;
-import com.westcatr.emergency.business.docking.h3.dto.h3RetuenDto.H3WorkItems;
-import com.westcatr.emergency.business.docking.h3.query.H3WorkItemQuery;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3WorkItems;
+import com.westcatr.emergency.business.docking.h3.pojo.query.H3WorkItemQuery;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lijiacheng
@@ -46,39 +47,39 @@ public class H3FlowService {
      * 获取待办任务
      **/
     public IResult getUnFinishWorkItems(H3WorkItemQuery h3WorkItemQuery, Integer page, Integer size) {
-        if (size == null||size<1) {
-            size=10;
+        if (size == null || size < 1) {
+            size = 10;
         }
-        if (page == null||page<1) {
-            page=1;
+        if (page == null || page < 1) {
+            page = 1;
         }
         h3WorkItemQuery.setSystemCode(H3_SYSTEM_CODE);
         h3WorkItemQuery.setSecret(H3_SECRET);
-        h3WorkItemQuery.setStartIndex((page-1)*size+1);
-        h3WorkItemQuery.setEndIndex(page*size);
+        h3WorkItemQuery.setStartIndex((page - 1) * size + 1);
+        h3WorkItemQuery.setEndIndex(page * size);
         //拼接查询条件
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         Field[] fields = ReflectUtil.getFields(h3WorkItemQuery.getClass());
         for (Field field : fields) {
             Object value = ReflectUtil.getFieldValue(h3WorkItemQuery, field);
-            if (null!=value&&!value.equals("")){
-                sb.append(field.getName()+"="+value+"&");
+            if (null != value && !value.equals("")) {
+                sb.append(field.getName() + "=" + value + "&");
             }
         }
         String queryParam = sb.substring(0, sb.length() - 2);
-        String url=h3bpmAddress+"/workitems/unfinish/"+h3WorkItemQuery.getUserId()+"?"+queryParam;
+        String url = h3bpmAddress + "/workitems/unfinish/" + h3WorkItemQuery.getUserId() + "?" + queryParam;
         String res = HttpUtil.get(url);
         H3Result h3Result = JSONObject.parseObject(res, H3Result.class);
-        if (h3Result.getCode()!=0){
-            throw  new MyRuntimeException("获取待办任务失败！！");
+        if (h3Result.getCode() != 0) {
+            throw new MyRuntimeException("获取待办任务失败！！");
         }
 
         Object data = h3Result.getData();
         List<H3WorkItems> list = new ArrayList<>();
-        if (data!=null){
+        if (data != null) {
             list = JSONArray.parseArray(data.toString(), H3WorkItems.class);
-       }
-        Page<H3WorkItems> pageObj = new Page(page,size,list.size());
+        }
+        Page<H3WorkItems> pageObj = new Page(page, size, list.size());
         pageObj.setRecords(list);
         return IResult.ok(pageObj);
 
@@ -88,40 +89,60 @@ public class H3FlowService {
      * 获取已办任务
      **/
     public IResult getFinishWorkItems(H3WorkItemQuery h3WorkItemQuery, Integer page, Integer size) {
-        if (size == null||size<1) {
-            size=10;
+        if (size == null || size < 1) {
+            size = 10;
         }
-        if (page == null||page<1) {
-            page=1;
+        if (page == null || page < 1) {
+            page = 1;
         }
         h3WorkItemQuery.setSystemCode(H3_SYSTEM_CODE);
         h3WorkItemQuery.setSecret(H3_SECRET);
-        h3WorkItemQuery.setStartIndex((page-1)*size+1);
-        h3WorkItemQuery.setEndIndex(page*size);
+        h3WorkItemQuery.setStartIndex((page - 1) * size + 1);
+        h3WorkItemQuery.setEndIndex(page * size);
         //拼接查询条件
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         Field[] fields = ReflectUtil.getFields(h3WorkItemQuery.getClass());
         for (Field field : fields) {
             Object value = ReflectUtil.getFieldValue(h3WorkItemQuery, field);
-            if (null!=value&&!value.equals("")){
-                sb.append(field.getName()+"="+value+"&");
+            if (null != value && !value.equals("")) {
+                sb.append(field.getName() + "=" + value + "&");
             }
         }
         String queryParam = sb.substring(0, sb.length() - 2);
-        String url=h3bpmAddress+"/workitems/finish/"+h3WorkItemQuery.getUserId()+"?"+queryParam;
+        String url = h3bpmAddress + "/workitems/finish/" + h3WorkItemQuery.getUserId() + "?" + queryParam;
         String res = HttpUtil.get(url);
         H3Result h3Result = JSONObject.parseObject(res, H3Result.class);
-        if (h3Result.getCode()!=0){
-            throw  new MyRuntimeException("获取已办任务失败！！");
+        if (h3Result.getCode() != 0) {
+            throw new MyRuntimeException("获取已办任务失败！！");
         }
 
         Object data = h3Result.getData();
         List<H3WorkItems> list = new ArrayList<>();
-        if (data!=null){
+        if (data != null) {
             list = JSONArray.parseArray(data.toString(), H3WorkItems.class);
         }
-        Page<H3WorkItems> pageObj = new Page(page,size,list.size());
+        Page<H3WorkItems> pageObj = new Page(page, size, list.size());
         pageObj.setRecords(list);
         return IResult.ok(pageObj);
+    }
+
+    public String getParentInstanceId(String instanceId) {
+        String sql = "SELECT ObjectID,ParentInstanceID from ot_instancecontext i WHERE i.ObjectID=? ";
+        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql, instanceId);
+        String yjInstanceId = (String) map.get("ParentInstanceID");
+        if (null == yjInstanceId) {
+            throw new MyRuntimeException("没有查询到事件流程父流程预警实例Id");
+        }
+        return yjInstanceId;
+    }
+
+    public String getWorkItemsIdByInstanceId(String instanceId) {
+        String  sql ="SELECT ObjectID,InstanceId from ot_workitem o where InstanceId=?";
+        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql);
+        String workItemsId = (String) map.get("ObjectID");//获取
+        if (workItemsId==null){
+            throw new MyRuntimeException("没有查到对应的待办任务id");
+        }
+        return workItemsId;
     }
 }

@@ -58,6 +58,10 @@ public class MonitorNextVO implements Serializable {
     @ApiModelProperty(value = "是否上级指示")
     private Integer tfSuperiorInstructions;
 
+
+    @ApiModelProperty(value = "预警等级")
+    private Integer warningLevel;
+
     private Date createTime;
 
     private Date updateTime;
@@ -82,6 +86,7 @@ public class MonitorNextVO implements Serializable {
 
     @ApiModelProperty(value = "h3流程实例id")
     private String h3InstanceId;
+
 
 
 }

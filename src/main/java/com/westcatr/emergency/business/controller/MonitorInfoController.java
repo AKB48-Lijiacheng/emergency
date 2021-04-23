@@ -205,7 +205,7 @@ public class MonitorInfoController {
     @ApiOperation(value = "监测信息去重", notes = "monitorInfo:duplicated")
     @ApiOperationSupport(order = 9)
     @PostMapping("/duplicated")
-    public IResult duplicatedMonitor(@RequestBody MonitorDto dto) {
+    public IResult duplicatedMonitor(@RequestBody @Validated MonitorDto dto) {
         String monitorNextId = monitorInfoService.duplicatedMonitor(dto);
         if (monitorNextId == null) {
             return IResult.fail("去重失败");
@@ -229,8 +229,8 @@ public class MonitorInfoController {
     @GetMapping("/srcDetail/{monitorId}")
     public IResult getMonitorSrc(@PathVariable("monitorId") String id) {
         MonitorInfo monitor = monitorInfoService.getById(id);
-        situMonitorSrcInfoService.getOne(new QueryWrapper<SituMonitorSrcInfo>().eq("src_id", monitor.getSituEventId()));
-        return IResult.ok("去重成功");
+        SituMonitorSrcInfo monitorSrc = situMonitorSrcInfoService.getOne(new QueryWrapper<SituMonitorSrcInfo>().eq("src_id", monitor.getSituEventId()));
+        return IResult.ok(monitorSrc);
     }
 
 }

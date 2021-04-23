@@ -1,8 +1,8 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
-import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.service.H3EventService;
-import com.westcatr.emergency.business.docking.h3.vo.EventFormVo;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.EventFormVo;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,7 +57,7 @@ public class H3EventController {
     @ApiOperation(value = "事件流程获取流程表单信息")
     @GetMapping("/getFlowFomDataByWorkItemId/{workItemId}")
     public IResult getFlowFomDataByWorkItemId(@PathVariable("workItemId") String workItemId) {
-        EventFormVo fomData = h3EventService.getFlowFomDataById(workItemId);
+        EventFormVo fomData = h3EventService.getFlowFomDataByWorkItemId(workItemId);
         return IResult.ok(fomData);
     }
 

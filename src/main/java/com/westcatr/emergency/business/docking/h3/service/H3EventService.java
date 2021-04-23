@@ -1,8 +1,8 @@
 package com.westcatr.emergency.business.docking.h3.service;
 
-import com.westcatr.emergency.business.docking.h3.dto.attachFileDto.H3AttachFileInfoDto;
-import com.westcatr.emergency.business.docking.h3.vo.EventFormVo;
-import com.westcatr.emergency.business.docking.h3.vo.H3CommentVo;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.attachFileDto.H3AttachFileInfoDto;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.EventFormVo;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.H3CommentVo;
 import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class H3EventService {
     /**
      * 获取事件流程的表单信息
      **/
-    public EventFormVo getFlowFomDataById(String workItemId) {
+    public EventFormVo getFlowFomDataByWorkItemId(String workItemId) {
         String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan " +
                 "from ot_workitem w LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID " +
                 "left JOIN i_eventflow  y on i.BizObjectId=y.ObjectID LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";

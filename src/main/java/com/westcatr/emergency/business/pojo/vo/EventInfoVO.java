@@ -1,18 +1,15 @@
 package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -43,6 +40,52 @@ public class EventInfoVO implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    @ApiModelProperty(value = "事件发生时间")
+    private Date eventStartTime;
+
+    @ApiModelProperty(value = "攻击来源")
+    private String attackSrc;
+
+    @ApiModelProperty(value = "攻击目标")
+    private String attackTarget;
+
+    @ApiModelProperty(value = "危害程度")
+    private String injuryExtent;
+
+    @ApiModelProperty(value = "影响范围")
+    private String scopeInfluence;
+
+    @ApiModelProperty(value = "事件发生的单位")
+    private String accidentUnit;
+
+    @ApiModelProperty(value = "初步影响")
+    private String initialImpact;
+
+    @ApiModelProperty(value = "事件等级(4,3,2,1)依次严重")
+    private String eventLevel;
+
+    @ApiModelProperty(value = "事件的描述")
+    private String eventDescrible;
+
+    @ApiModelProperty(value = "事件的原因")
+    private String eventCause;
+
+    @ApiModelProperty("处置内容")
+    private String detailInfo;
+    @ApiModelProperty("处置时间")
+    private Date disposalTime;
+    @ApiModelProperty("负责人")
+    private String personCharge;
+    @ApiModelProperty("处置方式")
+    private String disposalMethod;
+    @ApiModelProperty("支撑机构")
+    private String supporMechan;
+    @ApiModelProperty(value = "h3事件流程实例的id")
+    private String  h3EventInstanceId;
+
+    @ApiModelProperty(value = "事件流程h3的附件ids")
+    private String  h3AttachFileIds;
 
 
 }

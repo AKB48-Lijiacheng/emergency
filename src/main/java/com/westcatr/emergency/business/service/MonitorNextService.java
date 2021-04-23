@@ -1,9 +1,11 @@
 package com.westcatr.emergency.business.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.MonitorNextQuery;
-import com.westcatr.emergency.business.entity.MonitorNext;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.pojo.query.MonitorNextQuery;
+import com.westcatr.emergency.business.pojo.vo.MonitorNextVO;
+
 /**
  * <p>
  * 监测信息表---去重后 等待开启流程的检测信息表 服务类
@@ -24,5 +26,7 @@ public interface MonitorNextService extends IService<MonitorNext> {
 
     boolean iRemove(Long id);
 
-    Boolean endFlow(String instanceId);
+    Boolean setMonitorNextStatuByInstanceId(String instanceId);
+
+    MonitorNextVO getInfoByInstanceId(String instanceId);
 }

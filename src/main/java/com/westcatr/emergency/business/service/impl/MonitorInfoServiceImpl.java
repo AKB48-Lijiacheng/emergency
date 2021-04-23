@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.entity.MonitorNextSrcInfo;
+import com.westcatr.emergency.business.entity.SituMonitorSrcInfo;
 import com.westcatr.emergency.business.mapper.MonitorInfoMapper;
 import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
 import com.westcatr.emergency.business.pojo.dto.MonitorDto;
@@ -16,6 +18,8 @@ import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.pojo.vo.MonitorSimilarDto;
 import com.westcatr.emergency.business.service.MonitorInfoService;
 import com.westcatr.emergency.business.service.MonitorNextService;
+import com.westcatr.emergency.business.service.MonitorNextSrcInfoService;
+import com.westcatr.emergency.business.service.SituMonitorSrcInfoService;
 import com.westcatr.emergency.business.utils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +49,10 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
     String downLoadFilePath;
 @Autowired
 MonitorNextService monitorNextService;
+@Autowired
+    MonitorNextSrcInfoService monitorNextSrcInfoService;
+    @Autowired
+    SituMonitorSrcInfoService situMonitorSrcInfoService;
 
     @Override
     public IPage<MonitorInfo> iPage(MonitorInfoQuery query) {
@@ -136,17 +145,26 @@ MonitorNextService monitorNextService;
     @Transactional
     @Override
     public String duplicatedMonitor(MonitorDto dto) {
+        MonitorNextSrcInfo monitorNextSrcInfo = dto.getMonitorNextSrcInfo();
+        monitorNextSrcInfo.setId(null);
+        boolean bol = monitorNextSrcInfoService.save(monitorNextSrcInfo);
+        if (!bol){
+            throw new MyRuntimeException("生成去重后数据源失败！");
+        }
         MonitorNext monitorNext = dto.getMonitorNext();
         monitorNext.setId(null);
         monitorNext.setStatus(0);
         monitorNext.setEventInfoId(null);
-        monitorNext.setSituMonitorSrcId(null);
+        monitorNext.setSituMonitorSrcId(monitorNextSrcInfo.getId());
         boolean save = monitorNextService.save(monitorNext);
         if (!save){
-            throw new MyRuntimeException("生成新数据失败！");
+            throw new MyRuntimeException("生成新监测信息数据失败！");
         }
-        List<Long> ids = dto.getIds();
-       if ( !CollUtil.isEmpty(ids)){
+
+        List<Long> ids = dto.getIds();//monitor的ids
+        LinkedList<String> srcIds = new LinkedList<>();//元数据的ids
+        if ( !CollUtil.isEmpty(ids)){
+           //更新监测信息
            for (Long id : ids) {
                MonitorInfo monitorInfo = new MonitorInfo();
                monitorInfo.setId(id);
@@ -155,11 +173,26 @@ MonitorNextService monitorNextService;
                monitorInfo.setMonitorNextId(monitorNext.getId());
                boolean b = this.updateById(monitorInfo);
                if (!b){
-                   throw new MyRuntimeException("监测信息更新数据失败！ id="+id);
+                   throw new MyRuntimeException("去重前监测信息更新数据失败！ id="+id);
                }
+               //获取元数据的id加入list
+               QueryWrapper<MonitorInfo> qw = new QueryWrapper<MonitorInfo>().eq("id", id).select("id", "situ_monitor_src_id");
+               MonitorInfo monit = this.getOne(qw);
+               srcIds.add(monit.getSituMonitorSrcId());
            }
        }
 
+        if ( !CollUtil.isEmpty(srcIds)){
+            for (String srcId : srcIds) {
+                SituMonitorSrcInfo situMonitorSrcInfo = new SituMonitorSrcInfo();
+                situMonitorSrcInfo.setId(srcId);
+                situMonitorSrcInfo.setMonitorNextSrcId(monitorNextSrcInfo.getId());
+                boolean b = situMonitorSrcInfoService.updateById(situMonitorSrcInfo);
+                if (!b){
+                    throw new MyRuntimeException("去重前检测数据源信息更新失败！ id="+srcId);
+                }
+            }
+        }
 
         return String.valueOf(dto.getMonitorNext().getId());
     }

@@ -46,7 +46,7 @@ public class MybatisPlusGenerator {
         String tableName = "";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
-        String[] includeTable = new String[] {"bus_monitor_next"};
+        String[] includeTable = new String[] {"bus_event_info"};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[] { "bus_", "sys_" };
 
@@ -87,7 +87,7 @@ public class MybatisPlusGenerator {
             filePath = projectPath + "/src/main/java";
             gc.setOutputDir(projectPath + "/src/main/java");
         }
-        gc.setFileOverride(false);//是否覆盖
+        gc.setFileOverride(true);//是否覆盖
         gc.setActiveRecord(true);
         // XML 二级缓存
         gc.setEnableCache(false);

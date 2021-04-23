@@ -1,12 +1,14 @@
 package com.westcatr.emergency.business.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.entity.MonitorNextSrcInfo;
 import com.westcatr.emergency.business.pojo.query.MonitorNextQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorNextVO;
 import com.westcatr.emergency.business.service.MonitorNextService;
-import com.westcatr.emergency.business.service.SituMonitorSrcInfoService;
+import com.westcatr.emergency.business.service.MonitorNextSrcInfoService;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
@@ -40,17 +42,17 @@ public class MonitorNextController {
     @Autowired
     private MonitorNextService monitorNextService;
     @Autowired
-    private SituMonitorSrcInfoService situMonitorSrcInfoService;
+    private MonitorNextSrcInfoService monitorNextSrcInfoService;
 
     /**
      * 获取分页列表
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="监测信息表---去重后 等待开启流程的检测信息表分页数据接口", module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="监测信息表---去重后 ", module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:page")
     @ApiOperationSupport(order=1)
-    @ApiOperation(value="监测信息表---去重后 等待开启流程的检测信息表分页数据接口", notes="monitorNext:page")
+    @ApiOperation(value="监测信息表---去重后 ", notes="monitorNext:page")
     @GetMapping("/page")
     public IResult<IPage<MonitorNext>> getMonitorNextPage(MonitorNextQuery query) {
         return IResult.ok(monitorNextService.iPage(query));
@@ -61,10 +63,10 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="获取监测信息表---去重后 等待开启流程的检测信息表数据接口", module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="获取监测信息表---去重后 ", module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:get")
     @ApiOperationSupport(order=2)
-    @ApiOperation(value="获取监测信息表---去重后 等待开启流程的检测信息表数据接口", notes="monitorNext:get")
+    @ApiOperation(value="获取监测信息表---去重后 ", notes="monitorNext:get")
     @GetMapping("/get")
     public IResult<MonitorNext> getMonitorNextById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         return IResult.ok(monitorNextService.iGetById(id));
@@ -75,10 +77,10 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="新增监测信息表---去重后 等待开启流程的检测信息表数据接口", level = 2, module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="新增监测信息表---去重后", level = 2, module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:add")
     @ApiOperationSupport(order=3)
-    @ApiOperation(value="新增监测信息表---去重后 等待开启流程的检测信息表数据接口", notes="monitorNext:add")
+    @ApiOperation(value="新增监测信息表---去重后 ", notes="monitorNext:add")
     @PostMapping("/add")
     public IResult addMonitorNext(@RequestBody @Validated(Insert.class) MonitorNext param) {
         return IResult.auto(monitorNextService.iSave(param));
@@ -89,10 +91,10 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="更新监测信息表---去重后 等待开启流程的检测信息表数据接口", level = 2, module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="更新监测信息表---去重后 ", level = 2, module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:update")
     @ApiOperationSupport(order=4)
-    @ApiOperation(value="更新监测信息表---去重后 等待开启流程的检测信息表数据接口", notes="monitorNext:update")
+    @ApiOperation(value="更新监测信息表---去重后 ", notes="monitorNext:update")
     @PostMapping("/update")
     public IResult updateMonitorNextById(@RequestBody @Validated(Update.class) MonitorNext param) {
         return IResult.auto(monitorNextService.iUpdate(param));
@@ -103,10 +105,10 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="删除监测信息表---去重后 等待开启流程的检测信息表数据接口", level = 3, module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="删除监测信息表---去重后 ", level = 3, module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:del")
     @ApiOperationSupport(order=5)
-    @ApiOperation(value="删除监测信息表---去重后 等待开启流程的检测信息表数据接口", notes="monitorNext:del")
+    @ApiOperation(value="删除监测信息表---去重后 ", notes="monitorNext:del")
     @DeleteMapping("/delete")
     public IResult deleteMonitorNextById(@NotBlank(message = "id不能为空") @RequestParam(value = "id") String id) {
         for (String s : id.split(COMMA)) {
@@ -120,7 +122,7 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="监测信息表---去重后 等待开启流程的检测信息表VO分页数据接口", module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="监测信息表---去重后 ", module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:page:vo")
     @ApiOperationSupport(order=6)
     @ApiOperation(value="监测信息表---去重后 等待开启流程的检测信息表VO分页数据接口", notes="monitorNext:page:vo")
@@ -135,10 +137,10 @@ public class MonitorNextController {
      * @author : ls
      * @since : Create in 2021-04-21
      */
-    @SaveLog(value="获取监测信息表---去重后 等待开启流程的检测信息表VO数据接口", module="监测信息表---去重后 等待开启流程的检测信息表管理")
+    @SaveLog(value="获取监测信息表---去重后 ", module="监测信息表---去重后 ")
     @IPermissions(value="monitorNext:get:vo")
     @ApiOperationSupport(order=7)
-    @ApiOperation(value="获取监测信息表---去重后 等待开启流程的检测信息表VO数据接口", notes="monitorNext:get:vo")
+    @ApiOperation(value="获取监测信息表---去重后 ", notes="monitorNext:get:vo")
     @GetMapping("/getVo")
     public IResult<MonitorNextVO> getMonitorNextVoById(@NotNull(message = "id不能为空") @RequestParam(value = "id") Long id) {
         AssociationQuery<MonitorNextVO> associationQuery = new AssociationQuery<>(MonitorNextVO.class);
@@ -146,33 +148,27 @@ public class MonitorNextController {
     }
 
 
-
-
-
-
-
-    /**
-     * 流程完成后回调这个接口去解除绑定
-     * @author : ls
-     * @since : Create in 2021-04-21
-     */
-    @SaveLog(value="获取监测信息表---去重后 流程完成后回调这个接口去解除绑定", module="监测信息表---去重后 等待开启流程的检测信息表管理")
-    @IPermissions(value="monitorNext:get:vo")
-    @ApiOperationSupport(order=7)
-    @ApiOperation(value="流程完成后回调这个接口去解除绑定", notes="monitorNext:get:disBindInstance")
-    @PostMapping("/disBindInstance")
-    public IResult disBindInstanceByInstanceId(@NotNull(message = "流程实例id不能为空") String instanceId) {
-        log.info("sss");
-        if (null==instanceId){
-            return IResult.fail("请传入流程实例id");
-        }
-        Boolean flag = monitorNextService.endFlow(instanceId);
-        if (!flag){
-            return IResult.fail("监测信息解绑失败");
-        }else {
-            return IResult.fail("监测信息解绑成功");
-        }
-
+    @SaveLog(value = "获取监测信息数据源", module = "监测信息表管理")
+    @ApiOperation(value = "获取监测信息数据源", notes = "monitorInfo:srcDetail")
+    @ApiOperationSupport(order = 9)
+    @GetMapping("/srcDetail/{monitorNextId}")
+    public IResult getMonitorNextSrc(@PathVariable("monitorNextId") String id) {
+        MonitorNext monitor = monitorNextService.getById(id);
+        MonitorNextSrcInfo monitorNextSrcInfo = monitorNextSrcInfoService.getOne(new QueryWrapper<MonitorNextSrcInfo>().eq("id", monitor.getSituMonitorSrcId()));
+        return IResult.ok(monitorNextSrcInfo);
     }
+
+
+    @SaveLog(value = "根据流程实例Id获取监测信息", module = "监测信息表管理")
+    @ApiOperation(value = "根据流程实例Id获取监测信息", notes = "monitorInfo:getInfoByInstanceId")
+    @ApiOperationSupport(order = 9)
+    @GetMapping("/getInfoByInstanceId/{instanceId}")
+    public IResult getInfoByInstanceId(@PathVariable("instanceId") String instanceId) {
+        MonitorNextVO vo = monitorNextService.getInfoByInstanceId(instanceId);
+        return IResult.ok(vo);
+    }
+
+
+
 
 }

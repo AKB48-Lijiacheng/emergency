@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface MonitorNextMapper extends BaseMapper<MonitorNext> {
 
-    @Update("update bus_monitor_next b set h3_instance_id=null,status=2 where b.h3_instance_id=#{instanceId} ")
-    Boolean endFlowByInstanceId(String instanceId);
+    @Update("update bus_monitor_next b set status=1 where b.h3_instance_id=#{instanceId} ")
+    Boolean setMonitorNextStatuByInstanceId(String instanceId);
 }

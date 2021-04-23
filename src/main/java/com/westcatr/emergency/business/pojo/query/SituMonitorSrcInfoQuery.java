@@ -197,4 +197,7 @@ public class SituMonitorSrcInfoQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @QueryCondition
     private Date updateTime;
+
+    @ApiModelProperty(value = "去重后数据源表id")
+    private Date monitorNextSrcId;
 }

@@ -1,7 +1,7 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
-import com.westcatr.emergency.business.docking.h3.dto.formDto.H3PushFormDataDto;
-import com.westcatr.emergency.business.docking.h3.dto.flowDto.H3FlowStartDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.flowDto.H3FlowStartDto;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
