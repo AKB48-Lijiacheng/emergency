@@ -16,18 +16,18 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 区县基本信息表
+ * 市级架构
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sys_area_info")
-@ApiModel(value="AreaInfoVO对象", description="区县基本信息表VO对象")
-public class AreaInfoVO implements Serializable {
+@TableName("bus_city")
+@ApiModel(value="CityVO对象", description="市级架构VO对象")
+public class CityVO implements Serializable {
 
     @Select(exist = false)
     private static final long serialVersionUID=1L;
@@ -35,7 +35,7 @@ public class AreaInfoVO implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @ApiModelProperty(value = "行政区名")
+    @ApiModelProperty(value = "市级名称")
     private String unitName;
 
     @ApiModelProperty(value = "纬度")
@@ -44,8 +44,8 @@ public class AreaInfoVO implements Serializable {
     @ApiModelProperty(value = "经度")
     private BigDecimal longtitude;
 
-    @ApiModelProperty(value = "排序值")
-    private Integer sort;
+    @ApiModelProperty(value = "H3ObjectId")
+    private String h3Id;
 
 
 }

@@ -22,12 +22,33 @@ public class TopicExchangeAndBingdingConfig {
 
 
     @Bean
+    public TopicExchange EmailTopicExchange() {
+        TopicExchange topicExchange = new TopicExchange("email-ex");
+        return topicExchange;
+    }
+
+
+    @Bean
     Binding bindingTopic() {
         return BindingBuilder.bind(findPassword()).to(topicExchange()).with("findPassword");
     }
     @Bean
     Binding bindingTopic2() {
         return BindingBuilder.bind(UserRegister()).to(topicExchange()).with("register");
+    }
+    @Bean
+    Binding bindingTopic3() {
+        return BindingBuilder.bind(emailRegister()).to(EmailTopicExchange()).with("emailRegister");
+    }
+
+    /**
+     * 注册时发送邮箱验证
+     * @author lijiacheng
+     * @since 2021/4/16
+     **/
+    @Bean
+    public Queue emailRegister() {
+        return new Queue("email-register");
     }
 
 

@@ -29,28 +29,29 @@ import javax.sql.DataSource;
 public class dbconfig {
 
     @Primary
-    @Bean
-    @Qualifier("em")
+    @Bean("em")
     @ConfigurationProperties(prefix = "spring.datasource.em")
     public DataSource emDataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
+    @Bean(name = "emJdbcTemplate")
+    public JdbcTemplate primaryJdbcTemplate(@Qualifier("em") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+
+    }
 
 
 
 
-
-    @Bean
-    @Qualifier("h3")
+    @Bean("h3")
     @ConfigurationProperties(prefix = "spring.datasource.h3")
     public DataSource h3DataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
 
-    @Bean(name = "h3Jdbc")
-    @Qualifier("h3JdbcTemplate")
+    @Bean(name = "h3JdbcTemplate")
     public JdbcTemplate secondJdbcTemplate(@Qualifier("h3") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
 

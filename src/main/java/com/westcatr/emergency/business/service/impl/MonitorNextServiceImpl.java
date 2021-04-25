@@ -54,8 +54,8 @@ public class MonitorNextServiceImpl extends ServiceImpl<MonitorNextMapper, Monit
     }
 
     @Override
-    public Boolean setMonitorNextStatuByInstanceId(String instanceId) {
-        Boolean bo = baseMapper.setMonitorNextStatuByInstanceId(instanceId);
+    public Boolean setMonitorNextStatuByInstanceId(String instanceId,Integer statuNum) {
+        Boolean bo = baseMapper.setMonitorNextStatuByInstanceId(instanceId,statuNum);
        return bo;
     }
 

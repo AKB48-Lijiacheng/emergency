@@ -94,7 +94,7 @@ public class H3FlowController {
         if (null==instanceId){
             return IResult.fail("请传入流程实例id");
         }
-        Boolean flag = monitorNextService.setMonitorNextStatuByInstanceId(instanceId);//更新监测信息状态
+        Boolean flag = monitorNextService.setMonitorNextStatuByInstanceId(instanceId,2);//更新监测信息状态
         if (!flag){
            throw  new MyRuntimeException("监测信息设置完成状态失败");
         }

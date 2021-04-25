@@ -21,13 +21,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author ls
- * @since 2021-04-21
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="CityInfo查询对象", description="市级架构查询对象")
-public class CityInfoQuery extends TimeDTO implements Serializable {
+@ApiModel(value="City查询对象", description="市级架构查询对象")
+public class CityQuery extends TimeDTO implements Serializable {
 
     private static final long serialVersionUID=1L;
 

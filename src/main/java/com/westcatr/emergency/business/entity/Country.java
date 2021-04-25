@@ -20,18 +20,18 @@ import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- * 市级架构
+ * 二级行政区架构
  * </p>
  *
  * @author ls
- * @since 2021-04-21
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_city_info")
-@ApiModel(value="CityInfo对象", description="市级架构")
-public class CityInfo extends Model<CityInfo> {
+@TableName("bus_country")
+@ApiModel(value="Country对象", description="二级行政区架构")
+public class Country extends Model<Country> {
 
     private static final long serialVersionUID=1L;
 
@@ -39,9 +39,13 @@ public class CityInfo extends Model<CityInfo> {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "市级名称")
+    @ApiModelProperty(value = "区县名")
     @TableField("unit_name")
     private String unitName;
+
+    @ApiModelProperty(value = "上级单位id")
+    @TableField("pid")
+    private Long pid;
 
     @ApiModelProperty(value = "纬度")
     @TableField("latitude")
@@ -51,9 +55,24 @@ public class CityInfo extends Model<CityInfo> {
     @TableField("longtitude")
     private BigDecimal longtitude;
 
-    @ApiModelProperty(value = "H3ObjectId")
-    @TableField("h3_id")
-    private String h3Id;
+    @ApiModelProperty(value = "部门id")
+    @TableField("did")
+    private Long did;
+
+    @ApiModelProperty(value = "下设单位")
+    @TableField("set_down")
+    private String setDown;
+
+    @TableField("h3_ou_id")
+    private String h3OuId;
+
+    @ApiModelProperty(value = "排序值")
+    @TableField("sort")
+    private Integer sort;
+
+    @ApiModelProperty(value = "区划代码")
+    @TableField("zoning_code")
+    private String zoningCode;
 
 
     @Override

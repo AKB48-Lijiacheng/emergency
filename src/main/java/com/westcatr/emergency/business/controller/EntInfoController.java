@@ -29,7 +29,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
 /**
  *  EntInfo 控制器
  *   @author ls
- *  @since 2021-03-10
+ *  @since 2021-04-25
  */
 @Validated
 @Api(tags="企业信息表接口", description = "entInfo")
@@ -44,7 +44,7 @@ public class EntInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="企业信息表分页数据接口", module="企业信息表管理")
     @IPermissions(value="entInfo:page")
@@ -58,7 +58,7 @@ public class EntInfoController {
     /**
      * 通过id获取企业信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="获取企业信息表数据接口", module="企业信息表管理")
     @IPermissions(value="entInfo:get")
@@ -72,7 +72,7 @@ public class EntInfoController {
     /**
      * 新增企业信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="新增企业信息表数据接口", level = 2, module="企业信息表管理")
     @IPermissions(value="entInfo:add")
@@ -86,7 +86,7 @@ public class EntInfoController {
     /**
      * 更新企业信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="更新企业信息表数据接口", level = 2, module="企业信息表管理")
     @IPermissions(value="entInfo:update")
@@ -100,7 +100,7 @@ public class EntInfoController {
     /**
      * 通过id删除企业信息表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="删除企业信息表数据接口", level = 3, module="企业信息表管理")
     @IPermissions(value="entInfo:del")
@@ -117,7 +117,7 @@ public class EntInfoController {
     /**
      * 获取分页列表
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="企业信息表VO分页数据接口", module="企业信息表管理")
     @IPermissions(value="entInfo:page:vo")
@@ -132,7 +132,7 @@ public class EntInfoController {
     /**
      * 通过id获取企业信息表VO
      * @author : ls
-     * @since : Create in 2021-03-10
+     * @since : Create in 2021-04-25
      */
     @SaveLog(value="获取企业信息表VO数据接口", module="企业信息表管理")
     @IPermissions(value="entInfo:get:vo")

@@ -70,7 +70,7 @@ public class H3ApiController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    public IResult startFlow(H3FlowStartDto startDto,String workFlowTpye) {
+    public H3Result startFlow(H3FlowStartDto startDto,String workFlowTpye) {
        String url = h3bpmAddress + "/workflows/"+workFlowTpye;
         H3StartPushInfo starInfo = new H3StartPushInfo();
         starInfo.setSystemCode(H3_SYSTEM_CODE);
@@ -115,7 +115,7 @@ public class H3ApiController {
         monitorNext.setH3InstanceId(instanceId);
        monitorNextService.updateById(monitorNext);
     }
-        return IResult.ok(body);
+        return body;
     }
 
     /**
@@ -218,7 +218,7 @@ public class H3ApiController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    public IResult endWorkflow(String instanceId) {
+    public Boolean endWorkflow(String instanceId) {
         String url = h3bpmAddress + "/instances/finish/" + instanceId;
         H3FlowEndDTO endDTO = new H3FlowEndDTO();
         endDTO.setSystemCode(H3_SYSTEM_CODE);
@@ -232,10 +232,10 @@ public class H3ApiController {
                 url, HttpMethod.PUT, entitySubmit, H3Result.class)
                 .getBody();
         if (body.getCode() != 0) {
-            return IResult.fail(body.getMsg());
+           throw new MyRuntimeException("h3结束流程失败!!!");
         }
 
-        return IResult.ok("结束流程成功！");
+        return true;
     }
 
     /**

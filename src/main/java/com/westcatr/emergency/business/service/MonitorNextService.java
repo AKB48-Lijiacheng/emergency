@@ -26,7 +26,7 @@ public interface MonitorNextService extends IService<MonitorNext> {
 
     boolean iRemove(Long id);
 
-    Boolean setMonitorNextStatuByInstanceId(String instanceId);
+    Boolean setMonitorNextStatuByInstanceId(String instanceId,Integer statNum);
 
     MonitorNextVO getInfoByInstanceId(String instanceId);
 }

@@ -2,10 +2,10 @@ package com.westcatr.emergency.business.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
-import com.westcatr.emergency.business.pojo.query.CityInfoQuery;
-import com.westcatr.emergency.business.entity.CityInfo;
-import com.westcatr.emergency.business.mapper.CityInfoMapper;
-import com.westcatr.emergency.business.service.CityInfoService;
+import com.westcatr.emergency.business.pojo.query.CityQuery;
+import com.westcatr.emergency.business.entity.City;
+import com.westcatr.emergency.business.mapper.CityMapper;
+import com.westcatr.emergency.business.service.CityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
@@ -16,28 +16,28 @@ import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
  * </p>
  *
  * @author ls
- * @since 2021-04-21
+ * @since 2021-04-25
  */
 @Service
-public class CityInfoServiceImpl extends ServiceImpl<CityInfoMapper, CityInfo> implements CityInfoService {
+public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements CityService {
 
     @Override
-    public IPage<CityInfo> iPage(CityInfoQuery query) {
-        return this.page(PageDTO.page(query), new WrapperFactory<CityInfo>().create(query));
+    public IPage<City> iPage(CityQuery query) {
+        return this.page(PageDTO.page(query), new WrapperFactory<City>().create(query));
     }
 
     @Override
-    public boolean iSave(CityInfo param) {
+    public boolean iSave(City param) {
         return this.save(param);
     }
 
     @Override
-    public boolean iUpdate(CityInfo param) {
+    public boolean iUpdate(City param) {
         return this.updateById(param);
     }
 
     @Override
-    public CityInfo iGetById(Long id) {
+    public City iGetById(Long id) {
         return this.getById(id);
     }
 

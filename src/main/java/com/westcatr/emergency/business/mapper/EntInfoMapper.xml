@@ -10,14 +10,14 @@
         <result column="ent_industry_category" property="entIndustryCategory" />
         <result column="ent_address" property="entAddress" />
         <result column="post_code" property="postCode" />
+        <result column="social_credit_code" property="socialCreditCode" />
         <result column="legal_person" property="legalPerson" />
-        <result column="register_city" property="registerCity" />
-        <result column="busines_province" property="businesProvince" />
         <result column="contact_name" property="contactName" />
         <result column="contact_number" property="contactNumber" />
         <result column="contact_email" property="contactEmail" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="country_id" property="countryId" />
     </resultMap>
 
 </mapper>

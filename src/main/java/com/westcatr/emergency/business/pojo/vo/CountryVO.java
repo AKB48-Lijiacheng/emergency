@@ -16,18 +16,18 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 市级架构
+ * 二级行政区架构
  * </p>
  *
  * @author ls
- * @since 2021-04-21
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_city_info")
-@ApiModel(value="CityInfoVO对象", description="市级架构VO对象")
-public class CityInfoVO implements Serializable {
+@TableName("bus_country")
+@ApiModel(value="CountryVO对象", description="二级行政区架构VO对象")
+public class CountryVO implements Serializable {
 
     @Select(exist = false)
     private static final long serialVersionUID=1L;
@@ -35,8 +35,11 @@ public class CityInfoVO implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @ApiModelProperty(value = "市级名称")
+    @ApiModelProperty(value = "区县名")
     private String unitName;
+
+    @ApiModelProperty(value = "上级单位id")
+    private Long pid;
 
     @ApiModelProperty(value = "纬度")
     private BigDecimal latitude;
@@ -44,8 +47,19 @@ public class CityInfoVO implements Serializable {
     @ApiModelProperty(value = "经度")
     private BigDecimal longtitude;
 
-    @ApiModelProperty(value = "H3ObjectId")
-    private String h3Id;
+    @ApiModelProperty(value = "部门id")
+    private Long did;
+
+    @ApiModelProperty(value = "下设单位")
+    private String setDown;
+
+    private String h3OuId;
+
+    @ApiModelProperty(value = "排序值")
+    private Integer sort;
+
+    @ApiModelProperty(value = "区划代码")
+    private String zoningCode;
 
 
 }

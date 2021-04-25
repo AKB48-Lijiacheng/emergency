@@ -95,5 +95,8 @@ public class UserVO implements Serializable {
     @ApiModelProperty(value = "H3用户表id")
     private String h3UserId;
 
+    @ApiModelProperty(value = "用户激活验证Code")
+    private String activityCode;
+
 
 }

@@ -84,7 +84,7 @@ public class MonitorNext extends Model<MonitorNext> {
     @TableField("situ_event_id")
     private String situEventId;
 
-    @ApiModelProperty(value = "信息状态(0,处置中;1,处置完成;2,关闭)")
+    @ApiModelProperty(value = "信息状态(0,未处理;1处理中;2,处理完成)")
     @TableField("status")
     private Integer status;
 

@@ -20,12 +20,12 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bus_ent_info")
+@TableName("sys_ent_info")
 @ApiModel(value="EntInfo对象", description="企业信息表")
 public class EntInfo extends Model<EntInfo> {
 
@@ -54,17 +54,13 @@ public class EntInfo extends Model<EntInfo> {
     @TableField("post_code")
     private String postCode;
 
+    @ApiModelProperty(value = "统一社会信用代码")
+    @TableField("social_credit_code")
+    private String socialCreditCode;
+
     @ApiModelProperty(value = "法人")
     @TableField("legal_person")
     private String legalPerson;
-
-    @ApiModelProperty(value = "注册城市")
-    @TableField("register_city")
-    private String registerCity;
-
-    @ApiModelProperty(value = "业务省份")
-    @TableField("busines_province")
-    private String businesProvince;
 
     @ApiModelProperty(value = "联系人姓名")
     @TableField("contact_name")
@@ -83,6 +79,10 @@ public class EntInfo extends Model<EntInfo> {
 
     @TableField("update_time")
     private Date updateTime;
+
+    @ApiModelProperty(value = "所属区县id")
+    @TableField("country_id")
+    private Long countryId;
 
 
     @Override

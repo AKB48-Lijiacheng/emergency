@@ -17,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,47 +31,43 @@ public class EntInfoQuery extends TimeDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "企业名称")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String entName;
 
     @ApiModelProperty(value = "企业类别")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String entCategory;
 
     @ApiModelProperty(value = "行业类别")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String entIndustryCategory;
 
     @ApiModelProperty(value = "企业地址")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String entAddress;
 
     @ApiModelProperty(value = "邮政编码")
     @QueryCondition
     private String postCode;
 
+    @ApiModelProperty(value = "统一社会信用代码")
+    @QueryCondition
+    private String socialCreditCode;
+
     @ApiModelProperty(value = "法人")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String legalPerson;
 
-    @ApiModelProperty(value = "注册城市")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
-    private String registerCity;
-
-    @ApiModelProperty(value = "业务省份")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
-    private String businesProvince;
-
     @ApiModelProperty(value = "联系人姓名")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String contactName;
 
     @ApiModelProperty(value = "联系人电话")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String contactNumber;
 
     @ApiModelProperty(value = "联系人邮箱")
-    @QueryCondition(condition = QueryCondition.Condition.LIKE)
+    @QueryCondition
     private String contactEmail;
 
     @QueryCondition
@@ -80,7 +76,7 @@ public class EntInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Date updateTime;
 
-
-
-
+    @ApiModelProperty(value = "所属区县id")
+    @QueryCondition
+    private Long countryId;
 }

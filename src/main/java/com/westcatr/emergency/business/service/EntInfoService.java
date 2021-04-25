@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author ls
- * @since 2021-03-10
+ * @since 2021-04-25
  */
 public interface EntInfoService extends IService<EntInfo> {
 

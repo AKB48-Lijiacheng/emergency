@@ -53,4 +53,5 @@ public class MyAuthenticationProviderImpl extends AbstractAuthenticationProvider
         IUser iUser = userAndPermissionProvider.getByUsername(dto.getUsername());
         return saveUserToCache(iUser, dto);
     }
+
 }

@@ -2,6 +2,8 @@ package com.westcatr.emergency.business.docking.h3.controller;
 
 import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.flowDto.H3FlowStartDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
+import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * h3的流程接口
@@ -47,6 +50,8 @@ public class H3YJController {
     private final String H3_YJ_FORMCODE = "Syjlcjxw";
     // H3业务对象模式编码
     private final String BizObjectSchemaCode = "yjlcjxw";
+    @Autowired
+    MonitorNextService monitorNextService;
 
     /**
      * h3开启流程
@@ -57,8 +62,12 @@ public class H3YJController {
     @ApiOperation(value = "h3预警流程开启接口")
     @PostMapping("/startFlow")
     public IResult startFlow(@RequestBody @Validated H3FlowStartDto flowStartDTO) {
-        return h3ApiController.startFlow(flowStartDTO, BizObjectSchemaCode);
 
+        H3Result h3Result = h3ApiController.startFlow(flowStartDTO, BizObjectSchemaCode);
+        Map<String,Object> data = (Map) h3Result.getData();
+        String instanceId = (String) data.get("instanceId");
+        monitorNextService.setMonitorNextStatuByInstanceId(instanceId,1);
+        return IResult.ok(h3Result);
     }
 
     /**
@@ -86,7 +95,9 @@ public class H3YJController {
     @ApiOperation(value = "h3预警流程结束接口")
     @GetMapping("/endFlow/{instanceId}")
     public IResult endWorkflow(@PathVariable(value = "instanceId")String instanceId) {
-        return h3ApiController.endWorkflow(instanceId);
+        Boolean flag = h3ApiController.endWorkflow(instanceId);
+        monitorNextService.setMonitorNextStatuByInstanceId(instanceId,2);
+        return IResult.ok("结束流程成功:instanceId:"+instanceId);
     }
 
 

@@ -118,6 +118,9 @@ public class User extends Model<User> {
     @TableField("h3_user_id")
     private String h3UserId;
 
+    @ApiModelProperty(value = "用户激活验证Code")
+    @TableField("activity_code")
+    private String activityCode;
 
     @Override
     protected Serializable pkVal() {

@@ -1,5 +1,6 @@
 package com.westcatr.emergency.config.rabbitMqConfig;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -28,5 +29,17 @@ public class RabbitProducer {
      */
     public void registerSms(String phone) {
         this.rabbitTemplate.convertAndSend("sms-ex","register",phone);
+    }
+
+
+    /**
+     * 注册时发送验证邮箱
+     */
+    public void emailRegister(String email,String userName,String activCode) {
+        JSONObject json = new JSONObject();
+        json.put("email",email);
+        json.put("username",userName);
+        json.put("activCode",activCode);
+        this.rabbitTemplate.convertAndSend("email-ex","register",json);
     }
 }

@@ -178,7 +178,10 @@ MonitorNextService monitorNextService;
                //获取元数据的id加入list
                QueryWrapper<MonitorInfo> qw = new QueryWrapper<MonitorInfo>().eq("id", id).select("id", "situ_monitor_src_id");
                MonitorInfo monit = this.getOne(qw);
-               srcIds.add(monit.getSituMonitorSrcId());
+               String situMonitorSrcId = monit.getSituMonitorSrcId();
+               if (null!=situMonitorSrcId){
+                   srcIds.add(monit.getSituMonitorSrcId());
+               }
            }
        }
 
