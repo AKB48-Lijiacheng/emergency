@@ -36,7 +36,7 @@ public class ConsumerConfig {
 
 
     /**
-     * 注册验证
+     * 注册发送邮箱验证
      **/
     @RabbitHandler
     @RabbitListener(queues = "sms-register")
