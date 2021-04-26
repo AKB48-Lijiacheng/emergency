@@ -79,4 +79,7 @@ public class EntInfoQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "所属区县id")
     @QueryCondition
     private Long countryId;
+    @ApiModelProperty(value = "所属区县")
+    @QueryCondition
+    private String belongCountry;
 }

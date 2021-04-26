@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.westcatr.emergency.business.docking.h3.service.H3YjService;
 import com.westcatr.emergency.business.entity.EntInfo;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.pojo.dto.UserDto;
@@ -55,6 +56,8 @@ public class UserController {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     EntInfoService entInfoService;
+    @Autowired
+    H3YjService h3YjService;
 
     /**
      * 获取分页列表
@@ -188,11 +191,13 @@ public class UserController {
         QueryWrapper<EntInfo> entQw = new QueryWrapper<EntInfo>().eq("social_credit_code", userDto.getEntInfo().getSocialCreditCode());
         boolean b = entInfoService.saveOrUpdate(entInfo, entQw);
         if (!b){
-            throw  new MyRuntimeException("企业信息保存失败！");
+            throw  new MyRuntimeException("企业信息保存失败！,请检查统一社会信用代码是否填写正确或联系管理员");
         }
         //user设置回显id
         user.setEntId(entInfo.getId());
         user.setEnable(0);
+        user.setOrgConstructId(4);
+        user.setUserType("区县级");
         String acivCode = IdUtil.randomUUID();
         user.setActivityCode(acivCode);//激活验证码
         userService.save(user);
@@ -214,6 +219,10 @@ public class UserController {
         }
         user.setEnable(1);
         userService.updateById(user);
+        Boolean b = h3YjService.synUsersToH3(userName);
+        if (!b){
+            throw new MyRuntimeException("用户绑定H3失败！！");
+        }
         return IResult.ok("激活用户:"+userName+" 成功！ 可以登录啦！" );
     }
 }

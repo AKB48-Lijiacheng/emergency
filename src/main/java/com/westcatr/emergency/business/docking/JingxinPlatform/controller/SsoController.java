@@ -10,7 +10,6 @@ import com.westcatr.emergency.business.docking.JingxinPlatform.service.SsoServic
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.service.UserService;
 import com.westcatr.emergency.config.ThreadFactory;
-import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.authority.authority.domain.LoginDTO;
@@ -50,7 +49,6 @@ public class SsoController {
      * @since  2021/4/6
      **/
     @SaveLog(value="大平台sso登录接口", module="大平台相关接口")
-    @IPermissions(value="sso:login")
     @ApiOperation(value="大平台sso登录接口")
     @PostMapping ("/login")
     public  IResult  ssoLogin(@RequestBody SsoToken ssoToken){

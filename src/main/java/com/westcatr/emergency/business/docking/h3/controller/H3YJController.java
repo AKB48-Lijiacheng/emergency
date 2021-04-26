@@ -1,12 +1,14 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
-import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.flowDto.H3FlowStartDto;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
+import com.westcatr.emergency.business.docking.h3.service.H3YjService;
 import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +54,9 @@ public class H3YJController {
     private final String BizObjectSchemaCode = "yjlcjxw";
     @Autowired
     MonitorNextService monitorNextService;
+    @Autowired
+    H3YjService h3YjService;
+
 
     /**
      * h3开启流程
@@ -146,6 +151,17 @@ public class H3YJController {
                 }
             }
         }
+
+    }
+
+
+
+    //同步用户数据到H3
+    @ApiOperation(value = "同步用户数据到H3")
+    @GetMapping("/synUsersToH3")
+    public IResult synUserToH3(@RequestParam(value = "username",required = false)@ApiParam(value = "传username就同步单个，否则同步所有") String userName){
+      boolean b= h3YjService.synUsersToH3(userName);
+      return IResult.auto(b);
 
     }
 

@@ -49,6 +49,10 @@ public class UserQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private String fullName;
 
+    @ApiModelProperty(value = "用户类型")
+    @QueryCondition
+    private String userType;
+
     @ApiModelProperty(value = "部门id")
     @QueryCondition
     private Integer departmentId;
@@ -112,4 +116,8 @@ public class UserQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "H3用户表id")
     @QueryCondition
     private String h3UserId;
+
+    @ApiModelProperty(value = "组织架构id")
+    @QueryCondition
+    private Integer orgConstructId;
 }

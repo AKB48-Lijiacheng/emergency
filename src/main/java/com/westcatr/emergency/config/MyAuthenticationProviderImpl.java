@@ -48,10 +48,15 @@ public class MyAuthenticationProviderImpl extends AbstractAuthenticationProvider
         }
 
         if (!passwordEncryption(dto.getPassword(), user.getPassword())&&null!=user.getSsoId()){
-            throw new MyRuntimeException("改用户是大平台用户，请从大平台登录！");
+            throw new MyRuntimeException("该用户是大平台用户，请从大平台登录！");
         }
         IUser iUser = userAndPermissionProvider.getByUsername(dto.getUsername());
         return saveUserToCache(iUser, dto);
     }
 
+
+    @Override
+    public String saveUserToCache(IUser iUser, LoginDTO dto) {
+        return super.saveUserToCache(iUser, dto);
+    }
 }

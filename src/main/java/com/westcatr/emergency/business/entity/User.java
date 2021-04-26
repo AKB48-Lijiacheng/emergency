@@ -42,6 +42,10 @@ public class User extends Model<User> {
     @TableField("password")
     private String password;
 
+    @ApiModelProperty(value = "用户类型")
+    @TableField("user_type")
+    private String userType;
+
     @ApiModelProperty(value = "手机号")
     @TableField("phone")
     private String phone;
@@ -121,6 +125,9 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "用户激活验证Code")
     @TableField("activity_code")
     private String activityCode;
+    @ApiModelProperty(value = "组织架构id")
+    @TableField("org_construct_id")
+    private Integer orgConstructId;
 
     @Override
     protected Serializable pkVal() {

@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/h3/flow")
@@ -198,7 +199,8 @@ public class H3FlowController {
     @ApiOperation(value = "h3获取所有组织")
     @GetMapping("/getOrgs")
     public IResult getOrgs() {
-        return h3ApiController.getOrgs();
+        List orgList = h3ApiController.getOrgs();
+        return IResult.ok(orgList);
     }
 
     /**

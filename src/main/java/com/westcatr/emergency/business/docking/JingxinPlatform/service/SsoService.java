@@ -58,7 +58,6 @@ public class SsoService {
         loginLog.setUserId(iUser.getId());
         loginLog.setClientCode(dto.getClientCode());
         loginLogService.isave(loginLog);
-//todo   HttpContextUtil.getHttpServletResponse().setHeader("token", token);//为什么不生效
         return newToken;
     }
 }

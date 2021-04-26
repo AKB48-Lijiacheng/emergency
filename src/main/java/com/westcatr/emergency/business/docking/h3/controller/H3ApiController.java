@@ -244,10 +244,10 @@ public class H3ApiController {
      * @author lijiacheng
      * @since 2021/4/13
      **/
-    public IResult getOrgs() {
+    public List<H3Organizationunit> getOrgs() {
         String sql = "SELECT * from  ot_organizationunit where name like '%应急平台%' and name <> '应急平台'";
         List<H3Organizationunit> list = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(H3Organizationunit.class));
-        return IResult.ok(list);
+        return list;
     }
 
 
@@ -339,6 +339,12 @@ public class H3ApiController {
                         + "&MaxSize=1024000&SchemaCode=yjlc2", request, String.class);
         return JSON.parseObject(responseEntity.getBody()).getString("AttachmentId");
     }
+
+
+
+
+
+
 
 }
 

@@ -36,8 +36,10 @@ public class MybatisPlusGenerator {
         String author = "ls";
         // 数据库用户名
         String username = "root";
+//        String username = "liusheng";
         // 数据库密码
         String password = "root";
+//        String password = "liusheng@123456";
         // 数据库名
         String dataBase = "emergency_db";
         // 逻辑删除字段，不要为null或者空
@@ -46,7 +48,7 @@ public class MybatisPlusGenerator {
         String tableName = "";
         // String tableNames = "ct_screen_info";
         String[] ExcludeTable = new String[] {};
-        String[] includeTable = new String[] {"bus_city","bus_country"};
+        String[] includeTable = new String[] {"ot_user"};
         // 需要生成的表的前缀，生成后将不含前缀
         String[] tableQ = new String[] { "bus_", "sys_" };
 
@@ -107,6 +109,7 @@ public class MybatisPlusGenerator {
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername(username);
         dsc.setPassword(password);
+//        dsc.setUrl("jdbc:mysql://10.8.80.15:3306/" + dataBase+"?useSSL=false&serverTimezone=Asia/Shanghai");
         dsc.setUrl("jdbc:mysql://localhost:3306/" + dataBase+"?useSSL=false&serverTimezone=Asia/Shanghai");
         /*
          * if (isView) { dsc.setDbQuery(new PostgreSqlQuery() {

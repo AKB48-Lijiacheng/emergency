@@ -84,10 +84,15 @@ public class EntInfo extends Model<EntInfo> {
     @TableField("country_id")
     private Long countryId;
 
+    @ApiModelProperty(value = "所属区县")
+    @TableField("belong_country")
+    private String belongCountry;
+
 
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
+
 
 }

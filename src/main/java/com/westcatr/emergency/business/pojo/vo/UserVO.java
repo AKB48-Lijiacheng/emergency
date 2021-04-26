@@ -37,6 +37,9 @@ public class UserVO implements Serializable {
     @ApiModelProperty(value = "密码")
     private String password;
 
+    @ApiModelProperty(value = "用户类型")
+    private String userType;
+
     @ApiModelProperty(value = "手机号")
     private String phone;
 
@@ -97,6 +100,9 @@ public class UserVO implements Serializable {
 
     @ApiModelProperty(value = "用户激活验证Code")
     private String activityCode;
+
+    @ApiModelProperty(value = "组织架构id")
+    private Integer orgConstructId;
 
 
 }
