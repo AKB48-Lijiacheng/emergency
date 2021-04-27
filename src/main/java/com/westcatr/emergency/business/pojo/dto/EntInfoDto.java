@@ -46,11 +46,11 @@ public class EntInfoDto {
     private String contactName;
 
     @ApiModelProperty(value = "联系人电话")
-    @NotNull(message = "联系人姓名不能为空")
+    @NotNull(message = "联系人电话不能为空")
     private String contactNumber;
 
     @ApiModelProperty(value = "联系人邮箱")
-    @NotNull(message = "联系人姓名不能为空")
+    @NotNull(message = "联系人邮箱不能为空")
     private String contactEmail;
 
 

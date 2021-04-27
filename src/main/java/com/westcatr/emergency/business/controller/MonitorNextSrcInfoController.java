@@ -31,7 +31,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
  *  @since 2021-04-23
  */
 @Validated
-@Api(tags="接口", description = "monitorNextSrcInfo")
+@Api(tags="去重后监测信息数据源接口", description = "monitorNextSrcInfo")
 @Slf4j
 @RestController
 @RequestMapping("//monitorNextSrcInfo")

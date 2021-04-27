@@ -1,28 +1,26 @@
 package com.westcatr.emergency.business.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.westcatr.emergency.business.pojo.query.OrgConstructQuery;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
-
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.westcatr.rd.base.acommon.annotation.Insert;
-import com.westcatr.rd.base.acommon.annotation.Update;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.westcatr.emergency.business.service.OrgConstructService;
 import com.westcatr.emergency.business.entity.OrgConstruct;
+import com.westcatr.emergency.business.pojo.query.OrgConstructQuery;
+import com.westcatr.emergency.business.pojo.vo.OrgConstructVO;
+import com.westcatr.emergency.business.service.OrgConstructService;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
+import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
+import com.westcatr.rd.base.acommon.annotation.Update;
+import com.westcatr.rd.base.acommon.vo.IResult;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import com.westcatr.emergency.business.pojo.vo.OrgConstructVO;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
-import io.swagger.annotations.ApiOperation;
-import com.westcatr.rd.base.acommon.vo.IResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
@@ -32,7 +30,7 @@ import static cn.hutool.core.util.StrUtil.COMMA;
  *  @since 2021-04-26
  */
 @Validated
-@Api(tags="接口", description = "orgConstruct")
+@Api(tags = "组织架构接口",description = "org")
 @Slf4j
 @RestController
 @RequestMapping("//orgConstruct")

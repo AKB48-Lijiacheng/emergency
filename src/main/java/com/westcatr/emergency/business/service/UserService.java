@@ -28,4 +28,6 @@ public interface UserService extends IService<User> {
     void updateUserBySsoId(SsoUser ssoUser);
 
     User createNewUserBySsoUser(SsoUser ssoUser);
+
+
 }

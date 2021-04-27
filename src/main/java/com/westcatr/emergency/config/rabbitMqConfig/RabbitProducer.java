@@ -40,6 +40,7 @@ public class RabbitProducer {
         json.put("email",email);
         json.put("username",userName);
         json.put("activCode",activCode);
-        this.rabbitTemplate.convertAndSend("email-ex","register",json);
+//        String jsonStr = json.toJSONString();
+        this.rabbitTemplate.convertAndSend("email-ex","emailRegister",json);
     }
 }

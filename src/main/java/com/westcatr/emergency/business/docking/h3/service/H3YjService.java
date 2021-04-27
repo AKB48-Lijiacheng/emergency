@@ -13,6 +13,7 @@ import com.westcatr.emergency.business.entity.OrgConstruct;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.service.OrgConstructService;
 import com.westcatr.emergency.business.service.UserService;
+import com.westcatr.emergency.config.ThreadFactory;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +53,14 @@ public class H3YjService {
     //合成方法：传username就走单个，否者同步所有
     public Boolean synUsersToH3(String userName) {
         if (StrUtil.isEmptyIfStr(userName)) {//如果空就同步所有
-             synAllUsersToH3();
+            ThreadFactory.excutor(()-> synAllUsersToH3());
         } else {//如果否则同步单个用户
-            QueryWrapper<User> qw = new QueryWrapper<User>().eq("user_name", userName);
+            QueryWrapper<User> qw = new QueryWrapper<User>().eq("username", userName);
             User one = userService.getOne(qw);
             if (one == null) {
                 throw new MyRuntimeException("没有此用户，同步用户到H3失败");
             }
-             synUserToH3(one);
+            ThreadFactory.excutor(()->synUserToH3(one));
         }
         return true;
     }
@@ -93,7 +94,6 @@ public class H3YjService {
                 parentId = h3Org.getObjectID();
             }
         }
-
         QueryWrapper<OrgConstruct> qw = new QueryWrapper<OrgConstruct>().eq("id", user.getOrgConstructId()).select("org_name");
 
         if (CollUtil.isEmpty(query)) {
