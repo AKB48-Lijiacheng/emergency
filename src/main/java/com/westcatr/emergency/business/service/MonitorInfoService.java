@@ -36,4 +36,6 @@ public interface MonitorInfoService extends IService<MonitorInfo> {
     MonitorSimilarDto getSimiliar(String id);
 
     String duplicatedMonitor(MonitorDto dto);
+
+    Boolean addEntName(Long monitInfoId, Long entId);
 }

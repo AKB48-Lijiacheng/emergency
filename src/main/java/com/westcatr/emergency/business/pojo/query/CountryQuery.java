@@ -1,6 +1,5 @@
 package com.westcatr.emergency.business.pojo.query;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
@@ -69,5 +68,5 @@ public class CountryQuery extends TimeDTO implements Serializable {
 
     @ApiModelProperty(value = "告警次数")
     @QueryCondition
-    private String warningCount;
+    private Integer warningCount;
 }

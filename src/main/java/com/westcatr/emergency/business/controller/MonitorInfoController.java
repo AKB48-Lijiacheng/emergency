@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.MonitorInfo;
 import com.westcatr.emergency.business.entity.SituMonitorSrcInfo;
+import com.westcatr.emergency.business.pojo.dto.AddEntNameDto;
 import com.westcatr.emergency.business.pojo.dto.MonitorDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
@@ -53,6 +54,7 @@ public class MonitorInfoController {
     private MonitorInfoService monitorInfoService;
     @Autowired
     private SituMonitorSrcInfoService situMonitorSrcInfoService;
+
 
     /**
      * 获取分页列表
@@ -210,7 +212,7 @@ public class MonitorInfoController {
         if (monitorNextId == null) {
             return IResult.fail("去重失败");
         }
-        return IResult.ok("",monitorNextId);
+        return IResult.ok("", monitorNextId);
     }
 
     @SaveLog(value = "查找可能重复的数据", module = "监测信息表管理")
@@ -231,6 +233,18 @@ public class MonitorInfoController {
         MonitorInfo monitor = monitorInfoService.getById(id);
         SituMonitorSrcInfo monitorSrc = situMonitorSrcInfoService.getOne(new QueryWrapper<SituMonitorSrcInfo>().eq("src_id", monitor.getSituEventId()));
         return IResult.ok(monitorSrc);
+    }
+
+
+    @SaveLog(value = "监测信息添加相关企业字段", module = "监测信息表管理")
+    @ApiOperation(value = "监测信息添加相关企业字段", notes = "monitorInfo:addEntName")
+    @ApiOperationSupport(order = 9)
+    @PostMapping("/addEntName")
+    public IResult addEntName(@RequestBody@Validated AddEntNameDto addEntNameDto) {
+        Long monitInfoId = addEntNameDto.getMonitInfoId();
+        Long entId = addEntNameDto.getEntInfoId();
+    Boolean b = monitorInfoService.addEntName(monitInfoId,entId);
+        return IResult.auto(b);
     }
 
 }

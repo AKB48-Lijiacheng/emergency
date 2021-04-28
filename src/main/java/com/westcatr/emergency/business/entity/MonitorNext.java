@@ -112,6 +112,14 @@ public class MonitorNext extends Model<MonitorNext> {
     @TableField("h3_event_instance_id")
     private String h3EventInstanceId;
 
+    @ApiModelProperty(value = "h3附件ids")
+    @TableField("h3_attachFile_ids")
+    private String h3AttachFileIds;
+
+    @ApiModelProperty(value = "h3备注信息")
+    @TableField("h3_comment_text")
+    private String h3CommentText;
+
 
     @Override
     protected Serializable pkVal() {

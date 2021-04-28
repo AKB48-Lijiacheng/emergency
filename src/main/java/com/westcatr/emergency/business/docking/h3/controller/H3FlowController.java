@@ -1,9 +1,11 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.attachFileDto.H3AttachFileInfoDto;
 import com.westcatr.emergency.business.docking.h3.pojo.query.H3WorkItemQuery;
 import com.westcatr.emergency.business.docking.h3.pojo.vo.EventFormVo;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.H3CommentVo;
 import com.westcatr.emergency.business.docking.h3.pojo.vo.YjFormVo;
 import com.westcatr.emergency.business.docking.h3.service.H3EventService;
 import com.westcatr.emergency.business.docking.h3.service.H3FlowService;
@@ -23,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -91,6 +94,7 @@ public class H3FlowController {
     @ApiOperation(value="预警流程完成后回调", notes="monitorNext:post:disBindInstance")
     @PostMapping("/doFinished")
     public IResult disBindInstanceByInstanceId(@NotNull(message = "流程实例id不能为空") String instanceId) {
+       log.info("预警流程回调： "+instanceId);
         log.info("流程结束后的回调");
         if (null==instanceId){
             return IResult.fail("请传入流程实例id");
@@ -99,17 +103,30 @@ public class H3FlowController {
         if (!flag){
            throw  new MyRuntimeException("监测信息设置完成状态失败");
         }
-        String workItemId  =  h3FlowService.getWorkItemsIdByInstanceId(instanceId);
-        YjFormVo yjFormVo = h3ApiController.getFlowFomDataById(workItemId);//获取表单项
-
+        YjFormVo yjFormVo=  h3FlowService.getYjFormDataByInstanceId(instanceId);//获取表单项
         QueryWrapper<MonitorNext> qw = new QueryWrapper<MonitorNext>().eq("h3_instance_id", instanceId);
         MonitorNext monitorNext = monitorNextService.getOne(qw);
         if (null==monitorNext){
             throw new MyRuntimeException("没有对应的监测信息");
         }
+
+        List<String> fileIds = new ArrayList<>();
+        List<String> commentTests = new ArrayList<>();
+        for (H3AttachFileInfoDto h3AttachFile : yjFormVo.getAttachFilesInfo()) {
+            fileIds.add(h3AttachFile.getObjectID());
+        }
+        for (H3CommentVo commentText : yjFormVo.getCommentTexts()) {
+            commentTests.add(commentText.getText());
+        }
         MonitorNext monitorNextSave = new MonitorNext();
         monitorNextSave.setId(monitorNext.getId());
         monitorNextSave.setWarningLevel(Integer.valueOf(yjFormVo.getEarlyWarnLevel()));
+        if (!CollUtil.isEmpty(fileIds)){
+            monitorNextSave.setH3AttachFileIds(fileIds.toString());
+        }
+        if (!CollUtil.isEmpty(commentTests)){
+            monitorNextSave.setH3CommentText(commentTests.toString());
+        }
         boolean b = monitorNextService.updateById(monitorNextSave);
         if (!b){
             throw new MyRuntimeException("监测信息更新预警等级失败！！");
@@ -125,9 +142,9 @@ public class H3FlowController {
     @ApiOperation(value="事件流程完成后回调")
     @PostMapping("/eventFinished")
     public IResult eventFinished(@NotNull(message = "事件流程实例id不能为空") String instanceId) {
+        log.info("事件流程回调： "+instanceId);
         log.info("事件流程结束后的回调");
-      String workItemId  =  h3FlowService.getWorkItemsIdByInstanceId(instanceId);
-        EventFormVo formVo = h3EventService.getFlowFomDataByWorkItemId(workItemId);
+        EventFormVo formVo =   h3EventService.getFlowFomDataByInstanceId(instanceId);//获取表单项
         QueryWrapper<MonitorNext> qw = new QueryWrapper<MonitorNext>().eq("h3_event_instance_id", instanceId);
         MonitorNext monitorNext = monitorNextService.getOne(qw);
         if (monitorNext==null){
@@ -153,8 +170,23 @@ public class H3FlowController {
         eventInfoSave.setPersonCharge(formVo.getPersonCharge());
         eventInfoSave.setDisposalMethod(formVo.getDisposalMethod());
         eventInfoSave.setSupporMechan(formVo.getSupporMechan());
-        eventInfoSave.setH3AttachFileIds(JSON.toJSONString(formVo.getAttachFilesInfo()));
+
         eventInfoSave.setH3EventInstanceId(instanceId);
+        //设置附件和审批意见
+        List<String> fileIds = new ArrayList<>();
+        List<String> commentTests = new ArrayList<>();
+        for (H3AttachFileInfoDto h3AttachFile : formVo.getAttachFilesInfo()) {
+            fileIds.add(h3AttachFile.getObjectID());
+        }
+        for (H3CommentVo commentText : formVo.getCommentTexts()) {
+            commentTests.add(commentText.getText());
+        }
+        if (!CollUtil.isEmpty(fileIds)){
+            eventInfoSave.setH3AttachFileIds(fileIds.toString());
+        }
+        if (!CollUtil.isEmpty(commentTests)){
+            eventInfoSave.setH3CommentTests(commentTests.toString());
+        }
         boolean save = eventInfoService.save(eventInfoSave);
         if (!save) {
             throw  new MyRuntimeException("事件信息生成失败！！！");

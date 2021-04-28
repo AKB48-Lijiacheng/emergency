@@ -107,6 +107,10 @@ public class EventInfo extends Model<EventInfo> {
     @TableField(" h3_attach_file_ids")
     private String  h3AttachFileIds;
 
+    @ApiModelProperty(value = "h3审批意见s")
+    @TableField(" h3_comment_tests")
+    private String  h3CommentTests;
+
 
 
     @Override

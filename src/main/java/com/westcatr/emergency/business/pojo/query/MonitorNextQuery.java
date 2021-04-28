@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.pojo.query;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.TimeDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
@@ -104,4 +105,10 @@ public class MonitorNextQuery extends TimeDTO implements Serializable {
     @ApiModelProperty(value = "h3流程实例id")
     @QueryCondition
     private String h3InstanceId;
+
+    @ApiModelProperty(value = "h3附件ids")
+    private String h3AttachFileIds;
+
+    @ApiModelProperty(value = "h3备注信息")
+    private String h3CommentText;
 }

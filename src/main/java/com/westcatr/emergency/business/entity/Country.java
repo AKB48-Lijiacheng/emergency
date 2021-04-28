@@ -72,7 +72,7 @@ public class Country extends Model<Country> {
 
     @ApiModelProperty(value = "告警次数")
     @TableField("warning_count")
-    private String warningCount;
+    private Integer warningCount;
 
 
 

@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.pojo.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModel;
@@ -86,6 +87,12 @@ public class MonitorNextVO implements Serializable {
 
     @ApiModelProperty(value = "h3流程实例id")
     private String h3InstanceId;
+
+    @ApiModelProperty(value = "h3附件ids")
+    private String h3AttachFileIds;
+
+    @ApiModelProperty(value = "h3备注信息")
+    private String h3CommentText;
 
 
 

@@ -2,7 +2,6 @@ package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
-import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -60,7 +59,7 @@ public class CountryVO implements Serializable {
     private String zoningCode;
 
     @ApiModelProperty(value = "告警次数")
-    private String warningCount;
+    private Integer warningCount;
 
 
 }

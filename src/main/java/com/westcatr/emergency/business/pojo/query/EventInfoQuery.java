@@ -109,5 +109,8 @@ public class EventInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private String  h3AttachFileIds;
 
+    @ApiModelProperty(value = "h3审批意见s")
+    @QueryCondition
+    private String  h3CommentTests;
 
 }

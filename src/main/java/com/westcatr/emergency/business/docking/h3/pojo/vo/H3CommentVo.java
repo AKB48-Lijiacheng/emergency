@@ -2,6 +2,7 @@ package com.westcatr.emergency.business.docking.h3.pojo.vo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @Date 2021/4/21
  */
 @Api("审批意见表")
+@Data
 public class H3CommentVo {
     private  String ObjectID;
     @ApiModelProperty("业务对象模式编码")

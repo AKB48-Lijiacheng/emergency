@@ -6,20 +6,14 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.westcatr.emergency.business.entity.MonitorInfo;
-import com.westcatr.emergency.business.entity.MonitorNext;
-import com.westcatr.emergency.business.entity.MonitorNextSrcInfo;
-import com.westcatr.emergency.business.entity.SituMonitorSrcInfo;
+import com.westcatr.emergency.business.entity.*;
 import com.westcatr.emergency.business.mapper.MonitorInfoMapper;
 import com.westcatr.emergency.business.pojo.dto.ExcelDto.MonitorExcelDto;
 import com.westcatr.emergency.business.pojo.dto.MonitorDto;
 import com.westcatr.emergency.business.pojo.query.MonitorInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorInfoVO;
 import com.westcatr.emergency.business.pojo.vo.MonitorSimilarDto;
-import com.westcatr.emergency.business.service.MonitorInfoService;
-import com.westcatr.emergency.business.service.MonitorNextService;
-import com.westcatr.emergency.business.service.MonitorNextSrcInfoService;
-import com.westcatr.emergency.business.service.SituMonitorSrcInfoService;
+import com.westcatr.emergency.business.service.*;
 import com.westcatr.emergency.business.utils.FileUtil;
 import com.westcatr.rd.base.bmybatisplusbootstarter.dto.PageDTO;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
@@ -53,7 +47,10 @@ MonitorNextService monitorNextService;
     MonitorNextSrcInfoService monitorNextSrcInfoService;
     @Autowired
     SituMonitorSrcInfoService situMonitorSrcInfoService;
-
+    @Autowired
+    private EntInfoService entInfoService;
+    @Autowired
+    private CountryService countryService;
     @Override
     public IPage<MonitorInfo> iPage(MonitorInfoQuery query) {
         return this.page(PageDTO.page(query), new WrapperFactory<MonitorInfo>().create(query));
@@ -140,6 +137,37 @@ MonitorNextService monitorNextService;
         dto.setSimiliarsTotal(similiarList.size());
         dto.setNotSimiliarsTotal(notSimiliar.size());
         return dto;
+    }
+
+    @Transactional
+    @Override
+    public Boolean addEntName(Long monitInfoId, Long entId) {
+        QueryWrapper<EntInfo> qw = new QueryWrapper<EntInfo>().eq("id", entId).select("id", "ent_name", "country_id");
+        EntInfo entInfoQuery = entInfoService.getOne(qw);
+        if (null==entInfoQuery) {
+            throw new MyRuntimeException("没有此企业，请检查传入的企业是否正确！");
+        }
+        //吧相关企业添加到监测信息
+        MonitorInfo monitorInfoSave = new MonitorInfo();
+        monitorInfoSave.setId(monitInfoId);
+        monitorInfoSave.setEnterpriseName(entInfoQuery.getEntName());
+        boolean b = this.updateById(monitorInfoSave);
+        if (!b) {
+            throw new MyRuntimeException("相关企业添加失败，请联系管理员");
+        }
+        //去给县区增加攻击次数
+        Long countryId = entInfoQuery.getCountryId();
+        QueryWrapper<Country> countryQw = new QueryWrapper<Country>().eq("id", countryId).select("id", "warning_count");
+        Country countryQuery = countryService.getOne(countryQw);
+        if (null == countryQuery) {
+            throw new MyRuntimeException("该企业没有绑定对应的区县");
+        }
+        countryQuery.setWarningCount(countryQuery.getWarningCount()+1);
+        boolean update = countryService.updateById(countryQuery);
+        if (!update) {
+            throw new MyRuntimeException("区县增加告警次数失败！");
+        }
+        return true;
     }
 
     @Transactional

@@ -6,20 +6,25 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.westcatr.emergency.business.docking.h3.pojo.dto.attachFileDto.H3AttachFileInfoDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3WorkItems;
 import com.westcatr.emergency.business.docking.h3.pojo.query.H3WorkItemQuery;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.H3CommentVo;
+import com.westcatr.emergency.business.docking.h3.pojo.vo.YjFormVo;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -138,11 +143,47 @@ public class H3FlowService {
 
     public String getWorkItemsIdByInstanceId(String instanceId) {
         String  sql ="SELECT ObjectID,InstanceId from ot_workitem o where InstanceId=?";
-        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql);
+        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,instanceId);
         String workItemsId = (String) map.get("ObjectID");//获取
         if (workItemsId==null){
             throw new MyRuntimeException("没有查到对应的待办任务id");
         }
         return workItemsId;
+    }
+
+    public YjFormVo getYjFormDataByInstanceId(String instanceId) {
+        String sql = "SELECT  i.ObjectID as instanceId,y.ObjectID AS bizId,i.StartTime,o.name,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved,i.InstanceName " +
+                "from ot_instancecontext i LEFT JOIN i_yjlcjxw y on i.BizObjectId=y.ObjectID LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit where i.ObjectID=?";
+        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,instanceId);
+        Object bizObjectId=  map.get("bizId");
+        String workflowCode = (String) map.get("WorkflowCode");
+        if (map==null){
+            throw new MyRuntimeException("该待办流程id绑定的表单信息不存在！");
+        }
+        YjFormVo yjFormVo = new YjFormVo();
+        yjFormVo.setBizObjectId(String.valueOf(bizObjectId));
+        yjFormVo.setStartUserName((String) map.get("OriginatorName"));
+        yjFormVo.setStartTime((Date) map.get("StartTime"));
+        yjFormVo.setStartUserOrgan((String) map.get("Name"));
+        yjFormVo.setSequenceNo((String) map.get("SequenceNo"));
+        yjFormVo.setTfDevCenter( String.valueOf(map.get("TfDevCenter")));
+        yjFormVo.setEarlyWarnLevel(String.valueOf(map.get("EarlyWarnLevel")));
+        yjFormVo.setApproved((String) map.get("Approved"));
+
+        //设置审批意见
+        String str="RemakeInfo";
+        String commentSql="SELECT * from ot_comment c where c.InstanceId=? and DataField  IN ('"+str+"') ORDER BY CreatedTime ";
+        List<H3CommentVo> commentList = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(H3CommentVo.class), instanceId);
+        if (commentList!=null){
+            yjFormVo.setCommentTexts(commentList);
+        }
+        //设置附件信息
+        String fileSql="SELECT ObjectID,BizObjectId,BizObjectSchemaCode,CreatedBy,CreatedTime,Description,FileName,ContentType,FileName,ContentLength,DownloadUrl " +
+                "as Url from ot_attachment a where a.BizObjectId=?  ORDER BY CreatedTime";
+        List<H3AttachFileInfoDto> listFiles = h3JdbcTemplate.query(fileSql,new BeanPropertyRowMapper<>(H3AttachFileInfoDto.class),bizObjectId);
+        if (listFiles!=null){
+            yjFormVo.setAttachFilesInfo(listFiles);
+        }
+        return yjFormVo;
     }
 }

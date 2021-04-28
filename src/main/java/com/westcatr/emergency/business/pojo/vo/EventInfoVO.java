@@ -2,6 +2,7 @@ package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
+import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.QueryCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -86,6 +87,9 @@ public class EventInfoVO implements Serializable {
 
     @ApiModelProperty(value = "事件流程h3的附件ids")
     private String  h3AttachFileIds;
+
+    @ApiModelProperty(value = "h3审批意见s")
+    private String  h3CommentTests;
 
 
 }
