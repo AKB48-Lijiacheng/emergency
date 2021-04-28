@@ -2,8 +2,14 @@ package com.westcatr.emergency.business.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.westcatr.emergency.business.entity.City;
+import com.westcatr.emergency.business.entity.Country;
+import com.westcatr.emergency.business.entity.EntInfo;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.pojo.vo.MyInfoVo;
+import com.westcatr.emergency.business.service.CityService;
+import com.westcatr.emergency.business.service.CountryService;
+import com.westcatr.emergency.business.service.EntInfoService;
 import com.westcatr.emergency.business.service.UserService;
 import com.westcatr.rd.base.acommon.domain.IUser;
 import com.westcatr.rd.base.acommon.vo.IResult;
@@ -31,6 +37,12 @@ public class UserInfoController {
     private UserService userService;
     @Autowired
     private AuthenticationProvider authenticationProvider;
+    @Autowired
+    EntInfoService entInfoService;
+    @Autowired
+    CountryService countryService;
+    @Autowired
+    CityService cityService;
 
 
 
@@ -39,10 +51,24 @@ public class UserInfoController {
     @GetMapping("/getUserInfo")
     public IResult<UserInfoVO> getUserInfo(HttpServletRequest request){
         IUser user = authenticationProvider.getUser(request);
-        UserInfoVO vo = new MyInfoVo();
-        User userDate = userService.getOne(new QueryWrapper<User>().eq("id", user.getId()));//数据库的
-        BeanUtils.copyProperties(userDate, vo);
+        MyInfoVo vo = new MyInfoVo();
+        User userQuery = userService.getOne(new QueryWrapper<User>().eq("id", user.getId()));//数据库的
+        BeanUtils.copyProperties(userQuery, vo);
         BeanUtils.copyProperties(user, vo);
+        if (userQuery.getCityId()!=null){
+            City city = cityService.getById(userQuery.getCityId());
+            vo.setCity(city);
+
+        }else if (userQuery.getCountryId()!=null){
+            Country country = countryService.getById(userQuery.getCountryId());
+            vo.setCountry(country);
+
+        }else if (userQuery.getEntId()!=null){
+            EntInfo ent = entInfoService.getById(userQuery.getEntId());
+            vo.setEntInfo(ent);
+
+        }
+
         return IResult.ok(vo);
     }
 }

@@ -1,5 +1,8 @@
 package com.westcatr.emergency.business.pojo.vo;
 
+import com.westcatr.emergency.business.entity.City;
+import com.westcatr.emergency.business.entity.Country;
+import com.westcatr.emergency.business.entity.EntInfo;
 import com.westcatr.rd.base.authority.authority.domain.UserInfoVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,10 +29,19 @@ public class MyInfoVo extends UserInfoVO {
     private String ssoAccount;
     @ApiModelProperty(value = "大平台电话")
     private String ssoMobile;
-    @ApiModelProperty(value = "所属区县id")
-    private Long cityId;
     @ApiModelProperty(value = "所属市级id")
+    private Long cityId;
+    @ApiModelProperty(value = "所属县区id")
     private Long countryId;
     @ApiModelProperty(value = "所属企业id")
     private Long entId;
+    @ApiModelProperty(value = "所属企业信息")
+    private EntInfo entInfo;
+    @ApiModelProperty(value = "所属区县信息")
+    private Country country;
+    @ApiModelProperty(value = "所属市级信息")
+    private City city;
+
+
+
 }

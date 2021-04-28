@@ -75,7 +75,10 @@ public class SsoController {
         if (user.getEnable()==0){
            throw new MyRuntimeException("用户状态非正常",400);
         }
-       //异步去更新user的sso信息
+        //将Sso的用户信息绑定到我们里面的用户上
+        User userSave = new User();
+
+        //异步去更新user的sso信息
         ThreadFactory.executorPool.execute(()-> {
             userService.updateUserBySsoId(ssoUser);
         });
