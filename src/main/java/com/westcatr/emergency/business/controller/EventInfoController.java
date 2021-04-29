@@ -156,8 +156,8 @@ public class EventInfoController {
      */
     @SaveLog(value="事件月统计图查询接口", module="事件信息表管理")
     @IPermissions(value="eventInfo:get:vo")
-    @ApiOperationSupport(order=7)
-    @ApiOperation(value="事件图表查询接口", notes="eventInfo:get:vo")
+    @ApiOperationSupport(order=8)
+    @ApiOperation(value="事件月统计图查询接口", notes="eventInfo:get:vo")
     @GetMapping("/getEventsCountByMonth")
     public IResult getEventInfoVoById() {
         List<Map<Object,Object>> list = new LinkedList<>();
@@ -167,15 +167,19 @@ public class EventInfoController {
             String format = DateUtil.format(dateTime, "yyyy-MM");
             map.put(format,null);
         }
-        list.add(map);
-
   List<Map<Object,Object>> queryList  =eventInfoService.getEventsCount();
-        for (Map<Object, Object> monthAndCoun : queryList) {
-            Object months = monthAndCoun.get("months");
-            Object num = monthAndCoun.get("num");
-            map.put(months,num);
+        for (Map<Object, Object> objectObjectMap : queryList) {
+            Object months = objectObjectMap.get("months");
+            Object num = objectObjectMap.get("num");
+        map.replace(months,num);
         }
-        return IResult.ok(map);
+        for (Object o : map.keySet()) {
+            Object value = map.get(o);
+            Map<Object, Object> mapParam = new HashMap<>();
+            mapParam.put(o,value);
+            list.add(mapParam);
+        }
+        return IResult.ok(list);
         //todo
     }
 

@@ -210,13 +210,17 @@ public class MonitorNextController {
             String format = DateUtil.format(dateTime, "yyyy-MM");
             map.put(format,null);
         }
-        list.add(map);
-
         List<Map<Object,Object>> queryList  =monitorNextService.getMonitorNextCount();
-        for (Map<Object, Object> monthAndCoun : queryList) {
-            Object months = monthAndCoun.get("months");
-            Object num = monthAndCoun.get("num");
-            map.put(months,num);
+        for (Map<Object, Object> objectObjectMap : queryList) {
+            Object months = objectObjectMap.get("months");
+            Object num = objectObjectMap.get("num");
+            map.replace(months,num);
+        }
+        for (Object o : map.keySet()) {
+            Object value = map.get(o);
+            Map<Object, Object> mapParam = new HashMap<>();
+            mapParam.put(o,value);
+            list.add(mapParam);
         }
         return IResult.ok(map);
         //todo
