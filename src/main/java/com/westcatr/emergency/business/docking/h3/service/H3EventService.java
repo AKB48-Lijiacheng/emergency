@@ -32,7 +32,7 @@ public class H3EventService {
      * 获取事件流程的表单信息
      **/
     public EventFormVo getFlowFomDataByWorkItemId(String workItemId) {
-        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan " +
+        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.EarlyWarnLevel,y.Title,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan " +
                 "from ot_workitem w LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID " +
                 "left JOIN i_eventflow  y on i.BizObjectId=y.ObjectID LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
         Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,workItemId);
@@ -52,7 +52,8 @@ public class H3EventService {
         eventFormVo.setPersonCharge((String) map.get("personCharge"));
         eventFormVo.setDisposalMethod((String) map.get("disposalMethod"));
         eventFormVo.setSupporMechan((String) map.get("supporMechan"));
-
+        eventFormVo.setTitle((String) map.get("Title"));
+        eventFormVo.setEarlyWarnLevel((String) map.get("EarlyWarnLevel"));
         //设置审批意见
         String str="RemakeInfo";
         String commentSql="SELECT * from ot_comment c where c.InstanceId=? and DataField  IN ('"+str+"') ORDER BY CreatedTime ";
@@ -78,7 +79,7 @@ public class H3EventService {
     }
 
     public EventFormVo getFlowFomDataByInstanceId(String instanceId) {
-        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan" +
+        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.Title,y.EarlyWarnLevel,y.detailInfo,y.disposalTime,y.personCharge,y.disposalMethod,y.supporMechan" +
                 " from  ot_instancecontext i  left JOIN i_eventflow  y on i.BizObjectId=y.ObjectID " +
                 "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where i.ObjectID=?";
         Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,instanceId);
@@ -97,6 +98,8 @@ public class H3EventService {
         eventFormVo.setPersonCharge((String) map.get("personCharge"));
         eventFormVo.setDisposalMethod((String) map.get("disposalMethod"));
         eventFormVo.setSupporMechan((String) map.get("supporMechan"));
+        eventFormVo.setEarlyWarnLevel((String) map.get("EarlyWarnLevel"));
+        eventFormVo.setTitle((String) map.get("Title"));
 
         //设置审批意见
         String str="RemakeInfo";

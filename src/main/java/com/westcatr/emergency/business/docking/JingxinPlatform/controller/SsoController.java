@@ -77,7 +77,12 @@ public class SsoController {
         }
         //将Sso的用户信息绑定到我们里面的用户上
         User userSave = new User();
-
+        userSave.setId(user.getId());
+//        userSave.setUserType();
+        userSave.setPhone(ssoUser.getMobile());
+        userSave.setEmail(ssoUser.getEmail());
+        userSave.setFullName(ssoUser.getName());
+        userService.updateById(userSave);
         //异步去更新user的sso信息
         ThreadFactory.executorPool.execute(()-> {
             userService.updateUserBySsoId(ssoUser);

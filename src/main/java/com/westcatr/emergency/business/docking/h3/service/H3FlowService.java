@@ -152,7 +152,7 @@ public class H3FlowService {
     }
 
     public YjFormVo getYjFormDataByInstanceId(String instanceId) {
-        String sql = "SELECT  i.ObjectID as instanceId,y.ObjectID AS bizId,i.StartTime,o.name,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved,i.InstanceName " +
+        String sql = "SELECT  i.ObjectID as instanceId,y.ObjectID AS bizId,i.StartTime,o.name,i.OriginatorName,i.SequenceNo,y.Title,y.TfDevCenter,y.EarlyWarnLevel,y.approved,i.InstanceName " +
                 "from ot_instancecontext i LEFT JOIN i_yjlcjxw y on i.BizObjectId=y.ObjectID LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit where i.ObjectID=?";
         Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,instanceId);
         Object bizObjectId=  map.get("bizId");
@@ -169,6 +169,7 @@ public class H3FlowService {
         yjFormVo.setTfDevCenter( String.valueOf(map.get("TfDevCenter")));
         yjFormVo.setEarlyWarnLevel(String.valueOf(map.get("EarlyWarnLevel")));
         yjFormVo.setApproved((String) map.get("Approved"));
+        yjFormVo.setTitle((String) map.get("Title"));
 
         //设置审批意见
         String str="RemakeInfo";

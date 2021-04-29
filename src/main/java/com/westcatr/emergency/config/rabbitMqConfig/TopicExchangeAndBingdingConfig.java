@@ -30,7 +30,7 @@ public class TopicExchangeAndBingdingConfig {
 
     @Bean
     Binding bindingTopic() {
-        return BindingBuilder.bind(findPassword()).to(topicExchange()).with("findPassword");
+        return BindingBuilder.bind(findPassword()).to(EmailTopicExchange()).with("findPassword");
     }
     @Bean
     Binding bindingTopic2() {
@@ -53,14 +53,14 @@ public class TopicExchangeAndBingdingConfig {
 
 
     /**
-     * 找回密码短信通知
+     * 找回密码邮件通知
      *
      * @author lijiacheng
      * @since 2021/4/16
      **/
     @Bean
     public Queue findPassword() {
-        return new Queue("sms-findPassword");
+        return new Queue("email-findPassword");
     }
 
     /**

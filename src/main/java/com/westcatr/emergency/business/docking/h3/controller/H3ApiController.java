@@ -1,6 +1,7 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -15,7 +16,9 @@ import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
 import com.westcatr.emergency.business.docking.h3.pojo.vo.H3CommentVo;
 import com.westcatr.emergency.business.docking.h3.pojo.vo.YjFormVo;
 import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.entity.MonitorNextSrcInfo;
 import com.westcatr.emergency.business.service.MonitorNextService;
+import com.westcatr.emergency.business.service.MonitorNextSrcInfoService;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +65,8 @@ public class H3ApiController {
     JdbcTemplate h3JdbcTemplate;
     @Autowired
     MonitorNextService monitorNextService;
+    @Autowired
+    MonitorNextSrcInfoService monitorNextSrcInfoService;
 
 
     /**
@@ -78,8 +83,16 @@ public class H3ApiController {
         starInfo.setWorkflowCode(workFlowTpye);
         starInfo.setUserCode(startDto.getUserCode());
         starInfo.setFinishStart(true);
+        String monitorNextId = startDto.getMonitorNextId();
 
-        starInfo.setParamValues(getDataItemParam(startDto.getFormDto()));
+        MonitorNext monitorNextQ= monitorNextService.getById(monitorNextId);
+        QueryWrapper<MonitorNextSrcInfo> qw = new QueryWrapper<MonitorNextSrcInfo>().eq("id",monitorNextQ.getSituMonitorSrcId());
+        MonitorNextSrcInfo srcQuery = monitorNextSrcInfoService.getOne(qw);
+        List<DataItemParam> dataItemParam = getDataItemParam(startDto.getFormDto());
+        String value=srcQuery.getSrcProvince()+"-"+srcQuery.getEventName()+ DateUtil.now();
+        DataItemParam dateItem = new DataItemParam("Title",value);
+        dataItemParam.add(dateItem);
+        starInfo.setParamValues(dataItemParam);
         String json = JSON.toJSONString(starInfo, SerializerFeature.WriteMapNullValue);
         //设置请求
         HttpHeaders headers = new HttpHeaders();
@@ -105,7 +118,6 @@ public class H3ApiController {
         }
 
         //将开启的流程id绑定到数据体
-        String monitorNextId = startDto.getMonitorNextId();
         int num = monitorNextService.count(new QueryWrapper<MonitorNext>().eq("id", monitorNextId));
     if (num<1){
         throw  new MyRuntimeException("监测信息id传入错误，没有此数据");
@@ -278,7 +290,7 @@ public class H3ApiController {
     }
 
     public YjFormVo getFlowFomDataById(String workItemId) {
-        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.TfDevCenter,y.EarlyWarnLevel,y.approved,w.SheetCode,w.WorkflowCode,i.InstanceName from ot_workitem w " +
+        String sql = "SELECT i.ObjectID as instanceId,y.ObjectID AS bizId,o.name,i.StartTime,i.OriginatorName,i.SequenceNo,y.Title,y.TfDevCenter,y.EarlyWarnLevel,y.approved,w.SheetCode,w.WorkflowCode,i.InstanceName from ot_workitem w " +
                 "LEFT JOIN ot_instancecontext i on w.InstanceId=i.ObjectID left JOIN i_yjlcjxw  y on i.BizObjectId=y.ObjectID " +
                 "LEFT JOIN ot_organizationunit o on o.ObjectID=i.OrgUnit  where w.ObjectID=? ";
        Map<String, Object> map = h3JdbcTemplate.queryForMap(sql,workItemId);
@@ -298,6 +310,7 @@ public class H3ApiController {
         yjFormVo.setTfDevCenter( String.valueOf(map.get("TfDevCenter")));
         yjFormVo.setEarlyWarnLevel(String.valueOf(map.get("EarlyWarnLevel")));
         yjFormVo.setApproved((String) map.get("Approved"));
+        yjFormVo.setTitle((String) map.get("Title"));
 
         //设置审批意见
         String str="RemakeInfo";

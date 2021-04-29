@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -137,6 +138,11 @@ MonitorNextService monitorNextService;
         dto.setSimiliarsTotal(similiarList.size());
         dto.setNotSimiliarsTotal(notSimiliar.size());
         return dto;
+    }
+
+    @Override
+    public List<Map<Object, Object>> getMonitorCount() {
+        return   this.baseMapper.getMonitorNextCount();
     }
 
     @Transactional

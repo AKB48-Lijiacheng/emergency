@@ -36,10 +36,6 @@ public class UserDto {
     private String emailActivCode;
 
 
-    @ApiModelProperty(value = "验证码")
-    @NotNull(message = "验证码不能为空")
-    private String code;
-
     @ApiModelProperty(value = "企业信息")
     @NotNull(message = "企业信息不能为空")
      private EntInfoDto entInfo;

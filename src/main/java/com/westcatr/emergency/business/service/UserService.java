@@ -30,4 +30,5 @@ public interface UserService extends IService<User> {
     User createNewUserBySsoUser(SsoUser ssoUser);
 
 
+
 }

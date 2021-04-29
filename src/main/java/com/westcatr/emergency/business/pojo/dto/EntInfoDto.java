@@ -20,7 +20,6 @@ public class EntInfoDto {
     private String entName;
 
     @ApiModelProperty(value = "企业类别")
-
     private String entCategory;
 
     @ApiModelProperty(value = "行业类别")

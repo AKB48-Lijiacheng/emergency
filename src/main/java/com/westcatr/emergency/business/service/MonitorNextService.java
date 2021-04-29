@@ -6,6 +6,9 @@ import com.westcatr.emergency.business.entity.MonitorNext;
 import com.westcatr.emergency.business.pojo.query.MonitorNextQuery;
 import com.westcatr.emergency.business.pojo.vo.MonitorNextVO;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 监测信息表---去重后 等待开启流程的检测信息表 服务类
@@ -29,4 +32,9 @@ public interface MonitorNextService extends IService<MonitorNext> {
     Boolean setMonitorNextStatuByInstanceId(String instanceId,Integer statNum);
 
     MonitorNextVO getInfoByInstanceId(String instanceId);
+
+    Boolean addEntName(Long monitNextId, Long entId);
+
+    List<Map<Object, Object>> getMonitorNextCount();
+
 }

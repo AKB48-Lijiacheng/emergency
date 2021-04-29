@@ -76,6 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
        user.setPassword(SecureUtil.md5(iSecurityProperties.getBeginSalt()+"westcatr110,./"+iSecurityProperties.getEndSalt()));
         user.setPhone(ssoUser.getMobile());
         user.setFullName(ssoUser.getName());
+        user.setEmail(ssoUser.getEmail());
         user.setEnable(1);
         user.setSsoId(ssoUser.getId());
         user.setSsoUserIcon(ssoUser.getUser_icon());

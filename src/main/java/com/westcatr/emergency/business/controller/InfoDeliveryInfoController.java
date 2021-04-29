@@ -1,11 +1,15 @@
 package com.westcatr.emergency.business.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.InfoDeliveryInfo;
+import com.westcatr.emergency.business.entity.MonitorNext;
+import com.westcatr.emergency.business.pojo.dto.InfoDeliveryInfoDto;
 import com.westcatr.emergency.business.pojo.query.InfoDeliveryInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.InfoDeliveryInfoVO;
 import com.westcatr.emergency.business.service.InfoDeliveryInfoService;
+import com.westcatr.emergency.business.service.MonitorNextService;
 import com.westcatr.emergency.business.utils.FileDownLoadUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
@@ -13,6 +17,7 @@ import com.westcatr.rd.base.acommon.annotation.SaveLog;
 import com.westcatr.rd.base.acommon.annotation.Update;
 import com.westcatr.rd.base.acommon.vo.IResult;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
+import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +48,8 @@ public class InfoDeliveryInfoController {
 
     @Autowired
     private InfoDeliveryInfoService infoDeliveryInfoService;
+    @Autowired
+    MonitorNextService monitorNextService;
 
     /**
      * 获取分页列表
@@ -160,6 +167,32 @@ public class InfoDeliveryInfoController {
         List<InfoDeliveryInfoVO> records = associationQuery.voPage(query).getRecords();
         File file = infoDeliveryInfoService.buildDoc(type,records);
         FileDownLoadUtil.downloadSingleFile(file, request, response);
+    }
+
+
+    @SaveLog(value = "完成流程进行信息发布", module = "信息发布表管理")
+    @ApiOperation(value = "完成流程进行信息发布", notes = "infoDeliveryInfo:export")
+    @ApiOperationSupport(order = 8)
+    @PostMapping("/infoMonitor")
+    public IResult infoMonitor(@RequestBody InfoDeliveryInfoDto deliveryInfo) {
+        InfoDeliveryInfo infoDeliverySave = new InfoDeliveryInfo();
+        infoDeliverySave.setState("1");
+        BeanUtil.copyProperties(deliveryInfo,infoDeliverySave);
+        boolean save = infoDeliveryInfoService.save(infoDeliverySave);
+        if (!save){
+            throw new MyRuntimeException("信息发布生成失败，请联系管理员");
+        }
+        Long id = infoDeliverySave.getId();
+        MonitorNext monitorNextUpdate = new MonitorNext();
+        monitorNextUpdate.setId(deliveryInfo.getMonitorNextId());
+        monitorNextUpdate.setInfoDeliveryId(id);
+        boolean update = monitorNextService.updateById(monitorNextUpdate);
+        if (!update){
+            throw new MyRuntimeException("检测信息绑定信息发布失败，请联系管理员");
+        }
+        return  IResult.ok(id);
+
+
     }
 
 }

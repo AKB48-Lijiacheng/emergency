@@ -24,8 +24,15 @@ public class ConsumerConfig {
      * 找回密码
      **/
     @RabbitHandler
-    @RabbitListener(queues = "sms-findPassword")
-    public void findNextPersonSendMessage(String phoneNumber) {
+    @RabbitListener(queues = "email-findPassword")
+    public void findNextPersonSendMessage(JSONObject json) {
+        Object email = json.get("email");
+        Object username = json.get("username");
+        Object activCode = json.get("activCode");
+        String content="正在找回 "+username+" 用户的密码 \n 您的邮箱验证码为： "+activCode+"\n 有效时间为5分钟"  ;
+        log.info("向"+email+"发送邮件,内容："+content);
+        ThreadFactory.excutor(()-> mailService.sendSimpleMail((String) email,"应急平台找回密码",content));
+
 
     }
 
@@ -36,9 +43,8 @@ public class ConsumerConfig {
     @RabbitListener(queues = "email-register")
     public void emailCheck(JSONObject json) {
         Object email = json.get("email");
-        Object username = json.get("username");
         Object activCode = json.get("activCode");
-        String content="正在激活 "+username+" 用户 \n 您的邮箱验证码为： "+activCode;
+        String content="您的邮箱验证码为： "+activCode +"\n 有效时间为5分钟" ;
         log.info("向"+email+"发送邮件,内容："+content);
         ThreadFactory.excutor(()-> mailService.sendSimpleMail((String) email,"应急平台邮箱验证激活用户",content));
     }

@@ -10,6 +10,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import com.westcatr.rd.base.bmybatisplusbootstarter.wrapper.WrapperFactory;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 事件信息表 服务实现类
@@ -39,6 +42,11 @@ public class EventInfoServiceImpl extends ServiceImpl<EventInfoMapper, EventInfo
     @Override
     public EventInfo iGetById(Long id) {
         return this.getById(id);
+    }
+
+    @Override
+    public List<Map<Object, Object>> getEventsCount() {
+        return  this.baseMapper.getEventsCount();
     }
 
     @Override

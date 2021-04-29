@@ -94,6 +94,13 @@ public class MonitorNextVO implements Serializable {
     @ApiModelProperty(value = "h3备注信息")
     private String h3CommentText;
 
+    @ApiModelProperty(value = "信息发布表id")
+    private String infoDeliveryId;
+
+    @ApiModelProperty(value = "相关企业id")
+    private Long entInfoId;
+
+
 
 
 }

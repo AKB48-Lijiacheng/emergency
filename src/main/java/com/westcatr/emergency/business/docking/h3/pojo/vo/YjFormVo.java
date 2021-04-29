@@ -42,6 +42,9 @@ public class YjFormVo {
     @ApiModelProperty("审批人")
     private String approved;
 
+    @ApiModelProperty("标题")
+    private String Title;
+
 //    @ApiModelProperty("备注信息")
 //    private String CommentText;
 

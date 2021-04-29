@@ -40,6 +40,12 @@ public class EventFormVo {
     private String disposalMethod;
     @ApiModelProperty("支撑机构")
     private String supporMechan;
+
+    @ApiModelProperty("标题")
+    private String Title;
+
+    @ApiModelProperty("预警等级")
+    private String EarlyWarnLevel;
 //    @ApiModelProperty("相关附件")
 //    private String relevantAttachmen;
 //    @ApiModelProperty("工信部协助处理附件")

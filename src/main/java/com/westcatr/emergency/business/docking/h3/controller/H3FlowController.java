@@ -141,7 +141,7 @@ public class H3FlowController {
      */
     @ApiOperation(value="事件流程完成后回调")
     @PostMapping("/eventFinished")
-    public IResult eventFinished(@NotNull(message = "事件流程实例id不能为空") String instanceId) {
+    public IResult eventFinished(@NotNull(message = "事件流程实例id不能为空") String instanceId) throws InterruptedException {
         log.info("事件流程回调： "+instanceId);
         log.info("事件流程结束后的回调");
         EventFormVo formVo =   h3EventService.getFlowFomDataByInstanceId(instanceId);//获取表单项
@@ -150,8 +150,25 @@ public class H3FlowController {
         if (monitorNext==null){
             throw new MyRuntimeException("该事件实例id没有绑定去重后的监测数据");
         }
+        String  eventLevel=null;
+        String warningLevel = formVo.getEarlyWarnLevel();
+        if (warningLevel!=null){
+        switch (warningLevel){
+            case "1":
+                eventLevel="4";
+                break;
+            case "2":
+                eventLevel="3";
+                break;
+            case "3":
+                eventLevel="2";
+                break;
+            case "4":
+                eventLevel="1";
+        }
+        }
         EventInfo eventInfoSave = new EventInfo();
-        eventInfoSave.setEventName(null);
+        eventInfoSave.setEventName(formVo.getTitle());
         eventInfoSave.setEventRemake(null);
         eventInfoSave.setCreateTime(null);
         eventInfoSave.setUpdateTime(null);
@@ -162,7 +179,7 @@ public class H3FlowController {
         eventInfoSave.setScopeInfluence(null);
         eventInfoSave.setAccidentUnit(null);
         eventInfoSave.setInitialImpact(null);
-        eventInfoSave.setEventLevel(null);
+        eventInfoSave.setEventLevel(eventLevel);
         eventInfoSave.setEventDescrible(null);
         eventInfoSave.setEventCause(null);
         eventInfoSave.setDisposalTime(null);
@@ -170,7 +187,6 @@ public class H3FlowController {
         eventInfoSave.setPersonCharge(formVo.getPersonCharge());
         eventInfoSave.setDisposalMethod(formVo.getDisposalMethod());
         eventInfoSave.setSupporMechan(formVo.getSupporMechan());
-
         eventInfoSave.setH3EventInstanceId(instanceId);
         //设置附件和审批意见
         List<String> fileIds = new ArrayList<>();
@@ -191,6 +207,11 @@ public class H3FlowController {
         if (!save) {
             throw  new MyRuntimeException("事件信息生成失败！！！");
         }
+        //绑定事件到监测信息去重表
+        MonitorNext monitorNextSave = new MonitorNext();
+        monitorNextSave.setId(monitorNext.getId());
+        monitorNextSave.setEventInfoId(eventInfoSave.getId());
+        monitorNextService.updateById(monitorNext);
         return IResult.ok();
     }
 

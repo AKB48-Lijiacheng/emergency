@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.westcatr.emergency.business.pojo.query.EventInfoQuery;
 import com.westcatr.emergency.business.entity.EventInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 事件信息表 服务类
@@ -23,4 +27,6 @@ public interface EventInfoService extends IService<EventInfo> {
     EventInfo iGetById(Long id);
 
     boolean iRemove(Long id);
+
+    List<Map<Object, Object>> getEventsCount();
 }

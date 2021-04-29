@@ -1,5 +1,7 @@
 package com.westcatr.emergency.business.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -33,7 +35,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
@@ -241,10 +246,38 @@ public class MonitorInfoController {
     @ApiOperationSupport(order = 9)
     @PostMapping("/addEntName")
     public IResult addEntName(@RequestBody@Validated AddEntNameDto addEntNameDto) {
-        Long monitInfoId = addEntNameDto.getMonitInfoId();
+        Long monitNextId = addEntNameDto.getMonitNextId();
         Long entId = addEntNameDto.getEntInfoId();
-    Boolean b = monitorInfoService.addEntName(monitInfoId,entId);
+    Boolean b = monitorInfoService.addEntName(monitNextId,entId);
         return IResult.auto(b);
+    }
+
+
+
+
+    @SaveLog(value="预警信息处理月统计图查询接口", module="事件信息表管理")
+    @IPermissions(value="eventInfo:get:getMonitorNextCountByMonth")
+    @ApiOperationSupport(order=7)
+    @ApiOperation(value="预警信息处理月统计图查询接口", notes="eventInfo:get:getMonitorNextCountByMonth")
+    @GetMapping("/getMonitorCountByMonth")
+    public IResult getMonitorCountByMonth() {
+        List<Map<Object,Object>> list = new LinkedList<>();
+        Map<Object, Object> map = new HashMap<>();
+        for (int i = 0; i < 12; i++) {
+            DateTime dateTime = DateUtil.offsetMonth(DateUtil.date(), -i);
+            String format = DateUtil.format(dateTime, "yyyy-MM");
+            map.put(format,null);
+        }
+        list.add(map);
+
+        List<Map<Object,Object>> queryList  =monitorInfoService.getMonitorCount();
+        for (Map<Object, Object> monthAndCoun : queryList) {
+            Object months = monthAndCoun.get("months");
+            Object num = monthAndCoun.get("num");
+            map.put(months,num);
+        }
+        return IResult.ok(map);
+        //todo
     }
 
 }

@@ -10,6 +10,7 @@ import com.westcatr.emergency.business.pojo.vo.MonitorSimilarDto;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,4 +39,7 @@ public interface MonitorInfoService extends IService<MonitorInfo> {
     String duplicatedMonitor(MonitorDto dto);
 
     Boolean addEntName(Long monitInfoId, Long entId);
+
+    List<Map<Object, Object>> getMonitorCount();
+
 }

@@ -25,6 +25,11 @@ public class EventFormDto {
     private String disposalMethod;
     @ApiModelProperty("支撑机构")
     private String supporMechan;
+    @ApiModelProperty("标题")
+    private String Title;
+
+
+
     @ApiModelProperty("相关附件")
     private List<String> relevantAttachmen;
     @ApiModelProperty("工信部协助处理附件")

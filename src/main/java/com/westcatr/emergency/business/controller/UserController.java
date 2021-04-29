@@ -2,16 +2,16 @@ package com.westcatr.emergency.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.ramostear.captcha.HappyCaptcha;
 import com.westcatr.emergency.business.docking.h3.service.H3YjService;
 import com.westcatr.emergency.business.entity.EntInfo;
 import com.westcatr.emergency.business.entity.User;
 import com.westcatr.emergency.business.pojo.dto.ParamDto.EmailDto;
+import com.westcatr.emergency.business.pojo.dto.ResetPasswordDto;
 import com.westcatr.emergency.business.pojo.dto.UserDto;
 import com.westcatr.emergency.business.pojo.query.UserQuery;
 import com.westcatr.emergency.business.pojo.vo.UserVO;
@@ -28,7 +28,6 @@ import com.westcatr.rd.base.authority.authority.properties.ISecurityProperties;
 import com.westcatr.rd.base.authority.authority.provider.AuthenticationProvider;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.AssociationQuery;
 import com.westcatr.rd.base.bweb.exception.MyRuntimeException;
-import com.westcatr.rd.base.bweb.util.HttpContextUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -188,26 +187,15 @@ public class UserController {
     @ApiOperation(value = "注册用户接口", notes = "user:get:vo")
     @Transactional
     @PostMapping("/register")
-    public IResult<UserVO> register(@Validated UserDto userDto) {
+    public IResult<UserVO> register(@RequestBody@Validated UserDto userDto) {
         QueryWrapper<User> qw = new QueryWrapper<User>().eq("username", userDto.getUsername());
         int count = userService.count(qw);
         if (count>0){
             throw  new MyRuntimeException("该用户名已被注册!!");
         }
-        //验证码校验
-        if (iSecurityProperties.isCaptcha()){
-            if (StrUtil.isBlank(userDto.getCode())){
-                throw new MyRuntimeException("请输入验证码",400);
-            }
-            boolean flag = HappyCaptcha.verification(HttpContextUtil.getHttpServletRequest(),userDto.getCode(),true);
-            if (flag){
-                HappyCaptcha.remove(HttpContextUtil.getHttpServletRequest());
-            }else {
-                throw new MyRuntimeException("验证码错误",400);
-            }
-        }
+
         //邮箱验证码进行校验
-        Object activCode = stringRedisTemplate.opsForHash().get(userDto.getUsername(), userDto.getEmail());
+        Object activCode = stringRedisTemplate.opsForValue().get(userDto.getEmail());
         if (!userDto.getEmailActivCode().equals(activCode)){
             throw new MyRuntimeException("邮箱验证码错误");
         }
@@ -249,11 +237,58 @@ public class UserController {
     @PostMapping("/sendEmailCode")
     public IResult sendEmail(@RequestBody EmailDto emailDto) {
         String email = emailDto.getEmail();
-        String userName = emailDto.getUserName();
         String acivCode = IdUtil.randomUUID();
-        ThreadFactory.excutor(()->rabbitProducer.emailRegister(email,userName,acivCode));//发送注册验证邮箱
-        stringRedisTemplate.opsForHash().put(userName,email,acivCode);
-        stringRedisTemplate.expire(userName,5, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(email,acivCode);
+        stringRedisTemplate.expire(email,5, TimeUnit.MINUTES);
+        ThreadFactory.excutor(()->rabbitProducer.emailRegister(email,acivCode));//发送注册验证邮箱
         return IResult.ok("验证邮件已发送" );
     }
+
+    @SaveLog(value = "找回密码邮箱验证", module = "系统用户管理")
+    @ApiOperationSupport(order = 7)
+    @ApiOperation(value = "找回密码邮箱验证", notes = "user:post:findPassword")
+    @PostMapping("/findPasswordEmailSend")
+    public IResult findPasswordEmailSend(@RequestBody EmailDto emailDto) {
+        String username = emailDto.getUsername();
+        String email = emailDto.getEmail();
+        QueryWrapper<User> qw = new QueryWrapper<User>().eq("username", username);
+        User user = userService.getOne(qw);
+        if (user==null){
+            throw  new MyRuntimeException("用户不存在");
+        }
+        if (email.equals(user.getEmail())){
+            throw  new MyRuntimeException("邮箱错误，或未与用户绑定");
+        }
+        String acivCode = IdUtil.randomUUID();
+        stringRedisTemplate.opsForHash().put(username,email,acivCode);
+        stringRedisTemplate.expire(username,5, TimeUnit.MINUTES);
+        ThreadFactory.excutor(()->rabbitProducer.EmailFindPassword(email,username,acivCode));//发送注册验证邮箱
+        return IResult.ok("验证邮件已发送" );
+    }
+
+
+    @SaveLog(value = "重置密码", module = "系统用户管理")
+    @ApiOperationSupport(order = 7)
+    @ApiOperation(value = "重置密码", notes = "user:post:resetPassword")
+    @PostMapping("/resetPassword")
+    public IResult resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        //邮箱验证码进行校验
+        Object activCode = stringRedisTemplate.opsForHash().get(resetPasswordDto.getUsername(), resetPasswordDto.getEmail());
+        if (!resetPasswordDto.getActivCode().equals(activCode)){
+            throw new MyRuntimeException("邮箱验证码错误");
+        }
+        //重置密码
+        String username = resetPasswordDto.getUsername();
+        String password = resetPasswordDto.getPassword();
+        User userUpdate = new User();
+        userUpdate.setPassword(SecureUtil.md5(iSecurityProperties.getBeginSalt()+password+iSecurityProperties.getEndSalt()));
+        UpdateWrapper<User> uw = new UpdateWrapper<User>().eq("username", username);
+        userService.update(userUpdate,uw);
+
+        return IResult.ok("密码已重置: 您的重置密码为："+password );
+    }
+
+
+
+
 }

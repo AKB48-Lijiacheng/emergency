@@ -1,5 +1,7 @@
 package com.westcatr.emergency.business.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.EventInfo;
@@ -21,6 +23,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static cn.hutool.core.util.StrUtil.COMMA;
 
@@ -141,5 +147,39 @@ public class EventInfoController {
         AssociationQuery<EventInfoVO> associationQuery = new AssociationQuery<>(EventInfoVO.class);
         return IResult.ok(associationQuery.getVo(id, new EventInfoQuery()));
     }
+
+
+    /**
+     * 事件图标查询接口
+     * @author : ls
+     * @since : Create in 2021-04-23
+     */
+    @SaveLog(value="事件月统计图查询接口", module="事件信息表管理")
+    @IPermissions(value="eventInfo:get:vo")
+    @ApiOperationSupport(order=7)
+    @ApiOperation(value="事件图表查询接口", notes="eventInfo:get:vo")
+    @GetMapping("/getEventsCountByMonth")
+    public IResult getEventInfoVoById() {
+        List<Map<Object,Object>> list = new LinkedList<>();
+        Map<Object, Object> map = new HashMap<>();
+        for (int i = 0; i < 12; i++) {
+            DateTime dateTime = DateUtil.offsetMonth(DateUtil.date(), -i);
+            String format = DateUtil.format(dateTime, "yyyy-MM");
+            map.put(format,null);
+        }
+        list.add(map);
+
+  List<Map<Object,Object>> queryList  =eventInfoService.getEventsCount();
+        for (Map<Object, Object> monthAndCoun : queryList) {
+            Object months = monthAndCoun.get("months");
+            Object num = monthAndCoun.get("num");
+            map.put(months,num);
+        }
+        return IResult.ok(map);
+        //todo
+    }
+
+
+
 
 }
