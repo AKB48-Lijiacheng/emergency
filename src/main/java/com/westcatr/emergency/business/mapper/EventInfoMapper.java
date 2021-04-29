@@ -17,6 +17,6 @@ import java.util.Map;
  */
 public interface EventInfoMapper extends BaseMapper<EventInfo> {
 
-    @Select("SELECT DATE_FORMAT(create_time,'%Y-%m') months,count(*) as num from bus_event_info  WHERE DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  group by months; ")
+    @Select("SELECT DATE_FORMAT(create_time,'%Y-%m') time,count(*) as count from bus_event_info  WHERE DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  group by time; ")
     List<Map<Object, Object>> getEventsCount();
 }

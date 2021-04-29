@@ -160,26 +160,30 @@ public class EventInfoController {
     @ApiOperation(value="事件月统计图查询接口", notes="eventInfo:get:vo")
     @GetMapping("/getEventsCountByMonth")
     public IResult getEventInfoVoById() {
-        List<Map<Object,Object>> list = new LinkedList<>();
-        Map<Object, Object> map = new HashMap<>();
+        List<Map<Object,Object>> timeList = new LinkedList<>();
         for (int i = 0; i < 12; i++) {
             DateTime dateTime = DateUtil.offsetMonth(DateUtil.date(), -i);
             String format = DateUtil.format(dateTime, "yyyy-MM");
-            map.put(format,null);
+            Map<Object, Object> map = new HashMap<>();
+            map.put("time",format);
+            map.put("count",null);
+            timeList.add(map);
         }
-  List<Map<Object,Object>> queryList  =eventInfoService.getEventsCount();
-        for (Map<Object, Object> objectObjectMap : queryList) {
-            Object months = objectObjectMap.get("months");
-            Object num = objectObjectMap.get("num");
-        map.replace(months,num);
+        List<Map<Object,Object>> queryList  =eventInfoService.getEventsCount();
+        for (Map<Object, Object> mao : queryList) {
+            Object time = mao.get("time");
+            Object count = mao.get("count");
+            for (Map<Object, Object> timeMap : timeList) {
+                if (timeMap.get("time").equals(time)) {
+                    timeMap.put("count", count);
+                    break;
+                }
+            }
+
         }
-        for (Object o : map.keySet()) {
-            Object value = map.get(o);
-            Map<Object, Object> mapParam = new HashMap<>();
-            mapParam.put(o,value);
-            list.add(mapParam);
-        }
-        return IResult.ok(list);
+
+
+        return IResult.ok(timeList);
         //todo
     }
 

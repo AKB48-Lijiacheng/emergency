@@ -20,7 +20,7 @@ public interface MonitorInfoMapper extends BaseMapper<MonitorInfo> {
 
     List<MonitorInfo> getSimiliar(MonitorInfo enty);
 
-    @Select("SELECT DATE_FORMAT(create_time,'%Y-%m') months,count(*) as num from bus_monitor_info  WHERE DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  group by months; ")
+    @Select("SELECT DATE_FORMAT(create_time,'%Y-%m') time,count(*) as count from bus_monitor_info  WHERE DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  group by time; ")
     List<Map<Object, Object>> getMonitorNextCount();
 
 
