@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AddEntNameDto {
     @NotNull(message = "监测信息id不能为空")
-    private Long MonitNextId;
+    private Long id;
     @NotNull(message = "相关企业id不能为空")
     private Long entInfoId;
 }

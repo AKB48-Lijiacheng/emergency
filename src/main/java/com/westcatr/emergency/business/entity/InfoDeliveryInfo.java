@@ -56,9 +56,12 @@ public class InfoDeliveryInfo extends Model<InfoDeliveryInfo> {
     @TableField("update_time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "事件唯一id")
-    @TableField("event_id")
-    private Long eventId;
+    @ApiModelProperty(value = "关联流程名")
+    @TableField("related_monitor_name")
+    private String  relatedMonitorName;
+
+    @ApiModelProperty(value = "已完成流程唯一id")
+    private Long monitorNextId;
 
 
     @Override

@@ -52,7 +52,11 @@ public class InfoDeliveryInfoQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Date updateTime;
 
-    @ApiModelProperty(value = "事件唯一id")
+    @ApiModelProperty(value = "已完成流程唯一id")
     @QueryCondition
-    private Long eventId;
+    private Long monitorNextId;
+
+    @ApiModelProperty(value = "关联流程名")
+    @QueryCondition
+    private String  relatedMonitorName;
 }

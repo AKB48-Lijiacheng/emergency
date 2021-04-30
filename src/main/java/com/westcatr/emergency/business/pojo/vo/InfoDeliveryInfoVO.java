@@ -1,18 +1,14 @@
 package com.westcatr.emergency.business.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -46,12 +42,13 @@ public class InfoDeliveryInfoVO implements Serializable {
     @ApiModelProperty(value = "内容")
     private String content;
 
-    private Date createTime;
 
-    private Date updateTime;
+    @ApiModelProperty(value = "已完成流程唯一id")
+    private Long monitorNextId;
 
-    @ApiModelProperty(value = "事件唯一id")
-    private Long eventId;
+
+    @ApiModelProperty(value = "关联流程名")
+    private String  relatedMonitorName;
 
 
 }

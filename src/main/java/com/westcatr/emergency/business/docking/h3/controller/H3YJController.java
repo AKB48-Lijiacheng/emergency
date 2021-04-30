@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.docking.h3.controller;
 
+import com.westcatr.emergency.business.docking.h3.pojo.dto.FileDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.flowDto.H3FlowStartDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.formDto.H3PushFormDataDto;
 import com.westcatr.emergency.business.docking.h3.pojo.dto.h3RetuenDto.H3Result;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -56,6 +59,8 @@ public class H3YJController {
     MonitorNextService monitorNextService;
     @Autowired
     H3YjService h3YjService;
+    @Autowired
+    JdbcTemplate h3JdbcTemplate;
 
 
     /**
@@ -113,7 +118,15 @@ public class H3YJController {
     @ApiOperation(value = "h3附件上传")
     @PostMapping("/fileUpload")
     public IResult fileUpload(@RequestParam(value = "file", required = true) MultipartFile file) throws Exception {
-        return IResult.ok("成功", h3ApiController.uploadAttachFile(file));
+        String id = h3ApiController.uploadAttachFile(file);
+        String type = MimeTypeUtils.parseMimeType(file.getContentType()).getType();
+        FileDto fileDto = new FileDto();
+        fileDto.setId(id);
+        fileDto.setFileName(file.getName());
+        fileDto.setFileType(type);
+        fileDto.setFileSize(file.getSize()/1024);
+        fileDto.setUrl(id);
+        return IResult.ok(fileDto);
     }
 
     //附件下载

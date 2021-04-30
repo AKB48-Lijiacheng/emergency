@@ -1,13 +1,12 @@
 package com.westcatr.emergency.business.controller;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.EventInfo;
 import com.westcatr.emergency.business.pojo.query.EventInfoQuery;
 import com.westcatr.emergency.business.pojo.vo.EventInfoVO;
 import com.westcatr.emergency.business.service.EventInfoService;
+import com.westcatr.emergency.business.utils.CommonUtil;
 import com.westcatr.rd.base.acommon.annotation.IPermissions;
 import com.westcatr.rd.base.acommon.annotation.Insert;
 import com.westcatr.rd.base.acommon.annotation.SaveLog;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -160,15 +157,7 @@ public class EventInfoController {
     @ApiOperation(value="事件月统计图查询接口", notes="eventInfo:get:vo")
     @GetMapping("/getEventsCountByMonth")
     public IResult getEventInfoVoById() {
-        List<Map<Object,Object>> timeList = new LinkedList<>();
-        for (int i = 0; i < 12; i++) {
-            DateTime dateTime = DateUtil.offsetMonth(DateUtil.date(), -i);
-            String format = DateUtil.format(dateTime, "yyyy-MM");
-            Map<Object, Object> map = new HashMap<>();
-            map.put("time",format);
-            map.put("count",null);
-            timeList.add(map);
-        }
+        List<Map<Object, Object>> timeList = CommonUtil.getYearAgoMonthMap();
         List<Map<Object,Object>> queryList  =eventInfoService.getEventsCount();
         for (Map<Object, Object> mao : queryList) {
             Object time = mao.get("time");
@@ -181,7 +170,6 @@ public class EventInfoController {
             }
 
         }
-
 
         return IResult.ok(timeList);
         //todo

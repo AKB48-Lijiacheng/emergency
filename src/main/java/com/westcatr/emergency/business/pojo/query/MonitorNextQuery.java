@@ -30,6 +30,11 @@ public class MonitorNextQuery extends TimeDTO implements Serializable {
     @QueryCondition
     private Long id;
 
+    @ApiModelProperty(value = "预警名称")
+    @QueryCondition
+    private String name;
+
+
     @ApiModelProperty(value = "目标资产名称")
     @QueryCondition
     private String targetAssetName;

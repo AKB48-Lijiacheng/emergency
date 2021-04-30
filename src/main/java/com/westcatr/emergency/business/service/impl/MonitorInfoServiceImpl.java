@@ -2,6 +2,7 @@ package com.westcatr.emergency.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -186,6 +187,8 @@ MonitorNextService monitorNextService;
             throw new MyRuntimeException("生成去重后数据源失败！");
         }
         MonitorNext monitorNext = dto.getMonitorNext();
+        String name=monitorNextSrcInfo.getSrcProvince()+"-"+monitorNextSrcInfo.getEventName()+ DateUtil.now();
+        monitorNext.setName(name);
         monitorNext.setId(null);
         monitorNext.setStatus(0);
         monitorNext.setEventInfoId(null);

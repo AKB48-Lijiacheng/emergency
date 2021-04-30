@@ -142,7 +142,7 @@ public class H3ApiController {
         formDto.setBizObjectSchemaCode(bizObjectSchemaCode);
         formDto.setSecret(H3_SECRET);
 
-        // 先把数据保存到H3系统中去,并没有插入数据库
+        // 先把数据保存到H3系统中去
         H3PushInfoDTO h3PushInfoDTO = new H3PushInfoDTO();
         h3PushInfoDTO.setBizObjectSchemaCode(bizObjectSchemaCode); // 根据typename取出相应的BIZ_OBJECT_SCHEMA_CODE
         h3PushInfoDTO.setBizObjectId(formDto.getBizObjectId());
@@ -313,9 +313,8 @@ public class H3ApiController {
         yjFormVo.setTitle((String) map.get("Title"));
 
         //设置审批意见
-        String str="RemakeInfo";
-        String commentSql="SELECT * from ot_comment c where c.InstanceId=? and DataField  IN ('"+str+"') ORDER BY CreatedTime ";
-        List<H3CommentVo> commentList = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(H3CommentVo.class), instanceId);
+        String commentSql="SELECT ObjectID,BizObjectSchemaCode,InstanceId,Text,OUName,UserID,BizObjectId from ot_comment c where c.InstanceId=?  ORDER BY CreatedTime ";
+        List<H3CommentVo> commentList = h3JdbcTemplate.query(sql, new BeanPropertyRowMapper<H3CommentVo>(H3CommentVo.class),instanceId);
         yjFormVo.setCommentTexts(commentList);
 
         //设置附件信息

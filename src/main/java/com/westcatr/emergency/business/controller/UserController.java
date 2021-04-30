@@ -1,6 +1,8 @@
 package com.westcatr.emergency.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.CreditCodeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -188,12 +190,17 @@ public class UserController {
     @Transactional
     @PostMapping("/register")
     public IResult<UserVO> register(@RequestBody@Validated UserDto userDto) {
+        String socialCreditCode = userDto.getEntInfo().getSocialCreditCode();
+        if (!CreditCodeUtil.isCreditCode(socialCreditCode)) {
+            throw new MyRuntimeException("请填写正确的统一社会信用代码");
+        }
+
+
         QueryWrapper<User> qw = new QueryWrapper<User>().eq("username", userDto.getUsername());
         int count = userService.count(qw);
         if (count>0){
             throw  new MyRuntimeException("该用户名已被注册!!");
         }
-
         //邮箱验证码进行校验
         Object activCode = stringRedisTemplate.opsForValue().get(userDto.getEmail());
         if (!userDto.getEmailActivCode().equals(activCode)){
@@ -206,7 +213,7 @@ public class UserController {
         //企业信息保存
         EntInfo entInfo = new EntInfo();
         BeanUtil.copyProperties(userDto.getEntInfo(),entInfo);
-        QueryWrapper<EntInfo> entQw = new QueryWrapper<EntInfo>().eq("social_credit_code", userDto.getEntInfo().getSocialCreditCode());
+        QueryWrapper<EntInfo> entQw = new QueryWrapper<EntInfo>().eq("social_credit_code", socialCreditCode);
         boolean b = entInfoService.saveOrUpdate(entInfo, entQw);
         if (!b){
             throw  new MyRuntimeException("企业信息保存失败！,请检查统一社会信用代码是否填写正确或联系管理员");
@@ -238,6 +245,9 @@ public class UserController {
     public IResult sendEmail(@RequestBody EmailDto emailDto) {
         String email = emailDto.getEmail();
         String acivCode = IdUtil.randomUUID();
+        if (!Validator.isEmail(email)) {
+            throw new MyRuntimeException("邮箱格式错误！");
+        }
         stringRedisTemplate.opsForValue().set(email,acivCode);
         stringRedisTemplate.expire(email,5, TimeUnit.MINUTES);
         ThreadFactory.excutor(()->rabbitProducer.emailRegister(email,acivCode));//发送注册验证邮箱
@@ -251,6 +261,9 @@ public class UserController {
     public IResult findPasswordEmailSend(@RequestBody EmailDto emailDto) {
         String username = emailDto.getUsername();
         String email = emailDto.getEmail();
+        if (!Validator.isEmail(email)) {
+            throw new MyRuntimeException("邮箱格式错误！");
+        }
         QueryWrapper<User> qw = new QueryWrapper<User>().eq("username", username);
         User user = userService.getOne(qw);
         if (user==null){

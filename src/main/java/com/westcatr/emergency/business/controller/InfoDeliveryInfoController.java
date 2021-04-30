@@ -1,6 +1,7 @@
 package com.westcatr.emergency.business.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.InfoDeliveryInfo;
@@ -175,8 +176,14 @@ public class InfoDeliveryInfoController {
     @ApiOperationSupport(order = 8)
     @PostMapping("/infoMonitor")
     public IResult infoMonitor(@RequestBody InfoDeliveryInfoDto deliveryInfo) {
+        Long monitorNextId = deliveryInfo.getMonitorNextId();
+        QueryWrapper<MonitorNext> qw = new QueryWrapper<MonitorNext>().eq("id", monitorNextId);
+        MonitorNext one = monitorNextService.getOne(qw);
+
         InfoDeliveryInfo infoDeliverySave = new InfoDeliveryInfo();
+        infoDeliverySave.setRelatedMonitorName(one.getName());
         infoDeliverySave.setState("1");
+        infoDeliverySave.setMonitorNextId(monitorNextId);
         BeanUtil.copyProperties(deliveryInfo,infoDeliverySave);
         boolean save = infoDeliveryInfoService.save(infoDeliverySave);
         if (!save){

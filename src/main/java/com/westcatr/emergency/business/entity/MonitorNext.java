@@ -34,6 +34,10 @@ public class MonitorNext extends Model<MonitorNext> {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "预警名称")
+    @TableField("name")
+    private String name;
+
     @ApiModelProperty(value = "目标资产名称")
     @TableField("target_asset_name")
     private String targetAssetName;

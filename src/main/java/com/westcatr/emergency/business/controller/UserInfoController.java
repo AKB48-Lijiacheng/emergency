@@ -1,5 +1,6 @@
 package com.westcatr.emergency.business.controller;
 
+import cn.hutool.core.io.resource.ClassPathResource;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.westcatr.emergency.business.entity.City;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Properties;
 
 @Validated
 @Api(tags="用户信息接口", description = "user")
@@ -68,7 +71,15 @@ public class UserInfoController {
             vo.setEntInfo(ent);
 
         }
-
         return IResult.ok(vo);
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        ClassPathResource resource = new ClassPathResource("test.properties");
+        Properties properties = new Properties();
+        properties.load(resource.getStream());
+
+
     }
 }

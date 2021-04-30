@@ -1,6 +1,5 @@
 package com.westcatr.emergency.business.pojo.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.westcatr.rd.base.bmybatisplusbootstarter.association.annotation.Select;
 import io.swagger.annotations.ApiModel;
@@ -31,6 +30,10 @@ public class MonitorNextVO implements Serializable {
     private static final long serialVersionUID=1L;
 
     private Long id;
+
+    @ApiModelProperty(value = "预警名称")
+    private String name;
+
 
     @ApiModelProperty(value = "目标资产名称")
     private String targetAssetName;
