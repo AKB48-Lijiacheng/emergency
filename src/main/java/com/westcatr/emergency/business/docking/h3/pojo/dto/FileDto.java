@@ -15,19 +15,16 @@ import lombok.Data;
 
 public class FileDto  {
 
-
+    @ApiModelProperty(value = "返回的文件id")
     private String id;
 
     @ApiModelProperty(value = "文件名称")
     private String fileName;
 
-    @ApiModelProperty(value = "文件类型")
-    private String fileType;
-
     @ApiModelProperty(value = "文件大小（kb）")
     private Long fileSize;
 
-    @ApiModelProperty(value = "文件大小（kb）")
+    @ApiModelProperty(value = "下载地址")
     private String url;
 
 
