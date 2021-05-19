@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <MODULE>
+  namespace: emergency
+  labels:
+    app: <MODULE>
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: <MODULE>
+  template:
+    metadata:
+      labels:
+        app: <MODULE>
+    spec:
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: myreg
+      containers:
+      - image: <IMAGE>:<IMAGE_TAG>
+        name: <MODULE>
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 7700
+          name: api
+        env:
+        - name: env
+          value: test
+          #value: <ENV>
+        volumeMounts:
+          - mountPath: /home/upload
+            #会在nfs路径下建个test-data目录 
+            #readOnly: false
+            subPath: emergency
+            name: upload
+      volumes:
+        - name: upload
+          nfs:
+            server: 10.36.11.50
+            path: "/home/nfsdata"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: <MODULE>
+  namespace: emergency
+spec:
+  selector:
+    app: <MODULE>
+  type: NodePort
+  ports:
+  - name: api-port
+    port: 7700
+    targetPort: api
+    nodePort: 31000

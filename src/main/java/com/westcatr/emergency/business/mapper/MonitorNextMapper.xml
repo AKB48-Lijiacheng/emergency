@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.westcatr.emergency.business.mapper.MonitorNextMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.westcatr.emergency.business.entity.MonitorNext">
+        <id column="id" property="id" />
+        <result column="target_asset_name" property="targetAssetName" />
+        <result column="problem_name" property="problemName" />
+        <result column="monitor_time" property="monitorTime" />
+        <result column="problem_type" property="problemType" />
+        <result column="problem_describe" property="problemDescribe" />
+        <result column="enterprise_name" property="enterpriseName" />
+        <result column="disposal_measure" property="disposalMeasure" />
+        <result column="tf_major_events" property="tfMajorEvents" />
+        <result column="tf_superior_instructions" property="tfSuperiorInstructions" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="situ_event_id" property="situEventId" />
+        <result column="status" property="status" />
+        <result column="industrial_id" property="industrialId" />
+        <result column="judge_info_id" property="judgeInfoId" />
+        <result column="event_info_id" property="eventInfoId" />
+        <result column="situ_monitor_src_id" property="situMonitorSrcId" />
+    </resultMap>
+
+</mapper>

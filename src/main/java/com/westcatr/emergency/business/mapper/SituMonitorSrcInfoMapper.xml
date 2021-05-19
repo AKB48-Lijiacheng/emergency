@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.westcatr.emergency.business.mapper.SituMonitorSrcInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.westcatr.emergency.business.entity.SituMonitorSrcInfo">
+        <id column="id" property="id" />
+        <result column="src_id" property="srcId" />
+        <result column="org_log_id" property="orgLogId" />
+        <result column="event_category_id" property="eventCategoryId" />
+        <result column="event_technique_type" property="eventTechniqueType" />
+        <result column="event_description" property="eventDescription" />
+        <result column="src_ip_long" property="srcIpLong" />
+        <result column="alarm_first_time" property="alarmFirstTime" />
+        <result column="dst_ip" property="dstIp" />
+        <result column="src_ip" property="srcIp" />
+        <result column="protocol" property="protocol" />
+        <result column="event_type" property="eventType" />
+        <result column="intelligence_id" property="intelligenceId" />
+        <result column="strategy_category_id" property="strategyCategoryId" />
+        <result column="intelligence_type" property="intelligenceType" />
+        <result column="event_nums" property="eventNums" />
+        <result column="event_category_label" property="eventCategoryLabel" />
+        <result column="event_status" property="eventStatus" />
+        <result column="severity" property="severity" />
+        <result column="create_time" property="createTime" />
+        <result column="strategy_category_name" property="strategyCategoryName" />
+        <result column="rule_name" property="ruleName" />
+        <result column="risk_score" property="riskScore" />
+        <result column="data_center" property="dataCenter" />
+        <result column="baseline" property="baseline" />
+        <result column="sop_id" property="sopId" />
+        <result column="event_device_type" property="eventDeviceType" />
+        <result column="limit_time" property="limitTime" />
+        <result column="rule_id" property="ruleId" />
+        <result column="strategy_info_total" property="strategyInfoTotal" />
+        <result column="policy_type" property="policyType" />
+        <result column="abnormal" property="abnormal" />
+        <result column="src_country" property="srcCountry" />
+        <result column="strategy_category" property="strategyCategory" />
+        <result column="internal_event" property="internalEvent" />
+        <result column="limit_unit" property="limitUnit" />
+        <result column="event_name" property="eventName" />
+        <result column="dst_ip_long" property="dstIpLong" />
+        <result column="event_model_source" property="eventModelSource" />
+        <result column="alarm_last_time" property="alarmLastTime" />
+        <result column="src_province" property="srcProvince" />
+        <result column="icreate_time" property="icreateTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+</mapper>

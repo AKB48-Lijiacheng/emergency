@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.westcatr.emergency.business.mapper.EventInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.westcatr.emergency.business.entity.EventInfo">
+        <id column="id" property="id" />
+        <result column="event_name" property="eventName" />
+        <result column="event_remake" property="eventRemake" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="event_start_time" property="eventStartTime" />
+        <result column="attack_src" property="attackSrc" />
+        <result column="attack_target" property="attackTarget" />
+        <result column="injury_extent" property="injuryExtent" />
+        <result column="scope_influence" property="scopeInfluence" />
+        <result column="accident_unit" property="accidentUnit" />
+        <result column="Initial_impact" property="initialImpact" />
+        <result column="event_level" property="eventLevel" />
+        <result column="event_describle" property="eventDescrible" />
+        <result column="event_cause" property="eventCause" />
+        <result column="disposal_measure" property="disposalMeasure" />
+    </resultMap>
+
+</mapper>

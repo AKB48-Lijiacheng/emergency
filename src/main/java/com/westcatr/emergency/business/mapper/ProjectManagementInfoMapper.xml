@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.westcatr.emergency.business.mapper.ProjectManagementInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.westcatr.emergency.business.entity.ProjectManagementInfo">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="project_manager" property="projectManager" />
+        <result column="participant" property="participant" />
+        <result column="start_info_time" property="startInfoTime" />
+        <result column="end_info_time" property="endInfoTime" />
+        <result column="grade" property="grade" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+</mapper>
